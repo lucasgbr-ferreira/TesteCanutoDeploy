@@ -1,46 +1,68 @@
-# Introdução
+# 🚗 Canutors Motors – Plataforma SaaS para Concessionárias de Baixa Estrutura
 
-Texto descritivo com a visão geral do projeto abordado. Inclui o contexto, o problema, os objetivos, a justificativa e o público-alvo do projeto.
+**ODS 16 – Paz, Justiça e Instituições Eficazes**  
+**Objetivo:** Transparência, confiança e inclusão digital no mercado automotivo.
 
-## Problema
-Nesse momento você deve apresentar o problema que a sua aplicação deve  resolver. No entanto, não é a hora de comentar sobre a aplicação.
+---
 
-Descreva também o contexto em que essa aplicação será usada, se  houver: empresa, tecnologias, etc. Novamente, descreva apenas o que de  fato existir, pois ainda não é a hora de apresentar requisitos  detalhados ou projetos.
+## 📌 Introdução
+O projeto propõe o desenvolvimento de uma **plataforma de e-commerce SaaS** para concessionárias de baixa estrutura, alinhada à **ODS 16**.  
+A solução busca oferecer **transparência, confiança, inclusão digital e governança ética**, permitindo que pequenas concessionárias possam competir de forma justa com grandes players.
 
-Nesse momento, o grupo pode optar por fazer uso  de ferramentas como Design Thinking, que permite um olhar de ponta a ponta para o problema.
+O sistema será utilizado para **digitalizar processos de compra e venda de veículos**, disponibilizando ferramentas acessíveis que aumentem a clareza nas negociações e reduzam assimetrias de informação entre vendedores e clientes.
 
-> **Links Úteis**:
-> - [Objetivos, Problema de pesquisa e Justificativa](https://medium.com/@versioparole/objetivos-problema-de-pesquisa-e-justificativa-c98c8233b9c3)
-> - [Matriz Certezas, Suposições e Dúvidas](https://medium.com/educa%C3%A7%C3%A3o-fora-da-caixa/matriz-certezas-suposi%C3%A7%C3%B5es-e-d%C3%BAvidas-fa2263633655)
-> - [Brainstorming](https://www.euax.com.br/2018/09/brainstorming/)
+---
 
-## Objetivos
+## 📌 Problema
+Atualmente, **concessionárias de pequeno porte** enfrentam dificuldades para competir no ambiente digital, devido à **falta de infraestrutura tecnológica, limitações financeiras e baixa capacidade de comunicação transparente** com clientes.
 
-Aqui você deve descrever os objetivos do trabalho indicando que o objetivo geral é desenvolver um software para solucionar o problema apresentado acima. 
+Problemas identificados:
+- Pouca confiança por parte dos compradores (histórico do veículo nem sempre é claro).  
+- Assimetria de informações, dificultando negociações justas.  
+- Inexistência de canais estruturados de mediação de conflitos.  
+- Ausência de ferramentas digitais para relatórios e transparência na gestão.  
 
-Apresente também alguns (pelo menos 2) objetivos específicos dependendo de onde você vai querer concentrar a sua prática investigativa, ou como você vai aprofundar no seu trabalho.
- 
-> **Links Úteis**:
-> - [Objetivo geral e objetivo específico: como fazer e quais verbos utilizar](https://blog.mettzer.com/diferenca-entre-objetivo-geral-e-objetivo-especifico/)
+A falta de digitalização e transparência **compromete a competitividade** das pequenas concessionárias e prejudica a relação de confiança com o cliente.
 
-## Justificativa
+---
 
-Descreva a importância ou a motivação para trabalhar com esta aplicação que você escolheu. Indique as razões pelas quais você escolheu seus objetivos específicos ou as razões para aprofundar em certos aspectos do software.
+## 📌 Objetivos
 
-O grupo de trabalho pode fazer uso de questionários, entrevistas e dados estatísticos, que podem ser apresentados, com o objetivo de esclarecer detalhes do problema que será abordado pelo grupo.
+### Objetivo Geral
+Desenvolver uma solução SaaS de e-commerce para concessionárias de baixa estrutura, promovendo **transparência, confiança e ética**, em consonância com os princípios da ODS 16.
 
-> **Links Úteis**:
-> - [Como montar a justificativa](https://guiadamonografia.com.br/como-montar-justificativa-do-tcc/)
+### Objetivos Específicos
+- Criar uma plataforma **multi-tenant**, permitindo a operação simultânea de várias concessionárias em ambiente seguro e isolado.  
+- Implementar mecanismos de **transparência**, como histórico do veículo, simulações financeiras claras e relatórios automatizados.  
+- Oferecer **canais de mediação de conflitos e denúncias**, fortalecendo a confiança entre clientes e concessionárias.  
+- Garantir **inclusão digital**, com design responsivo e linguagem acessível a diferentes perfis de usuários.
 
-## Público-Alvo
+---
 
-Descreva quem serão as pessoas que usarão a sua aplicação indicando os diferentes perfis. O objetivo aqui não é definir quem serão os clientes ou quais serão os papéis dos usuários na aplicação. A ideia é, dentro do possível, conhecer um pouco mais sobre o perfil dos usuários: conhecimentos prévios, relação com a tecnologia, relações
-hierárquicas, etc.
+## 📌 Justificativa
+A escolha por desenvolver este projeto está ligada à necessidade de **democratizar o acesso à tecnologia** no setor automotivo. Enquanto grandes concessionárias contam com sistemas robustos, as pequenas enfrentam **desvantagens competitivas**, resultando em perda de clientes e dificuldade de crescimento sustentável.
 
-Adicione informações sobre o público-alvo por meio de uma descrição textual, diagramas de personas e mapa de stakeholders.
+O projeto, alinhado à **ODS 16**, busca:
+- Promover **práticas comerciais mais justas e transparentes**.  
+- Fortalecer a **confiança entre vendedores e compradores**.  
+- Reduzir conflitos por meio de **canais de mediação e denúncia**.  
+- Garantir **inclusão digital** para concessionárias com baixa estrutura tecnológica.
 
-> **Links Úteis**:
-> - [Público-alvo](https://blog.hotmart.com/pt-br/publico-alvo/)
-> - [Como definir o público alvo](https://exame.com/pme/5-dicas-essenciais-para-definir-o-publico-alvo-do-seu-negocio/)
-> - [Público-alvo: o que é, tipos, como definir seu público e exemplos](https://klickpages.com.br/blog/publico-alvo-o-que-e/)
-> - [Qual a diferença entre público-alvo e persona?](https://rockcontent.com/blog/diferenca-publico-alvo-e-persona/)
+Portanto, o software **resolve um problema técnico e atende a um propósito social**, fortalecendo instituições menores e garantindo acesso justo às oportunidades do mercado digital.
+
+---
+
+## 📌 Público-Alvo
+
+**Concessionárias de pequeno porte**
+- Pouca infraestrutura tecnológica.  
+- Necessidade de presença digital para competir no mercado.  
+- Gestores com conhecimento básico em tecnologia.
+
+**Clientes de concessionárias**
+- Pessoas que buscam **confiança, transparência e clareza** na compra de veículos.  
+- Perfis variados: desde usuários experientes até compradores de primeira viagem.
+
+**Stakeholders indiretos**
+- Bancos e financeiras (integração de simulações de crédito).  
+- Comunidade local (impacto de práticas mais éticas e sustentáveis).
