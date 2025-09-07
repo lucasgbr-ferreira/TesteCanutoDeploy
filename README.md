@@ -1,23 +1,23 @@
 # TÍTULO DO PROJETO
 
-`CURSO`
+`Análise e Desenvolvimento de Sistemas`
 
-`DISCIPLINA`
+`Trabalho Interdisciplinar: Aplicações para Processos de Negócios`
 
-`SEMESTRE`
+`2° semestre`
 
 Descrever resumidamente, em um ou dois parágrafos, o projeto que está sendo desenvolvido.
 
 ## Integrantes
 
-* Nome completo do aluno 1
-* Nome completo do aluno 2
-* Nome completo do aluno 3
-* Nome completo do aluno 4
+* Mateus Souza Campos
+* Paula Bessa
+* Gabriel Alves
+* Vitor Carvalho
 
 ## Orientador
 
-* Nome completo do professor 1
+* Caroline Rhaian
 
 ## Instruções de utilização
 
