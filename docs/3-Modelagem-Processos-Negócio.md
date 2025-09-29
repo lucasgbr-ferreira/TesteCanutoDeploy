@@ -4,7 +4,10 @@
 
 A modelagem **AS IS** reflete os processos de registro e venda de veículos de uma concessionária de forma isolada e com gargalos visíveis, comuns em ambientes com pouca automação. O processo de Registro de Veículos mostra uma sequência linear de tarefas, desde a compra até o anúncio manual no Instagram, com a possibilidade de modificações e um registro em um "banco de dados físico". O processo de Venda de Veículos detalha a interação com o cliente, desde a escolha do anúncio até o fechamento da venda, com etapas que dependem de agendamentos e contato manual.
 
+
 ---
+<img width="4530" height="2100" alt="as_is_canutomotorsVendaVeiculos" src="https://github.com/user-attachments/assets/f80aa81b-cbcc-4751-bb93-1fa6d5bb6f5f" />
+<img width="4524" height="1080" alt="as_is_canutomotrsRegistroVeiculos" src="https://github.com/user-attachments/assets/9c465492-d6ad-454f-98a9-e16c70a013c1" />
 
 #### **3.2. Análise dos processos**
 
