@@ -5,7 +5,7 @@
 
 ---
 
-## 📌 Introdução
+## Introdução
 O projeto propõe o desenvolvimento de uma **plataforma de e-commerce SaaS** para concessionárias de baixa estrutura, alinhada à **ODS 16**.  
 A solução busca oferecer **transparência, confiança, inclusão digital e governança ética**, permitindo que pequenas concessionárias possam competir de forma justa com grandes players.
 
@@ -13,7 +13,7 @@ O sistema será utilizado para **digitalizar processos de compra e venda de veí
 
 ---
 
-## 📌 Problema
+## Problema
 Atualmente, **concessionárias de pequeno porte** enfrentam dificuldades para competir no ambiente digital, devido à **falta de infraestrutura tecnológica, limitações financeiras e baixa capacidade de comunicação transparente** com clientes.
 
 Problemas identificados:
@@ -26,7 +26,7 @@ A falta de digitalização e transparência **compromete a competitividade** das
 
 ---
 
-## 📌 Objetivos
+## Objetivos
 
 ### Objetivo Geral
 Desenvolver uma solução SaaS de e-commerce para concessionárias de baixa estrutura, promovendo **transparência, confiança e ética**, em consonância com os princípios da ODS 16.
@@ -39,7 +39,7 @@ Desenvolver uma solução SaaS de e-commerce para concessionárias de baixa estr
 
 ---
 
-## 📌 Justificativa
+## Justificativa
 A escolha por desenvolver este projeto está ligada à necessidade de **democratizar o acesso à tecnologia** no setor automotivo. Enquanto grandes concessionárias contam com sistemas robustos, as pequenas enfrentam **desvantagens competitivas**, resultando em perda de clientes e dificuldade de crescimento sustentável.
 
 O projeto, alinhado à **ODS 16**, busca:
@@ -52,7 +52,7 @@ Portanto, o software **resolve um problema técnico e atende a um propósito soc
 
 ---
 
-## 📌 Público-Alvo
+## Público-Alvo
 
 **Concessionárias de pequeno porte**
 - Pouca infraestrutura tecnológica.  
