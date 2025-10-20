@@ -1,15 +1,5 @@
 # REFERÊNCIAS
 
-BECKENKAMP, Marcus. As vantagens de usar um sistema web no lugar de planilhas para
-gerir seu negócio. Medium, 2023. Disponível em: https://medium.com/%40beckenkamp/asvantagens-de-usar-um-sistema-web-no-lugar-de-planilhas-para-gerir-seu-neg%C3%B3cioa1459367341a
-
-CARVALHO, Alexandre. 40 % das empresas ainda dependem de planilhas para gestão de
-dados. Você RH, 02 abr. 2025. Disponível em:
-https://vocerh.abril.com.br/politicaspraticas/40-das-empresas-ainda-dependem-de-planilhaspara-gestao-de-dados/
-
-BECKENKAMP, Marcus. As vantagens de usar um sistema web no lugar de planilhas para
-gerir seu negócio. Medium, 2023. Disponível em: https://medium.com/%40beckenkamp/asvantagens-de-usar-um-sistema-web-no-lugar-de-planilhas-para-gerir-seu-neg%C3%B3cioa1459367341a
-
 APRENDA a Modelar um banco de dados com o uso de MER e DER. DevMedia,
 [s.d.]. Disponível em: https://www.devmedia.com.br/mer-e-der-modelagem-de-bancos-de-dados/14332.
 Acesso em: 15 out. 2025.
