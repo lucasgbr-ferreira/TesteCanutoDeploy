@@ -1,68 +1,67 @@
-// client/src/App.jsx
 import React from "react";
-import { motion } from "framer-motion";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import GalleryScroll from "./components/GalleryScroll";
+
+
 import "./styles/landing.css";
-import "./styles/gallery.css"; // garante estilos da galeria
+import "./styles/gallery.css";
+import "./styles/home.css";
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: (delay = 0) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: "easeOut", delay }
-  })
-};
 
-export default function App() {
+import HomeCliente from "./pages/HomeCliente";
+
+// ====== PÁGINAS DO CLIENTE ======
+function Buscar() {
+  return <h2 style={{ textAlign: "center", marginTop: "80px" }}>Página de Buscar Veículos</h2>;
+}
+
+function Veiculos() {
+  return <h2 style={{ textAlign: "center", marginTop: "80px" }}>Página de Veículos</h2>;
+}
+
+function Agenda() {
+  return <h2 style={{ textAlign: "center", marginTop: "80px" }}>Página de Minha Agenda</h2>;
+}
+
+function Historico() {
+  return <h2 style={{ textAlign: "center", marginTop: "80px" }}>Página de Histórico</h2>;
+}
+
+function Propostas() {
+  return <h2 style={{ textAlign: "center", marginTop: "80px" }}>Página de Propostas</h2>;
+}
+
+function Suporte() {
+  return <h2 style={{ textAlign: "center", marginTop: "80px" }}>Página de Suporte</h2>;
+}
+
+function Catalogo() {
+  return <h2 style={{ textAlign: "center", marginTop: "80px" }}>Página de Catálogo de Veículos</h2>;
+}
+
+// ====== LANDING PAGE  ======
+function LandingPage() {
   return (
     <main className="lp-root">
-      {/* HERO - simples e central */}
+      {/* HERO */}
       <section className="lp-hero">
         <div className="lp-container lp-hero-grid">
           <div className="lp-hero-left">
-            <motion.h1
-              className="lp-hero-title"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.3 }}
-              variants={fadeUp}
-              custom={0}
-            >
+            <h1 className="lp-hero-title">
               Encontre o carro perfeito — ofertas exclusivas na sua região
-            </motion.h1>
+            </h1>
 
-            <motion.p
-              className="lp-hero-sub"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.3 }}
-              variants={fadeUp}
-              custom={0.12}
-            >
+            <p className="lp-hero-sub">
               Catálogo atualizado, financiamento integrado e atendimento direto das concessionárias.
-            </motion.p>
+            </p>
 
-            <motion.div
-              className="lp-hero-cta"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.3 }}
-              variants={fadeUp}
-              custom={0.24}
-            >
+            <div className="lp-hero-cta">
               <a href="/catalog" className="btn primary large">Ver catálogo</a>
               <a href="/register" className="btn ghost large">Criar conta</a>
-            </motion.div>
+            </div>
           </div>
 
-          <motion.div
-            className="lp-hero-right"
-            initial={{ opacity: 0, scale: 0.98 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            viewport={{ once: true, amount: 0.3 }}
-          >
+          <div className="lp-hero-right">
             <div className="lp-hero-card">
               <div className="lp-car-visual">🚘</div>
               <div className="lp-car-info">
@@ -70,7 +69,7 @@ export default function App() {
                 <p>Entrada facilitada — parcelas a partir de R$799</p>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
@@ -78,57 +77,49 @@ export default function App() {
       <section className="lp-features">
         <div className="lp-container">
           <div className="lp-features-grid">
-            <article className="lp-feature-card">
-              <div className="lp-feature-ico">★</div>
-              <h4>Filtros avançados</h4>
-              <p>Busque por preço, ano, cidade e muito mais.</p>
-            </article>
-            <article className="lp-feature-card">
-              <div className="lp-feature-ico">★</div>
-              <h4>Credenciamento rápido</h4>
-              <p>Cadastro simplificado para clientes e concessionárias.</p>
-            </article>
-            <article className="lp-feature-card">
-              <div className="lp-feature-ico">★</div>
-              <h4>Painel de gestão</h4>
-              <p>Acompanhe propostas, agendamentos e métricas.</p>
-            </article>
+            <article className="lp-feature-card">★ Filtros avançados</article>
+            <article className="lp-feature-card">★ Credenciamento rápido</article>
+            <article className="lp-feature-card">★ Painel de gestão</article>
           </div>
         </div>
       </section>
 
-      {/* ABOUT */}
-      <section className="lp-about">
-        <div className="lp-container">
-          <h3>Como funciona</h3>
-          <p>
-            Conectamos clientes às concessionárias próximas, facilitamos propostas e agendamentos, e apresentamos opções de pagamento e garantia — tudo numa única plataforma.
-          </p>
-        </div>
-      </section>
-
-      {/* GALLERY SCROLL (horizontal on vertical scroll) */}
+      {/* GALLERY */}
       <GalleryScroll />
 
       {/* CTA */}
-      <section className="lp-cta" id="cadastro">
+      <section className="lp-cta">
         <div className="lp-container">
-          <div className="lp-cta-inner">
-            <h3>Pronto para encontrar seu próximo carro?</h3>
-            <p>Crie sua conta e comece a pesquisar no catálogo agora mesmo.</p>
-            <div style={{ marginTop: 12 }}>
-              <a href="/register" className="btn primary">Criar Conta</a>
-              <a href="/catalog" className="btn ghost">Ver catálogo</a>
-            </div>
-          </div>
+          <h3>Pronto para encontrar seu próximo carro?</h3>
+          <a href="/register" className="btn primary">Criar Conta</a>
         </div>
       </section>
-
-      <footer className="lp-footer">
-        <div className="lp-container">
-          <small>© {new Date().getFullYear()} GesCar — Conectando pessoas e concessionárias</small>
-        </div>
-      </footer>
     </main>
+  );
+}
+
+// ====== ROTAS DO APP ======
+export default function App() {
+  return (
+    <Router>
+      <Routes>
+
+       
+        <Route path="/" element={<HomeCliente />} />
+
+       
+        <Route path="/landing" element={<LandingPage />} />
+
+        
+        <Route path="/cliente/buscar" element={<Buscar />} />
+        <Route path="/cliente/veiculos" element={<Veiculos />} />
+        <Route path="/cliente/agenda" element={<Agenda />} />
+        <Route path="/cliente/historico" element={<Historico />} />
+        <Route path="/cliente/propostas" element={<Propostas />} />
+        <Route path="/cliente/suporte" element={<Suporte />} />
+        <Route path="/cliente/catalogo" element={<Catalogo />} />
+
+      </Routes>
+    </Router>
   );
 }
