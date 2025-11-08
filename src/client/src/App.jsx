@@ -1,9 +1,13 @@
 // client/src/App.jsx
 import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+import PerfilCliente from "./pages/PerfilCliente";
+
 import { motion } from "framer-motion";
 import GalleryScroll from "./components/GalleryScroll";
 import "./styles/landing.css";
-import "./styles/gallery.css"; // garante estilos da galeria
+import "./styles/gallery.css";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
@@ -14,10 +18,10 @@ const fadeUp = {
   })
 };
 
-export default function App() {
+function LandingPage() {
   return (
     <main className="lp-root">
-      {/* HERO - simples e central */}
+      {/* HERO */}
       <section className="lp-hero">
         <div className="lp-container lp-hero-grid">
           <div className="lp-hero-left">
@@ -107,7 +111,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* GALLERY SCROLL (horizontal on vertical scroll) */}
+      {/* GALLERY */}
       <GalleryScroll />
 
       {/* CTA */}
@@ -130,5 +134,19 @@ export default function App() {
         </div>
       </footer>
     </main>
+  );
+}
+
+export default function App() {
+  return (
+    <Router>
+      <Routes>
+
+        <Route path="/" element={<PerfilCliente />} />
+
+        <Route path="/landing" element={<LandingPage />} />
+
+      </Routes>
+    </Router>
   );
 }
