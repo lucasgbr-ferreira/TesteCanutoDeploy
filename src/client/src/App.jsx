@@ -1,6 +1,7 @@
 // client/src/App.jsx
 import React from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import GalleryScroll from "./components/GalleryScroll";
 import "./styles/landing.css";
 import "./styles/gallery.css"; // garante estilos da galeria
@@ -51,7 +52,7 @@ export default function App() {
               variants={fadeUp}
               custom={0.24}
             >
-              <a href="/catalog" className="btn primary large">Ver catálogo</a>
+              <Link to="/catalog" className="btn primary large">Ver catálogo</Link>
               <a href="/register" className="btn ghost large">Criar conta</a>
             </motion.div>
           </div>
