@@ -1,3 +1,4 @@
+// client/src/pages/CatalogoVeiculos.jsx
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -15,7 +16,11 @@ import {
   LogOut,
   Menu,
   X,
-  Car
+  Car,
+  Palette,
+  Settings,
+  ChevronDown,
+  ChevronUp
 } from 'lucide-react';
 
 import "../styles/landing.css";
@@ -169,6 +174,12 @@ export default function CatalogoVeiculos() {
     }).format(price);
   };
 
+  // Função para formatar quilometragem
+  const formatKm = (km) => {
+    if (!km) return 'N/A';
+    return new Intl.NumberFormat('pt-BR').format(km) + ' km';
+  };
+
   return (
     <main className="lp-root">
       
@@ -295,6 +306,7 @@ export default function CatalogoVeiculos() {
                 key={vehicle.id} 
                 vehicle={vehicle} 
                 formatPrice={formatPrice}
+                formatKm={formatKm}
               />
             ))}
           </motion.div>
@@ -314,7 +326,12 @@ export default function CatalogoVeiculos() {
 }
 
 // --- Componente do Card ---
-function VehicleCard({ vehicle, formatPrice }) {
+function VehicleCard({ vehicle, formatPrice, formatKm }) {
+  const [showDetails, setShowDetails] = useState(false);
+
+  // Verificar se o veículo está disponível para contato
+  const isAvailable = vehicle.status === 'Disponível';
+
   return (
     <motion.div 
       className="vehicle-card"
@@ -332,6 +349,11 @@ function VehicleCard({ vehicle, formatPrice }) {
           <Tag size={14} />
           {vehicle.placa}
         </div>
+        
+        {/* Badge de Status */}
+        <div className={`vehicle-status-badge ${!isAvailable ? 'status-unavailable' : ''}`}>
+          {vehicle.status}
+        </div>
       </div>
       
       <div className="vehicle-card-body">
@@ -339,22 +361,102 @@ function VehicleCard({ vehicle, formatPrice }) {
           {vehicle.marca} {vehicle.modelo}
         </h3>
         
-        <div className="vehicle-card-info">
-          <div className="info-item">
-            <Calendar size={16} />
-            <span>Ano: <strong>{vehicle.ano}</strong></span>
-          </div>
+        {/* Informações principais em grid */}
+        <div className="vehicle-card-info-grid">
+          {vehicle.ano && (
+            <div className="info-item">
+              <Calendar size={16} />
+              <span>Ano: <strong>{vehicle.ano}</strong></span>
+            </div>
+          )}
           
+          {vehicle.quilometragem && (
+            <div className="info-item">
+              <Gauge size={16} />
+              <span>KM: <strong>{formatKm(vehicle.quilometragem)}</strong></span>
+            </div>
+          )}
+
+          {vehicle.cor && (
+            <div className="info-item">
+              <Palette size={16} />
+              <span>Cor: <strong>{vehicle.cor}</strong></span>
+            </div>
+          )}
+
+          {vehicle.combustivel && (
+            <div className="info-item">
+              <Fuel size={16} />
+              <span>Combustível: <strong>{vehicle.combustivel}</strong></span>
+            </div>
+          )}
+
+          {vehicle.cambio && (
+            <div className="info-item">
+              <Cog size={16} />
+              <span>Câmbio: <strong>{vehicle.cambio}</strong></span>
+            </div>
+          )}
+
           <div className="info-item">
             <Car size={16} />
-            <span>Modelo: <strong>{vehicle.modelo}</strong></span>
-          </div>
-          
-          <div className="info-item">
-            <MapPin size={16} />
-            <span>Marca: <strong>{vehicle.marca}</strong></span>
+            <span>Status: <strong>{vehicle.status}</strong></span>
           </div>
         </div>
+
+        {/* Informações adicionais (expandíveis) */}
+        {(vehicle.especificacoes || vehicle.historico || vehicle.laudoTecnico) && (
+          <div className="vehicle-additional-info">
+            <button 
+              className="btn-details-toggle"
+              onClick={() => setShowDetails(!showDetails)}
+            >
+              {showDetails ? (
+                <>
+                  <ChevronUp size={14} />
+                  Ocultar Detalhes
+                </>
+              ) : (
+                <>
+                  <ChevronDown size={14} />
+                  Ver Detalhes Completos
+                </>
+              )}
+            </button>
+
+            <AnimatePresence>
+              {showDetails && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="details-content"
+                >
+                  {vehicle.especificacoes && (
+                    <div className="detail-section">
+                      <h4>Especificações Técnicas</h4>
+                      <p>{vehicle.especificacoes}</p>
+                    </div>
+                  )}
+
+                  {vehicle.historico && (
+                    <div className="detail-section">
+                      <h4>Histórico do Veículo</h4>
+                      <p>{vehicle.historico}</p>
+                    </div>
+                  )}
+
+                  {vehicle.laudoTecnico && (
+                    <div className="detail-section">
+                      <h4>Laudo Técnico</h4>
+                      <p>{vehicle.laudoTecnico}</p>
+                    </div>
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        )}
       </div>
       
       <div className="vehicle-card-footer">
@@ -362,8 +464,11 @@ function VehicleCard({ vehicle, formatPrice }) {
           <span className="price-label">Preço</span>
           <span className="price-value">{formatPrice(vehicle.preco)}</span>
         </div>
-        <button className="btn-contact">
-          Entrar em Contato
+        <button 
+          className={`btn-contact ${!isAvailable ? 'disabled' : ''}`}
+          disabled={!isAvailable}
+        >
+          {isAvailable ? 'Entrar em Contato' : 'Indisponível'}
         </button>
       </div>
     </motion.div>
