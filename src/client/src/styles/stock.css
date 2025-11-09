@@ -7,7 +7,7 @@
   text-align: center;
   background-color: var(--card); 
   background-image: linear-gradient(rgba(7, 20, 40, 0.8), rgba(7, 20, 40, 0.8)),
-    url('https://placehold.co/1920x600/334155/FFF?text=Estoque');
+    url('https://sun9-42.userapi.com/impf/h1O3UbcAYQZZYiQxxCEvFXFH4n8HF5sC7tudrg/Pff6adsxeGk.jpg?size=1920x768&quality=95&crop=0,44,2400,958&sign=7e4b89a006168b798b2cf46fe6154a89&type=cover_group');
   background-size: cover;
   background-position: center;
   border-bottom: 1px solid var(--glass);
@@ -170,7 +170,9 @@
   text-transform: uppercase;
 }
 
-.form-group input {
+.form-group input,
+.form-group select,
+.form-group textarea {
   width: 100%;
   padding: 12px 14px;
   background: rgba(0, 0, 0, 0.2);
@@ -179,17 +181,90 @@
   color: #fff;
   font-size: 14px;
   transition: all 0.2s ease;
+  font-family: inherit;
 }
 
-.form-group input:focus {
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.2);
 }
 
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.5;
+}
+
+.form-group select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 40px;
+  cursor: pointer;
+}
+
+.form-group select:focus {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23ff5a5f'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+}
+
 .dash-real-form .btn {
   margin-top: 16px;
   align-self: flex-start;
+}
+
+/* Mensagem de sucesso abaixo do botão */
+.form-success-message {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(90deg, #10b981, #059669);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-top: 16px;
+  font-weight: 600;
+  animation: slideInUp 0.3s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Campos com erro */
+.form-group input.error,
+.form-group select.error,
+.form-group textarea.error {
+  border-color: #ef4444 !important;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2) !important;
+}
+
+.field-error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #ef4444;
+  font-size: 12px;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+.form-required-notice {
+  margin-top: 16px;
+  text-align: left;
+  color: var(--muted);
+  font-size: 12px;
 }
 
 /* 6. Estilos do Modal (Fundo e Conteúdo) */
@@ -259,6 +334,7 @@
 }
 
 .veiculo-card-img-container {
+  position: relative;
   width: 100%;
   height: 200px;
   overflow: hidden;
@@ -289,46 +365,155 @@
   gap: 12px;
 }
 
+.veiculo-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  gap: 12px;
+}
+
 .veiculo-card-title {
   font-size: 18px;
   font-weight: 700;
   color: #fff;
   margin: 0;
   line-height: 1.3;
-  min-height: 46px;
-  display: flex;
-  align-items: center;
+  flex: 1;
 }
 
 .veiculo-card-placa {
-  font-family: 'Monaco', 'Consolas', monospace; 
+  font-family: 'Monaco', 'Consolas', monospace;
   font-size: 14px;
   color: var(--muted);
   background: var(--glass);
   padding: 4px 8px;
   border-radius: 4px;
-  align-self: flex-start; 
   letter-spacing: 1px;
+  white-space: nowrap;
 }
 
-.veiculo-card-details {
+/* Grid de informações do veículo */
+.veiculo-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.veiculo-card-info-item {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-top: auto;
+  gap: 6px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  border: 1px solid var(--glass);
 }
 
-.veiculo-card-ano {
-  font-size: 14px;
+.info-icon {
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.info-label {
+  font-size: 11px;
   color: var(--muted);
+  text-transform: uppercase;
   font-weight: 600;
+  margin-right: 4px;
+}
+
+.info-value {
+  font-size: 13px;
+  color: #fff;
+  font-weight: 500;
+  flex: 1;
+}
+
+/* Seção de preço */
+.veiculo-card-price-section {
+  text-align: center;
+  margin: 20px 0;
+  padding: 16px;
+  background: linear-gradient(135deg, rgba(255, 90, 95, 0.1), rgba(255, 90, 95, 0.05));
+  border-radius: 8px;
+  border: 1px solid rgba(255, 90, 95, 0.2);
 }
 
 .veiculo-card-preco {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 800;
   color: var(--accent);
-  text-align: right;
+  margin: 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* Seções de informações adicionais */
+.veiculo-additional-info {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--glass);
+}
+
+.info-section {
+  margin-bottom: 12px;
+}
+
+.info-section:last-child {
+  margin-bottom: 0;
+}
+
+.info-section-title {
+  font-size: 12px;
+  color: var(--muted);
+  text-transform: uppercase;
+  font-weight: 700;
+  margin: 0 0 4px 0;
+  letter-spacing: 0.5px;
+}
+
+.info-section-content {
+  font-size: 13px;
+  color: #fff;
+  line-height: 1.4;
+  margin: 0;
+  opacity: 0.9;
+}
+
+/* Badge de status melhorado */
+.veiculo-status-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  z-index: 2;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.veiculo-status-badge[data-status="Disponível"] {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+}
+
+.veiculo-status-badge[data-status="Vendido"] {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+}
+
+.veiculo-status-badge[data-status="Em Manutenção"] {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+}
+
+.veiculo-status-badge[data-status="Reservado"] {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
 }
 
 /* 9. Botão de Excluir - MELHORADO */
@@ -440,7 +625,374 @@
   opacity: 0.5;
 }
 
-/* 12. Responsividade para mobile - MELHORADO */
+/* 12. ESTILOS PARA MODO DE EDIÇÃO MELHORADOS */
+
+.veiculo-card.editing {
+  border: 2px solid var(--accent);
+  box-shadow: 0 8px 32px rgba(255, 90, 95, 0.15);
+  background: linear-gradient(135deg, var(--card), rgba(255, 90, 95, 0.05));
+  animation: pulseEdit 0.6s ease-in-out;
+}
+
+@keyframes pulseEdit {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 90, 95, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(255, 90, 95, 0.1);
+  }
+  100% {
+    box-shadow: 0 8px 32px rgba(255, 90, 95, 0.15);
+  }
+}
+
+.veiculo-card.editing .veiculo-card-body {
+  padding: 20px;
+}
+
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Seções do formulário de edição */
+.edit-section {
+  margin-bottom: 24px;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  border: 1px solid var(--glass);
+}
+
+.edit-section:last-child {
+  margin-bottom: 16px;
+}
+
+.edit-section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--accent);
+  margin: 0 0 16px 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid rgba(255, 90, 95, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.edit-section-title::before {
+  content: "";
+  display: block;
+  width: 4px;
+  height: 16px;
+  background: var(--accent);
+  border-radius: 2px;
+}
+
+/* Layout melhorado para linhas de edição */
+.edit-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  align-items: start;
+}
+
+/* Campos de edição melhorados */
+.edit-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.edit-field.medium {
+  grid-column: span 2;
+}
+
+.edit-field.small {
+  grid-column: span 1;
+}
+
+.edit-field.full-width {
+  grid-column: 1 / -1;
+}
+
+.edit-field label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.edit-field label::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.1);
+  margin-left: 8px;
+}
+
+/* Indicador visual para campos obrigatórios */
+.edit-field label[for*="placa"]::before,
+.edit-field label[for*="marca"]::before,
+.edit-field label[for*="modelo"]::before {
+  content: "*";
+  color: var(--accent);
+  margin-right: 2px;
+}
+
+.edit-input {
+  padding: 12px 14px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--glass);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.edit-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(255, 90, 95, 0.2);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.edit-input.error {
+  border-color: #ef4444;
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+}
+
+/* Estilos para selects no formulário de edição */
+.edit-field select.edit-input {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 40px;
+  cursor: pointer;
+}
+
+.edit-field select.edit-input:focus {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23ff5a5f'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+}
+
+/* Textareas no formulário de edição */
+.edit-field textarea.edit-input {
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.5;
+}
+
+/* Placeholders estilizados */
+.edit-input::placeholder {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 13px;
+}
+
+/* 13. BOTÕES DE AÇÃO - BASE CONSISTENTE */
+.btn-edit,
+.btn-delete,
+.btn-save,
+.btn-cancel {
+  min-height: 44px;
+  padding: 12px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: none;
+}
+
+/* Botões de Ação Melhorados - CORES E HOVER ESPECÍFICOS */
+.veiculo-card-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--glass);
+}
+
+.btn-edit {
+  background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+  color: white;
+}
+
+.btn-edit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+  background: linear-gradient(90deg, #1d4ed8, #1e40af);
+}
+
+.btn-edit:active {
+  transform: translateY(0);
+}
+
+.btn-delete {
+  background: linear-gradient(90deg, #ef4444, #dc2626);
+  color: white;
+}
+
+.btn-delete:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+  background: linear-gradient(90deg, #dc2626, #b91c1c);
+}
+
+.btn-delete:active {
+  transform: translateY(0);
+}
+
+.btn-save {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+}
+
+.btn-save:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+  background: linear-gradient(135deg, #059669, #047857);
+}
+
+.btn-save:active {
+  transform: translateY(0);
+}
+
+.btn-save:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.btn-cancel {
+  background: var(--glass);
+  color: var(--muted);
+  border: 1px solid var(--glass);
+}
+
+.btn-cancel:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
+.btn-cancel:active {
+  transform: translateY(0);
+}
+
+/* 14. Estados de Foco para Acessibilidade */
+.btn-edit:focus,
+.btn-delete:focus,
+.btn-save:focus,
+.btn-cancel:focus,
+.edit-input:focus,
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus,
+.modal-close-btn:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* 15. Efeito de skeleton loading */
+.skeleton {
+  background: linear-gradient(90deg, var(--glass) 25%, rgba(255,255,255,0.1) 50%, var(--glass) 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton-image {
+  width: 100%;
+  height: 200px;
+  border-radius: var(--radius) var(--radius) 0 0;
+}
+
+.skeleton-text {
+  height: 16px;
+  border-radius: 4px;
+  margin-bottom: 8px;
+}
+
+.skeleton-text.short {
+  width: 60%;
+}
+
+.skeleton-button {
+  height: 40px;
+  border-radius: 6px;
+  margin-top: 16px;
+}
+
+/* 16. Animações suaves para transições */
+.veiculo-card {
+  animation: fadeInUp 0.5s ease-out;
+  transition: all 0.3s ease;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 17. Scrollbar personalizada para o modal */
+.veiculo-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.veiculo-list::-webkit-scrollbar-track {
+  background: var(--glass);
+  border-radius: 3px;
+}
+
+.veiculo-list::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 3px;
+}
+
+.veiculo-list::-webkit-scrollbar-thumb:hover {
+  background: #ff7b7f;
+}
+
+/* 18. Placeholder para imagens que não carregam */
+.veiculo-card-img-container img:before {
+  content: "🚗";
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--glass);
+  color: var(--muted);
+  font-size: 24px;
+}
+
+/* 19. RESPONSIVIDADE */
+
 @media (max-width: 768px) {
   .dash-hero {
     padding: 72px 0;
@@ -499,6 +1051,68 @@
   .modal-header h3 {
     font-size: 20px;
   }
+
+  /* Responsividade para edição */
+  .edit-section {
+    padding: 16px;
+    margin-bottom: 20px;
+  }
+  
+  .edit-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  
+  .edit-field.medium,
+  .edit-field.small,
+  .edit-field.full-width {
+    grid-column: 1;
+  }
+  
+  .edit-section-title {
+    font-size: 15px;
+  }
+  
+  .veiculo-card-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .btn-edit,
+  .btn-delete,
+  .btn-save,
+  .btn-cancel {
+    padding: 12px 16px;
+  }
+
+  /* Grid de informações do veículo em mobile */
+  .veiculo-card-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  
+  .veiculo-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .veiculo-card-placa {
+    align-self: flex-start;
+  }
+  
+  .veiculo-card-price-section {
+    margin: 16px 0;
+    padding: 12px;
+  }
+  
+  .veiculo-card-preco {
+    font-size: 20px;
+  }
+  
+  .veiculo-card-info-item {
+    padding: 6px 8px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -515,290 +1129,37 @@
   .veiculo-card-preco {
     text-align: left;
   }
-}
 
-/* 13. Animações suaves para transições - MELHORADO */
-.veiculo-card {
-  animation: fadeInUp 0.5s ease-out;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* 14. Scrollbar personalizada para o modal */
-.veiculo-list::-webkit-scrollbar {
-  width: 6px;
-}
-
-.veiculo-list::-webkit-scrollbar-track {
-  background: var(--glass);
-  border-radius: 3px;
-}
-
-.veiculo-list::-webkit-scrollbar-thumb {
-  background: var(--accent);
-  border-radius: 3px;
-}
-
-.veiculo-list::-webkit-scrollbar-thumb:hover {
-  background: #ff7b7f;
-}
-
-/* 15. Estados de foco para acessibilidade */
-.btn-delete:focus {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-
-.form-group input:focus {
-  outline: 2px solid var(--accent);
-  outline-offset: 1px;
-}
-
-.modal-close-btn:focus {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-
-/* 16. Placeholder para imagens que não carregam */
-.veiculo-card-img-container img:before {
-  content: "🚗";
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--glass);
-  color: var(--muted);
-  font-size: 24px;
-}
-
-/* 17. Efeito de skeleton loading */
-.skeleton {
-  background: linear-gradient(90deg, var(--glass) 25%, rgba(255,255,255,0.1) 50%, var(--glass) 75%);
-  background-size: 200% 100%;
-  animation: loading 1.5s infinite;
-}
-
-@keyframes loading {
-  0% {
-    background-position: 200% 0;
-  }
-  100% {
-    background-position: -200% 0;
-  }
-}
-
-.skeleton-image {
-  width: 100%;
-  height: 200px;
-  border-radius: var(--radius) var(--radius) 0 0;
-}
-
-.skeleton-text {
-  height: 16px;
-  border-radius: 4px;
-  margin-bottom: 8px;
-}
-
-.skeleton-text.short {
-  width: 60%;
-}
-
-.skeleton-button {
-  height: 40px;
-  border-radius: 6px;
-  margin-top: 16px;
-}
-
-/* 18. Estilos para Modo de Edição */
-.veiculo-card.editing {
-  border: 2px solid var(--accent);
-  box-shadow: 0 0 0 3px rgba(255, 90, 95, 0.1);
-}
-
-.edit-form {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.edit-field {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.edit-field label {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--muted);
-  text-transform: uppercase;
-}
-
-.edit-input {
-  padding: 8px 12px;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid var(--glass);
-  border-radius: 6px;
-  color: #fff;
-  font-size: 14px;
-  transition: all 0.2s ease;
-}
-
-.edit-input:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(255, 90, 95, 0.2);
-}
-
-.edit-row {
-  display: flex;
-  gap: 12px;
-}
-
-.edit-field.small {
-  flex: 1;
-}
-
-/* 18.5 Base consistente para todos os botões de ação */
-.btn-edit,
-.btn-delete,
-.btn-save,
-.btn-cancel {
-  min-height: 44px;
-  padding: 12px 16px;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  border: none;
-}
-
-/* 19. Botões de Ação Melhorados - CORES E HOVER ESPECÍFICOS */
-.veiculo-card-actions {
-  display: flex;
-  gap: 8px;
-  margin-top: 16px;
-}
-
-.btn-edit {
-  background: linear-gradient(90deg, #3b82f6, #1d4ed8);
-  color: white;
-}
-
-.btn-edit:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
-  background: linear-gradient(90deg, #1d4ed8, #1e40af);
-}
-
-.btn-edit:active {
-  transform: translateY(0);
-}
-
-.btn-delete:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
-}
-
-.btn-delete:active {
-  transform: translateY(0);
-}
-
-.btn-save {
-  background: linear-gradient(90deg, #10b981, #059669);
-  color: white;
-}
-
-.btn-save:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
-  background: linear-gradient(90deg, #059669, #047857);
-}
-
-.btn-save:active {
-  transform: translateY(0);
-}
-
-.btn-cancel {
-  background: var(--glass);
-  color: var(--muted);
-  border: 1px solid var(--glass);
-}
-
-.btn-cancel:hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: #fff;
-  transform: translateY(-2px);
-}
-
-.btn-cancel:active {
-  transform: translateY(0);
-}
-
-/* 20. Estados de Foco para Acessibilidade */
-.btn-edit:focus,
-.btn-delete:focus,
-.btn-save:focus,
-.btn-cancel:focus {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
-}
-
-.edit-input:focus {
-  outline: 2px solid var(--accent);
-  outline-offset: 1px;
-}
-
-/* 21. Responsividade para Edição */
-@media (max-width: 768px) {
-  .edit-row {
-    flex-direction: column;
-    gap: 8px;
+  .veiculo-card-img-container {
+    height: 180px;
   }
   
-  .veiculo-card-actions {
-    flex-direction: column;
+  .veiculo-card-title {
+    font-size: 16px;
   }
   
-  .btn-edit,
-  .btn-delete,
-  .btn-save,
-  .btn-cancel {
-    padding: 12px 16px;
+  .veiculo-card-preco {
+    font-size: 18px;
   }
-}
-
-/* 22. Animações para Transição de Edição */
-.veiculo-card {
-  transition: all 0.3s ease;
-}
-
-.veiculo-card.editing {
-  animation: pulseEdit 0.5s ease-in-out;
-}
-
-@keyframes pulseEdit {
-  0% {
-    box-shadow: 0 0 0 0 rgba(255, 90, 95, 0.4);
+  
+  .veiculo-status-badge {
+    top: 8px;
+    right: 8px;
+    padding: 4px 8px;
+    font-size: 9px;
   }
-  70% {
-    box-shadow: 0 0 0 10px rgba(255, 90, 95, 0);
+
+  .edit-section {
+    padding: 12px;
+    margin-bottom: 16px;
   }
-  100% {
-    box-shadow: 0 0 0 0 rgba(255, 90, 95, 0);
+  
+  .edit-input {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+  
+  .edit-field label {
+    font-size: 11px;
   }
 }
