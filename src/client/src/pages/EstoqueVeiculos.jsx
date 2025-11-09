@@ -22,6 +22,7 @@ import {
   AlertCircle,
   CheckCircle2,
   Gauge,
+  Calendar,
   Palette,
   Fuel,
   Settings
@@ -1358,7 +1359,7 @@ function VeiculoCard({
         <div className="veiculo-card-grid">
           {veiculo.ano && (
             <div className="veiculo-card-info-item">
-              <span className="info-label">Ano</span>
+              <Calendar size={16} className="info-icon" />
               <span className="info-value">{veiculo.ano}</span>
             </div>
           )}
