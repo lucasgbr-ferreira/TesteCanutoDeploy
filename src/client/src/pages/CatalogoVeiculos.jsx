@@ -162,7 +162,7 @@ export default function CatalogoVeiculos() {
   const navLinks = [
     { name: 'Início', href: '/' },
     { name: 'Veículos', href: '/catalog' },
-    { name: 'Promoções', href: '/promocoes' },
+    { name: 'Promoções', href: '/catalog/#' },
   ];
 
   // Função para formatar preço
@@ -466,7 +466,7 @@ function VehicleCard({ vehicle, formatPrice, formatKm }) {
         </div>
         <button 
           className={`btn-contact ${!isAvailable ? 'disabled' : ''}`}
-          disabled={!isAvailable}
+          disabled={isAvailable}
         >
           {isAvailable ? 'Entrar em Contato' : 'Indisponível'}
         </button>
