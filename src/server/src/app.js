@@ -12,6 +12,7 @@ import uploadRoutes from './routes/uploadRoutes.js';
 import imageGetRoutes from './routes/imageGetRoutes.js';
 import concessionariaRoutes from './routes/concessionariaRoutes.js';
 import clientRoutes from './routes/clientRoutes.js';
+import veiculoRoutes from './routes/veiculoRoutes.js';
 
 
 import profilePhotoRoutes from "./routes/profilePhotoRoutes.js";
@@ -34,6 +35,7 @@ app.use("/api/profile/photo", profilePhotoRoutes);
 app.use('/api/uploads', uploadRoutes); 
 app.use('/api/clients', clientRoutes); 
 
+app.use('/api/veiculos', veiculoRoutes);
 
 app.get('/', (req, res) => res.send('GesCar API running'));
 

@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import PerfilCliente from "./pages/PerfilCliente";
 
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import GalleryScroll from "./components/GalleryScroll";
 
 
@@ -57,6 +58,17 @@ function LandingPage() {
 
             <p className="lp-hero-sub">
               Catálogo atualizado, financiamento integrado e atendimento direto das concessionárias.
+            </motion.p>
+
+            <motion.div
+              className="lp-hero-cta"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+              variants={fadeUp}
+              custom={0.24}
+            >
+              <Link to="/catalog" className="btn primary large">Ver catálogo</Link>
             </p>
 
             <div className="lp-hero-cta">
