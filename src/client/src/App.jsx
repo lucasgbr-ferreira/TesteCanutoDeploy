@@ -1,5 +1,9 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+import PerfilCliente from "./pages/PerfilCliente";
+
+import { motion } from "framer-motion";
 import GalleryScroll from "./components/GalleryScroll";
 
 
@@ -84,6 +88,16 @@ function LandingPage() {
         </div>
       </section>
 
+      {/* ABOUT */}
+      <section className="lp-about">
+        <div className="lp-container">
+          <h3>Como funciona</h3>
+          <p>
+            Conectamos clientes às concessionárias próximas, facilitamos propostas e agendamentos, e apresentamos opções de pagamento e garantia — tudo numa única plataforma.
+          </p>
+        </div>
+      </section>
+
       {/* GALLERY */}
       <GalleryScroll />
 
@@ -118,6 +132,10 @@ export default function App() {
         <Route path="/cliente/propostas" element={<Propostas />} />
         <Route path="/cliente/suporte" element={<Suporte />} />
         <Route path="/cliente/catalogo" element={<Catalogo />} />
+
+        <Route path="/" element={<PerfilCliente />} />
+
+        <Route path="/landing" element={<LandingPage />} />
 
       </Routes>
     </Router>
