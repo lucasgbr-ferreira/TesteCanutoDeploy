@@ -1,28 +1,26 @@
 import React from "react";
-import "../styles/home.css";
+import "../styles/landing.css";
+import Logo from "../assets/GesCar-Logo-removebg-preview.png"; 
 
-export default function Header() {
+export default function HeaderCliente() {
   return (
-    <header className="header-cliente">
-      {/* LOGO */}
-      <div className="logo">
-        <span className="logo-text">Ges</span>
-        <span className="logo-highlight">Car</span>
+    <header className="lp-header">
+      <div className="lp-brand">
+        <a href="/home_cliente">
+          <img src={Logo} alt="GesCar" className="lp-logo" />
+        </a>
       </div>
 
-      {/* MENU CENTRAL */}
-      <nav className="nav-menu">
+      <nav className="lp-nav" style={{ display: "flex", gap: 18, alignItems: "center" }}>
         <a href="/home_cliente">Início</a>
-        <span className="separator">|</span>
         <a href="#">Veículos</a>
-        <span className="separator">|</span>
         <a href="#">Promoções</a>
-        <span className="separator">|</span>
         <a href="/perfil">Perfil</a>
-      </nav>
 
-      {/* BOTÃO SAIR */}
-      <button className="btn-logout">Sair</button>
+        <div style={{ marginLeft: "18px" }}>
+          <button className="lp-button-logout">Sair</button>
+        </div>
+      </nav>
     </header>
   );
 }
