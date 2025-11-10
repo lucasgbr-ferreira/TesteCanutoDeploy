@@ -1,16 +1,9 @@
 // server/src/controllers/veiculoController.js
-import { Veiculo, Concessionaria } from '../models/index.js';
+import { Veiculo } from '../models/index.js';
 
 // --- CREATE ---
 export const createVeiculo = async (req, res) => {
   try {
-    // Verificar se o usuário está autenticado e é uma concessionária
-    if (!req.user || req.user.role !== 'concessionaria') {
-      return res.status(403).json({ 
-        message: 'Acesso negado. Apenas concessionárias podem cadastrar veículos.' 
-      });
-    }
-
     const dadosVeiculo = req.body;
     
     // Validação adicional no servidor
@@ -20,28 +13,24 @@ export const createVeiculo = async (req, res) => {
       });
     }
 
-    // Buscar a concessionária do usuário logado
-    const concessionaria = await Concessionaria.findOne({ 
-      where: { user_id: req.user.id } 
-    });
-
-    if (!concessionaria) {
-      return res.status(404).json({ 
-        message: 'Concessionária não encontrada para este usuário' 
-      });
-    }
-
     // Formatar placa para maiúsculas
     if (dadosVeiculo.placa) {
       dadosVeiculo.placa = dadosVeiculo.placa.toUpperCase().replace(/\s/g, '');
     }
 
-    // Associar veículo à concessionária
-    dadosVeiculo.concessionaria_id = concessionaria.id;
+    // VALIDAÇÃO ADICIONAL: Garantir que campos numéricos sejam convertidos
+    const dadosProcessados = {
+      ...dadosVeiculo,
+      ano: dadosVeiculo.ano ? parseInt(dadosVeiculo.ano) : null,
+      preco: dadosVeiculo.preco ? parseFloat(dadosVeiculo.preco) : null,
+      quilometragem: dadosVeiculo.quilometragem ? parseInt(dadosVeiculo.quilometragem) : null
+    };
 
-    const novoVeiculo = await Veiculo.create(dadosVeiculo); 
+    const novoVeiculo = await Veiculo.create(dadosProcessados); 
     res.status(201).json(novoVeiculo);
   } catch (error) {
+    console.error('Erro detalhado ao criar veículo:', error);
+    
     if (error.name === 'SequelizeValidationError') {
       const errors = error.errors.map(err => err.message);
       return res.status(400).json({ 
@@ -54,7 +43,17 @@ export const createVeiculo = async (req, res) => {
         message: 'Placa já cadastrada no sistema' 
       });
     }
-    res.status(500).json({ message: 'Erro ao cadastrar veículo', error: error.message });
+    // Adicionar mais tipos de erro do Sequelize
+    if (error.name === 'SequelizeDatabaseError') {
+      return res.status(400).json({ 
+        message: 'Erro no banco de dados: ' + error.message 
+      });
+    }
+    
+    res.status(500).json({ 
+      message: 'Erro interno ao cadastrar veículo',
+      error: process.env.NODE_ENV === 'development' ? error.message : 'Erro interno do servidor'
+    });
   }
 };
 
@@ -66,39 +65,11 @@ export const getAllVeiculos = async (req, res) => {
     });
     res.status(200).json(veiculos);
   } catch (error) {
-    res.status(500).json({ message: 'Erro ao buscar veículos', error: error.message });
-  }
-};
-
-// --- READ BY CONCESSIONARIA ---
-export const getVeiculosByConcessionaria = async (req, res) => {
-  try {
-    // Verificar se o usuário está autenticado e é uma concessionária
-    if (!req.user || req.user.role !== 'concessionaria') {
-      return res.status(403).json({ 
-        message: 'Acesso negado. Apenas concessionárias podem visualizar seus veículos.' 
-      });
-    }
-
-    // Buscar a concessionária do usuário logado
-    const concessionaria = await Concessionaria.findOne({ 
-      where: { user_id: req.user.id } 
+    console.error('Erro ao buscar veículos:', error);
+    res.status(500).json({ 
+      message: 'Erro ao buscar veículos', 
+      error: process.env.NODE_ENV === 'development' ? error.message : 'Erro interno do servidor'
     });
-
-    if (!concessionaria) {
-      return res.status(404).json({ 
-        message: 'Concessionária não encontrada' 
-      });
-    }
-
-    const veiculos = await Veiculo.findAll({
-      where: { concessionaria_id: concessionaria.id },
-      order: [['createdAt', 'DESC']]
-    });
-
-    res.status(200).json(veiculos);
-  } catch (error) {
-    res.status(500).json({ message: 'Erro ao buscar veículos', error: error.message });
   }
 };
 
@@ -112,26 +83,24 @@ export const updateVeiculo = async (req, res) => {
       return res.status(404).json({ message: 'Veículo não encontrado' });
     }
 
-    // Verificar se o usuário é dono do veículo
-    const concessionaria = await Concessionaria.findOne({ 
-      where: { user_id: req.user.id } 
-    });
-
-    if (!concessionaria || veiculo.concessionaria_id !== concessionaria.id) {
-      return res.status(403).json({ 
-        message: 'Acesso negado. Você só pode editar veículos da sua concessionária.' 
-      });
-    }
-
     // Formatar placa para maiúsculas
     if (req.body.placa) {
       req.body.placa = req.body.placa.toUpperCase().replace(/\s/g, '');
     }
 
-    await veiculo.update(req.body);
+    // Processar campos numéricos
+    const dadosAtualizados = {
+      ...req.body,
+      ano: req.body.ano ? parseInt(req.body.ano) : null,
+      preco: req.body.preco ? parseFloat(req.body.preco) : null,
+      quilometragem: req.body.quilometragem ? parseInt(req.body.quilometragem) : null
+    };
+
+    await veiculo.update(dadosAtualizados);
     
     res.status(200).json(veiculo); 
   } catch (error) {
+    console.error('Erro ao atualizar veículo:', error);
     if (error.name === 'SequelizeValidationError') {
       const errors = error.errors.map(err => err.message);
       return res.status(400).json({ 
@@ -144,7 +113,10 @@ export const updateVeiculo = async (req, res) => {
         message: 'Placa já cadastrada no sistema' 
       });
     }
-    res.status(500).json({ message: 'Erro ao atualizar veículo', error: error.message });
+    res.status(500).json({ 
+      message: 'Erro ao atualizar veículo', 
+      error: process.env.NODE_ENV === 'development' ? error.message : 'Erro interno do servidor'
+    });
   }
 };
 
@@ -158,21 +130,14 @@ export const deleteVeiculo = async (req, res) => {
       return res.status(404).json({ message: 'Veículo não encontrado' });
     }
 
-    // Verificar se o usuário é dono do veículo
-    const concessionaria = await Concessionaria.findOne({ 
-      where: { user_id: req.user.id } 
-    });
-
-    if (!concessionaria || veiculo.concessionaria_id !== concessionaria.id) {
-      return res.status(403).json({ 
-        message: 'Acesso negado. Você só pode excluir veículos da sua concessionária.' 
-      });
-    }
-
     await veiculo.destroy();
     
     res.status(204).json({ message: 'Veículo deletado com sucesso' });
   } catch (error) {
-    res.status(500).json({ message: 'Erro ao deletar veículo', error: error.message });
+    console.error('Erro ao deletar veículo:', error);
+    res.status(500).json({ 
+      message: 'Erro ao deletar veículo', 
+      error: process.env.NODE_ENV === 'development' ? error.message : 'Erro interno do servidor'
+    });
   }
 };

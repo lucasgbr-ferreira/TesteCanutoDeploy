@@ -1,3 +1,5 @@
+// client/src/pages/EstoqueVeiculos.jsx
+
 // --- Imports ---
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -144,7 +146,7 @@ const validateForm = (formData) => {
 };
 
 // --- Sub-Componentes (Dropdown e Modal de Login) ---
-function ProfileDropdown({ user, onLogout }) {
+function ProfileDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -161,7 +163,7 @@ function ProfileDropdown({ user, onLogout }) {
   return (
     <div className="profile-dropdown" ref={dropdownRef}>
       <button onClick={() => setIsOpen(!isOpen)} className="nav-link">
-        {user?.name || 'Perfil'}
+        Perfil
         <svg className={`dropdown-arrow ${isOpen ? 'open' : ''}`} width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
       </button>
 
@@ -176,7 +178,7 @@ function ProfileDropdown({ user, onLogout }) {
             <a href="#" className="dropdown-item"><Users width={16} height={16} /> Minha Conta</a>
             <a href="#" className="dropdown-item"><Heart width={16} height={16} /> Meus Favoritos</a>
             <hr />
-            <a href="#" className="dropdown-item" onClick={onLogout}><LogOut width={16} height={16} /> Sair</a>
+            <a href="#" className="dropdown-item"><LogOut width={16} height={16} /> Sair</a>
           </motion.div>
         )}
       </AnimatePresence>
@@ -184,29 +186,7 @@ function ProfileDropdown({ user, onLogout }) {
   );
 }
 
-function LoginModal({ isOpen, onClose, onLogin }) {
-  const [email, setEmail] = useState("canuto@canutomotors.com");
-  const [password, setPassword] = useState("12345");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError('');
-
-    try {
-      await onLogin(email, password);
-      onClose();
-      setEmail('');
-      setPassword('');
-    } catch (err) {
-      setError(err.response?.data?.message || 'Erro ao fazer login');
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
+function LoginModal({ isOpen, onClose }) {
   return (
     <AnimatePresence>
       {isOpen && (
@@ -230,50 +210,21 @@ function LoginModal({ isOpen, onClose, onLogin }) {
                 <X width={24} height={24} />
               </button>
             </div>
-            <form onSubmit={handleSubmit}>
+            <form>
               <div className="modal-body">
-                {error && (
-                  <div className="form-error-message">
-                    <AlertCircle size={16} />
-                    {error}
-                  </div>
-                )}
                 <div className="form-group">
                   <label htmlFor="emailInput">Email</label>
-                  <input
-                    type="email"
-                    id="emailInput"
-                    placeholder="voce@exemplo.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
+                  <input type="email" id="emailInput" placeholder="voce@exemplo.com" />
                 </div>
                 <div className="form-group">
                   <label htmlFor="passwordInput">Senha</label>
-                  <input
-                    type="password"
-                    id="passwordInput"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
+                  <input type="password" id="passwordInput" />
                 </div>
               </div>
               <div className="modal-footer">
-                <button
-                  type="submit"
-                  className="btn primary"
-                  style={{ width: '100%' }}
-                  disabled={isLoading}
-                >
-                  {isLoading ? 'Entrando...' : 'Entrar'}
+                <button type="submit" className="btn primary" style={{ width: '100%' }}>
+                  Entrar
                 </button>
-                <div style={{ marginTop: '16px', fontSize: '14px', color: '#666', textAlign: 'center' }}>
-                  <strong>Credenciais de teste:</strong><br />
-                  canuto@canutomotors.com<br />
-                  Senha: 12345
-                </div>
               </div>
             </form>
           </motion.div>
@@ -287,10 +238,6 @@ function LoginModal({ isOpen, onClose, onLogin }) {
 export default function EstoqueVeiculos() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [user, setUser] = useState(null);
-
-  // --- Estados de Autenticação ---
-  const [authToken, setAuthToken] = useState(localStorage.getItem('authToken'));
 
   // --- LÓGICA DO FORMULÁRIO (MODIFICADO COM VALIDAÇÕES) ---
   const [formData, setFormData] = useState({
@@ -326,83 +273,16 @@ export default function EstoqueVeiculos() {
   const [isEditMode, setIsEditMode] = useState(false);
   const [editErrors, setEditErrors] = useState({});
 
-  // --- Efeito para configurar axios com token ---
-  useEffect(() => {
-    if (authToken) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${authToken}`;
-      // Buscar dados do usuário
-      fetchUserData();
-    } else {
-      delete axios.defaults.headers.common['Authorization'];
-    }
-  }, [authToken]);
-
-  const fetchUserData = async () => {
-    try {
-      // Como não temos rota /me, vamos tentar buscar os veículos para validar a autenticação
-      await fetchVeiculos();
-
-      // Se chegou aqui, o usuário está autenticado e é uma concessionária
-      const userData = {
-        name: 'Canuto Motors',
-        email: 'canuto@canutomotors.com',
-        role: 'concessionaria'
-      };
-      setUser(userData);
-    } catch (error) {
-      console.error('Erro ao validar autenticação:', error);
-      logout();
-    }
-  };
-
-  const handleLogin = async (email, password) => {
-    const response = await axios.post('http://localhost:3000/api/auth/login', {
-      email,
-      password
-    });
-
-    const { token, user: userData } = response.data;
-
-    // Verificar se o usuário é uma concessionária
-    if (userData.role !== 'concessionaria') {
-      throw new Error('Acesso restrito apenas para concessionárias');
-    }
-
-    localStorage.setItem('authToken', token);
-    setAuthToken(token);
-    setUser(userData);
-
-    // Buscar veículos após login bem-sucedido
-    fetchVeiculos();
-  };
-
-  const logout = () => {
-    localStorage.removeItem('authToken');
-    setAuthToken(null);
-    setUser(null);
-    delete axios.defaults.headers.common['Authorization'];
-  };
-
   // --- Função para buscar veículos ---
   const fetchVeiculos = async () => {
     setIsLoading(true);
     setError(null);
     try {
-      // Usar a nova rota que retorna apenas veículos da concessionária logada
-      const response = await axios.get('http://localhost:3000/api/veiculos/meus-veiculos');
+      const response = await axios.get('http://localhost:3000/api/veiculos');
       setVeiculos(response.data);
     } catch (err) {
       console.error("Erro ao buscar veículos:", err);
-
-      if (err.response?.status === 403) {
-        setError("Acesso negado. Você precisa estar logado como concessionária.");
-        // Forçar logout se não for concessionária
-        logout();
-      } else if (err.response?.status === 404) {
-        setError("Concessionária não encontrada no sistema.");
-      } else {
-        setError("Não foi possível carregar os veículos.");
-      }
+      setError("Não foi possível carregar os veículos.");
       setVeiculos([]);
     } finally {
       setIsLoading(false);
@@ -438,12 +318,7 @@ export default function EstoqueVeiculos() {
       alert('Veículo excluído com sucesso!');
     } catch (error) {
       console.error('Erro ao excluir veículo:', error);
-      if (error.response?.status === 403) {
-        alert('Acesso negado. Você precisa estar logado para excluir veículos.');
-        setIsModalOpen(true);
-      } else {
-        alert('Erro ao excluir veículo. Tente novamente.');
-      }
+      alert('Erro ao excluir veículo. Tente novamente.');
     }
   };
 
@@ -473,13 +348,6 @@ export default function EstoqueVeiculos() {
   // --- Função para salvar edição ---
   const handleSaveEdit = async () => {
     if (!veiculoEditando) return;
-
-    // Verificar se está autenticado
-    if (!user) {
-      alert('Você precisa estar logado para editar veículos.');
-      setIsModalOpen(true);
-      return;
-    }
 
     // Validar todos os campos antes de salvar
     let hasErrors = false;
@@ -524,10 +392,7 @@ export default function EstoqueVeiculos() {
       alert('Veículo atualizado com sucesso!');
     } catch (error) {
       console.error('Erro ao atualizar veículo:', error);
-      if (error.response?.status === 403) {
-        alert('Acesso negado. Você precisa estar logado para editar veículos.');
-        setIsModalOpen(true);
-      } else if (error.response?.data?.errors) {
+      if (error.response?.data?.errors) {
         alert(`Erro de validação: ${error.response.data.errors.join(', ')}`);
       } else {
         alert('Erro ao atualizar veículo. Tente novamente.');
@@ -553,7 +418,7 @@ export default function EstoqueVeiculos() {
     validateEditField(field, value);
   };
 
-  // --- Handlers do Formulário Principal (MODIFICADO para usar auth) ---
+  // --- Handlers do Formulário Principal ---
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prevState => ({
@@ -576,13 +441,6 @@ export default function EstoqueVeiculos() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Verificar se está autenticado
-    if (!user) {
-      alert('Você precisa estar logado para cadastrar veículos.');
-      setIsModalOpen(true);
-      return;
-    }
 
     // Validação completa do formulário
     const { isValid, errors } = validateForm(formData);
@@ -639,28 +497,22 @@ export default function EstoqueVeiculos() {
         (error.response.data.errors ? error.response.data.errors.join(', ') : error.response.data.message)
         : error.message;
       console.error('Erro ao cadastrar:', errorMessage);
-
-      if (error.response?.status === 403) {
-        alert('Acesso negado. Você precisa estar logado como concessionária para cadastrar veículos.');
-        setIsModalOpen(true);
-      } else {
-        alert(`Erro ao cadastrar veículo: ${errorMessage}`);
-      }
+      alert(`Erro ao cadastrar veículo: ${errorMessage}`);
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const navLinks = [
-    { name: 'Início', href: '/' },
+    { name: 'Início', href: '/dashboard/estoque' },
     { name: 'Veículos', href: '/catalog' },
-    { name: 'Promoções', href: '/promocoes' },
+    { name: 'Promoções', href: '/catalog' },
   ];
 
   return (
     <main className="lp-root">
 
-      {/* 1. Navbar (Menu Superior) MODIFICADO */}
+      {/* 1. Navbar (Menu Superior) */}
       <nav className="lp-header">
         <div className="lp-container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Link to="/" className="lp-brand">
@@ -675,18 +527,8 @@ export default function EstoqueVeiculos() {
                 {link.name}
               </Link>
             ))}
-            {user ? (
-              <>
-                <ProfileDropdown user={user} onLogout={logout} />
-                <span className="nav-link" style={{ color: '#10b981' }}>
-                  👋 Olá, {user.name}
-                </span>
-              </>
-            ) : (
-              <button onClick={() => setIsModalOpen(true)} className="btn primary small">
-                Entrar
-              </button>
-            )}
+            <ProfileDropdown />
+
           </div>
 
           {/* Botão Mobile */}
@@ -709,7 +551,7 @@ export default function EstoqueVeiculos() {
                   {link.name}
                 </Link>
               ))}
-              {user && <ProfileDropdown user={user} onLogout={logout} />}
+              <ProfileDropdown />
             </motion.div>
           )}
         </AnimatePresence>
@@ -727,34 +569,15 @@ export default function EstoqueVeiculos() {
           <motion.h1 variants={fadeUp}>
             Estoque de veículos da concessionária
           </motion.h1>
-
           <motion.p variants={fadeUp} custom={0.1}>
-            {user
-              ? 'Gerencie com precisão todos os veículos disponíveis em seu estoque.'
-              : 'Faça login para gerenciar o estoque de veículos.'
-            }
+            Gerencie com precisão todos os veículos disponíveis em seu estoque.
           </motion.p>
-
           <motion.div className="dash-hero-cta" variants={fadeUp} custom={0.2}>
-
-            {user ? (
-              <a href="#add-veiculo" className="btn primary">
-                Adicionar Veículo
-              </a>
-            ) : (
-              <button
-                onClick={() => setIsModalOpen(true)}
-                className="btn primary small"
-              >
-                Fazer Login
-              </button>
-            )}
-
+            <a href="#add-veiculo" className="btn primary">Adicionar Veículo</a>
             <button className="btn ghost">Filtrar Estoque</button>
           </motion.div>
         </div>
       </motion.header>
-
 
       {/* 3. Seção Introdução */}
       <motion.section
@@ -766,333 +589,329 @@ export default function EstoqueVeiculos() {
       >
         <div className="lp-container" style={{ marginTop: "40px" }}>
           <motion.h2 variants={fadeUp} custom={0.1}>
-            {user ? 'Catálogo completo' : 'Acesso Restrito'}
+            Catálogo completo
           </motion.h2>
           <motion.p variants={fadeUp} custom={0.2}>
-            {user
-              ? 'Visualize todos os veículos cadastrados em um único lugar.'
-              : 'Apenas concessionárias autenticadas podem gerenciar o estoque.'
-            }
+            Visualize todos os veículos cadastrados em um único lugar.
           </motion.p>
         </div>
+
       </motion.section>
 
-      {/* 4. Seção Grid de Ações - SÓ EXIBE SE ESTIVER LOGADO */}
-      {user && (
-        <main className="lp-container" style={{ paddingBottom: '72px', paddingTop: '36px' }}>
-          <motion.div
-            className="dash-grid"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.1 }}
-            variants={staggerContainer}
-          >
-            <DashboardCard
-              icon={Car}
-              title="Veículos disponíveis para venda"
-              desc="Confira os detalhes de cada veículo do estoque."
-              linkText="Detalhes"
-              onClick={handleOpenVeiculoModal}
-            />
-            <DashboardCard
-              icon={CheckSquare}
-              title="Veículos vendidos"
-              desc="Histórico de vendas concluídas."
-              linkText="Relatório"
-            />
-            <DashboardCard
-              icon={Wrench}
-              title="Veículos em manutenção"
-              desc="Acompanhe veículos temporariamente indisponíveis."
-              linkText="Manutenção"
-            />
-          </motion.div>
+      {/* 4. Seção Grid de Ações */}
+      <main className="lp-container" style={{ paddingBottom: '72px', paddingTop: '36px' }}>
+        <motion.div
+          className="dash-grid"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+          variants={staggerContainer}
+        >
+          <DashboardCard
+            icon={Car}
+            title="Veículos disponíveis para venda"
+            desc="Confira os detalhes de cada veículo do estoque."
+            linkText="Detalhes"
+            onClick={handleOpenVeiculoModal}
+          />
+          <DashboardCard
+            icon={CheckSquare}
+            title="Veículos vendidos"
+            desc="Histórico de vendas concluídas."
+            linkText="Relatório"
+          />
+          <DashboardCard
+            icon={Wrench}
+            title="Veículos em manutenção"
+            desc="Acompanhe veículos temporariamente indisponíveis."
+            linkText="Manutenção"
+          />
+        </motion.div>
 
-          {/* 5. Seção Adicionar Veículo (MODIFICADA COM VALIDAÇÕES) - SÓ EXIBE SE ESTIVER LOGADO */}
-          <motion.section
-            id="add-veiculo"
-            className="dash-add-form"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            variants={fadeUp}
-          >
-            <h2>Adicionar novo veículo</h2>
-            <p>
-              Insira todas as informações necessárias para cadastrar um novo veículo.
-            </p>
+        {/* 5. Seção Adicionar Veículo (MODIFICADA COM VALIDAÇÕES) */}
+        <motion.section
+          id="add-veiculo"
+          className="dash-add-form"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={fadeUp}
+        >
+          <h2>Adicionar novo veículo</h2>
+          <p>
+            Insira todas as informações necessárias para cadastrar um novo veículo.
+          </p>
 
-            <form onSubmit={handleSubmit} className="dash-real-form">
+          <form onSubmit={handleSubmit} className="dash-real-form">
 
-              {/* Linha 1: Placa, Marca, Modelo */}
-              <div className="form-row">
-                <div className="form-group small">
-                  <label htmlFor="placa">Placa *</label>
-                  <input
-                    type="text"
-                    id="placa"
-                    name="placa"
-                    value={formData.placa}
-                    onChange={handleChange}
-                    className={formErrors.placa ? 'error' : ''}
-                    placeholder="ABC1D23"
-                    required
-                  />
-                  {formErrors.placa && (
-                    <div className="field-error">
-                      <AlertCircle size={14} />
-                      {formErrors.placa[0]}
-                    </div>
-                  )}
-                </div>
-                <div className="form-group medium">
-                  <label htmlFor="marca">Marca *</label>
-                  <input
-                    type="text"
-                    id="marca"
-                    name="marca"
-                    value={formData.marca}
-                    onChange={handleChange}
-                    className={formErrors.marca ? 'error' : ''}
-                    placeholder="ex: Toyota"
-                    required
-                  />
-                  {formErrors.marca && (
-                    <div className="field-error">
-                      <AlertCircle size={14} />
-                      {formErrors.marca[0]}
-                    </div>
-                  )}
-                </div>
-                <div className="form-group large">
-                  <label htmlFor="modelo">Modelo *</label>
-                  <input
-                    type="text"
-                    id="modelo"
-                    name="modelo"
-                    value={formData.modelo}
-                    onChange={handleChange}
-                    className={formErrors.modelo ? 'error' : ''}
-                    placeholder="ex: Corolla XEI"
-                    required
-                  />
-                  {formErrors.modelo && (
-                    <div className="field-error">
-                      <AlertCircle size={14} />
-                      {formErrors.modelo[0]}
-                    </div>
-                  )}
-                </div>
+            {/* Linha 1: Placa, Marca, Modelo */}
+            <div className="form-row">
+              <div className="form-group small">
+                <label htmlFor="placa">Placa *</label>
+                <input
+                  type="text"
+                  id="placa"
+                  name="placa"
+                  value={formData.placa}
+                  onChange={handleChange}
+                  className={formErrors.placa ? 'error' : ''}
+                  placeholder="ABC1D23"
+                  required
+                />
+                {formErrors.placa && (
+                  <div className="field-error">
+                    <AlertCircle size={14} />
+                    {formErrors.placa[0]}
+                  </div>
+                )}
               </div>
-
-              {/* Linha 2: Ano, Preço, Quilometragem */}
-              <div className="form-row">
-                <div className="form-group small">
-                  <label htmlFor="ano">Ano</label>
-                  <input
-                    type="number"
-                    id="ano"
-                    name="ano"
-                    value={formData.ano}
-                    onChange={handleChange}
-                    className={formErrors.ano ? 'error' : ''}
-                    placeholder="ex: 2024"
-                  />
-                  {formErrors.ano && (
-                    <div className="field-error">
-                      <AlertCircle size={14} />
-                      {formErrors.ano[0]}
-                    </div>
-                  )}
-                </div>
-                <div className="form-group medium">
-                  <label htmlFor="preco">Preço (R$)</label>
-                  <input
-                    type="number"
-                    step="0.01"
-                    id="preco"
-                    name="preco"
-                    value={formData.preco}
-                    onChange={handleChange}
-                    className={formErrors.preco ? 'error' : ''}
-                    placeholder="ex: 75000.00"
-                  />
-                  {formErrors.preco && (
-                    <div className="field-error">
-                      <AlertCircle size={14} />
-                      {formErrors.preco[0]}
-                    </div>
-                  )}
-                </div>
-                <div className="form-group small">
-                  <label htmlFor="quilometragem">Quilometragem</label>
-                  <input
-                    type="number"
-                    id="quilometragem"
-                    name="quilometragem"
-                    value={formData.quilometragem}
-                    onChange={handleChange}
-                    className={formErrors.quilometragem ? 'error' : ''}
-                    placeholder="ex: 50000"
-                  />
-                  {formErrors.quilometragem && (
-                    <div className="field-error">
-                      <AlertCircle size={14} />
-                      {formErrors.quilometragem[0]}
-                    </div>
-                  )}
-                </div>
+              <div className="form-group medium">
+                <label htmlFor="marca">Marca *</label>
+                <input
+                  type="text"
+                  id="marca"
+                  name="marca"
+                  value={formData.marca}
+                  onChange={handleChange}
+                  className={formErrors.marca ? 'error' : ''}
+                  placeholder="ex: Toyota"
+                  required
+                />
+                {formErrors.marca && (
+                  <div className="field-error">
+                    <AlertCircle size={14} />
+                    {formErrors.marca[0]}
+                  </div>
+                )}
               </div>
-
-              {/* Linha 3: Cor, Combustível, Câmbio */}
-              <div className="form-row">
-                <div className="form-group small">
-                  <label htmlFor="cor">Cor</label>
-                  <input
-                    type="text"
-                    id="cor"
-                    name="cor"
-                    value={formData.cor}
-                    onChange={handleChange}
-                    placeholder="ex: Prata"
-                  />
-                </div>
-                <div className="form-group small">
-                  <label htmlFor="combustivel">Combustível</label>
-                  <select
-                    id="combustivel"
-                    name="combustivel"
-                    value={formData.combustivel}
-                    onChange={handleChange}
-                  >
-                    <option value="">Selecione</option>
-                    <option value="Gasolina">Gasolina</option>
-                    <option value="Álcool">Álcool</option>
-                    <option value="Diesel">Diesel</option>
-                    <option value="Flex">Flex</option>
-                    <option value="Elétrico">Elétrico</option>
-                    <option value="Híbrido">Híbrido</option>
-                  </select>
-                </div>
-                <div className="form-group small">
-                  <label htmlFor="cambio">Câmbio</label>
-                  <select
-                    id="cambio"
-                    name="cambio"
-                    value={formData.cambio}
-                    onChange={handleChange}
-                  >
-                    <option value="">Selecione</option>
-                    <option value="Manual">Manual</option>
-                    <option value="Automático">Automático</option>
-                    <option value="Automático Sequencial">Automático Sequencial</option>
-                    <option value="CVT">CVT</option>
-                  </select>
-                </div>
-                <div className="form-group small">
-                  <label htmlFor="status">Status</label>
-                  <select
-                    id="status"
-                    name="status"
-                    value={formData.status}
-                    onChange={handleChange}
-                  >
-                    <option value="Disponível">Disponível</option>
-                    <option value="Vendido" disabled>Vendido</option>
-                    <option value="Em Manutenção" disabled>Em Manutenção</option>
-                  </select>
-                </div>
+              <div className="form-group large">
+                <label htmlFor="modelo">Modelo *</label>
+                <input
+                  type="text"
+                  id="modelo"
+                  name="modelo"
+                  value={formData.modelo}
+                  onChange={handleChange}
+                  className={formErrors.modelo ? 'error' : ''}
+                  placeholder="ex: Corolla XEI"
+                  required
+                />
+                {formErrors.modelo && (
+                  <div className="field-error">
+                    <AlertCircle size={14} />
+                    {formErrors.modelo[0]}
+                  </div>
+                )}
               </div>
+            </div>
 
-              {/* Linha 4: URL da Imagem */}
-              <div className="form-row">
-                <div className="form-group large" style={{ flexGrow: 10 }}>
-                  <label htmlFor="imagemUrl">URL da Imagem</label>
-                  <input
-                    type="text"
-                    id="imagemUrl"
-                    name="imagemUrl"
-                    value={formData.imagemUrl}
-                    onChange={handleChange}
-                    className={formErrors.imagemUrl ? 'error' : ''}
-                    placeholder="https://exemplo.com/foto-do-carro.png"
-                  />
-                  {formErrors.imagemUrl && (
-                    <div className="field-error">
-                      <AlertCircle size={14} />
-                      {formErrors.imagemUrl[0]}
-                    </div>
-                  )}
-                </div>
+            {/* Linha 2: Ano, Preço, Quilometragem */}
+            <div className="form-row">
+              <div className="form-group small">
+                <label htmlFor="ano">Ano</label>
+                <input
+                  type="number"
+                  id="ano"
+                  name="ano"
+                  value={formData.ano}
+                  onChange={handleChange}
+                  className={formErrors.ano ? 'error' : ''}
+                  placeholder="ex: 2024"
+                />
+                {formErrors.ano && (
+                  <div className="field-error">
+                    <AlertCircle size={14} />
+                    {formErrors.ano[0]}
+                  </div>
+                )}
               </div>
-
-              {/* NOVOS CAMPOS: Especificações, Histórico, Laudo Técnico */}
-              <div className="form-row">
-                <div className="form-group large" style={{ flexGrow: 10 }}>
-                  <label htmlFor="especificacoes">Especificações Técnicas</label>
-                  <textarea
-                    id="especificacoes"
-                    name="especificacoes"
-                    value={formData.especificacoes}
-                    onChange={handleChange}
-                    placeholder="Detalhes do motor, potência, consumo, dimensões, etc."
-                    rows="4"
-                  />
-                </div>
+              <div className="form-group medium">
+                <label htmlFor="preco">Preço (R$)</label>
+                <input
+                  type="number"
+                  step="0.01"
+                  id="preco"
+                  name="preco"
+                  value={formData.preco}
+                  onChange={handleChange}
+                  className={formErrors.preco ? 'error' : ''}
+                  placeholder="ex: 75000.00"
+                />
+                {formErrors.preco && (
+                  <div className="field-error">
+                    <AlertCircle size={14} />
+                    {formErrors.preco[0]}
+                  </div>
+                )}
               </div>
-
-              <div className="form-row">
-                <div className="form-group large" style={{ flexGrow: 10 }}>
-                  <label htmlFor="historico">Histórico do Veículo</label>
-                  <textarea
-                    id="historico"
-                    name="historico"
-                    value={formData.historico}
-                    onChange={handleChange}
-                    placeholder="Histórico de proprietários, acidentes, manutenções anteriores, etc."
-                    rows="4"
-                  />
-                </div>
+              <div className="form-group small">
+                <label htmlFor="quilometragem">Quilometragem</label>
+                <input
+                  type="number"
+                  id="quilometragem"
+                  name="quilometragem"
+                  value={formData.quilometragem}
+                  onChange={handleChange}
+                  className={formErrors.quilometragem ? 'error' : ''}
+                  placeholder="ex: 50000"
+                />
+                {formErrors.quilometragem && (
+                  <div className="field-error">
+                    <AlertCircle size={14} />
+                    {formErrors.quilometragem[0]}
+                  </div>
+                )}
               </div>
+            </div>
 
-              <div className="form-row">
-                <div className="form-group large" style={{ flexGrow: 10 }}>
-                  <label htmlFor="laudoTecnico">Laudo Técnico/Revisões</label>
-                  <textarea
-                    id="laudoTecnico"
-                    name="laudoTecnico"
-                    value={formData.laudoTecnico}
-                    onChange={handleChange}
-                    placeholder="Laudos técnicos, revisões realizadas, problemas identificados, etc."
-                    rows="4"
-                  />
-                </div>
+            {/* Linha 3: Cor, Combustível, Câmbio */}
+            <div className="form-row">
+              <div className="form-group small">
+                <label htmlFor="cor">Cor</label>
+                <input
+                  type="text"
+                  id="cor"
+                  name="cor"
+                  value={formData.cor}
+                  onChange={handleChange}
+                  placeholder="ex: Prata"
+                />
               </div>
-
-              <button
-                type="submit"
-                className="btn primary"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? 'Cadastrando...' : 'Cadastrar Veículo no Estoque'}
-              </button>
-
-              {/* MENSAGEM DE SUCESSO MOVIDA PARA AQUI - ABAIXO DO BOTÃO */}
-              {submitSuccess && (
-                <div className="form-success-message">
-                  <CheckCircle2 size={20} />
-                  <span>Veículo cadastrado com sucesso!</span>
-                </div>
-              )}
-
-              <div className="form-required-notice">
-                <small>* Campos obrigatórios</small>
+              <div className="form-group small">
+                <label htmlFor="combustivel">Combustível</label>
+                <select
+                  id="combustivel"
+                  name="combustivel"
+                  value={formData.combustivel}
+                  onChange={handleChange}
+                >
+                  <option value="">Selecione</option>
+                  <option value="Gasolina">Gasolina</option>
+                  <option value="Álcool">Álcool</option>
+                  <option value="Diesel">Diesel</option>
+                  <option value="Flex">Flex</option>
+                  <option value="Elétrico">Elétrico</option>
+                  <option value="Híbrido">Híbrido</option>
+                </select>
               </div>
-            </form>
+              <div className="form-group small">
+                <label htmlFor="cambio">Câmbio</label>
+                <select
+                  id="cambio"
+                  name="cambio"
+                  value={formData.cambio}
+                  onChange={handleChange}
+                >
+                  <option value="">Selecione</option>
+                  <option value="Manual">Manual</option>
+                  <option value="Automático">Automático</option>
+                  <option value="Automático Sequencial">Automático Sequencial</option>
+                  <option value="CVT">CVT</option>
+                </select>
+              </div>
+              <div className="form-group small">
+                <label htmlFor="status">Status</label>
+                <select
+                  id="status"
+                  name="status"
+                  value={formData.status}
+                  onChange={handleChange}
+                >
+                  <option value="Disponível">Disponível</option>
+                  <option value="Vendido" disabled>Vendido</option>
+                  <option value="Em Manutenção" disabled>Em Manutenção</option>
+                </select>
+              </div>
+            </div>
 
-          </motion.section>
-        </main>
-      )}
+            {/* Linha 4: URL da Imagem */}
+            <div className="form-row">
+              <div className="form-group large" style={{ flexGrow: 10 }}>
+                <label htmlFor="imagemUrl">URL da Imagem</label>
+                <input
+                  type="text"
+                  id="imagemUrl"
+                  name="imagemUrl"
+                  value={formData.imagemUrl}
+                  onChange={handleChange}
+                  className={formErrors.imagemUrl ? 'error' : ''}
+                  placeholder="https://exemplo.com/foto-do-carro.png"
+                />
+                {formErrors.imagemUrl && (
+                  <div className="field-error">
+                    <AlertCircle size={14} />
+                    {formErrors.imagemUrl[0]}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* NOVOS CAMPOS: Especificações, Histórico, Laudo Técnico */}
+            <div className="form-row">
+              <div className="form-group large" style={{ flexGrow: 10 }}>
+                <label htmlFor="especificacoes">Especificações Técnicas</label>
+                <textarea
+                  id="especificacoes"
+                  name="especificacoes"
+                  value={formData.especificacoes}
+                  onChange={handleChange}
+                  placeholder="Detalhes do motor, potência, consumo, dimensões, etc."
+                  rows="4"
+                />
+              </div>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group large" style={{ flexGrow: 10 }}>
+                <label htmlFor="historico">Histórico do Veículo</label>
+                <textarea
+                  id="historico"
+                  name="historico"
+                  value={formData.historico}
+                  onChange={handleChange}
+                  placeholder="Histórico de proprietários, acidentes, manutenções anteriores, etc."
+                  rows="4"
+                />
+              </div>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group large" style={{ flexGrow: 10 }}>
+                <label htmlFor="laudoTecnico">Laudo Técnico/Revisões</label>
+                <textarea
+                  id="laudoTecnico"
+                  name="laudoTecnico"
+                  value={formData.laudoTecnico}
+                  onChange={handleChange}
+                  placeholder="Laudos técnicos, revisões realizadas, problemas identificados, etc."
+                  rows="4"
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className="btn primary"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Cadastrando...' : 'Cadastrar Veículo no Estoque'}
+            </button>
+
+            {/* MENSAGEM DE SUCESSO MOVIDA PARA AQUI - ABAIXO DO BOTÃO */}
+            {submitSuccess && (
+              <div className="form-success-message">
+                <CheckCircle2 size={20} />
+                <span>Veículo cadastrado com sucesso!</span>
+              </div>
+            )}
+
+            <div className="form-required-notice">
+              <small>* Campos obrigatórios</small>
+            </div>
+          </form>
+
+        </motion.section>
+      </main>
 
       {/* 6. Footer */}
       <footer className="lp-footer">
@@ -1102,30 +921,24 @@ export default function EstoqueVeiculos() {
       </footer>
 
       {/* Modais */}
-      <LoginModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        onLogin={handleLogin}
-      />
+      <LoginModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
 
-      {/* Modal de Lista de Veículos - SÓ EXIBE SE ESTIVER LOGADO */}
-      {user && (
-        <VeiculoListModal
-          isOpen={isVeiculoModalOpen}
-          onClose={handleCloseVeiculoModal}
-          veiculos={veiculos}
-          isLoading={isLoading}
-          error={error}
-          onDeleteVeiculo={handleDeleteVeiculo}
-          onEditVeiculo={handleEditVeiculo}
-          isEditMode={isEditMode}
-          veiculoEditando={veiculoEditando}
-          onSaveEdit={handleSaveEdit}
-          onCancelEdit={handleCancelEdit}
-          onEditFieldChange={handleEditFieldChange}
-          editErrors={editErrors}
-        />
-      )}
+      {/* Modal de Lista de Veículos */}
+      <VeiculoListModal
+        isOpen={isVeiculoModalOpen}
+        onClose={handleCloseVeiculoModal}
+        veiculos={veiculos}
+        isLoading={isLoading}
+        error={error}
+        onDeleteVeiculo={handleDeleteVeiculo}
+        onEditVeiculo={handleEditVeiculo}
+        isEditMode={isEditMode}
+        veiculoEditando={veiculoEditando}
+        onSaveEdit={handleSaveEdit}
+        onCancelEdit={handleCancelEdit}
+        onEditFieldChange={handleEditFieldChange}
+        editErrors={editErrors}
+      />
 
     </main>
   );
@@ -1242,6 +1055,8 @@ function VeiculoListModal({
     </AnimatePresence>
   );
 }
+
+// ... código anterior mantido ...
 
 // --- Componente: Card do Veículo (MELHORADO COM FORMULÁRIO DE EDIÇÃO REORGANIZADO) ---
 function VeiculoCard({
@@ -1541,6 +1356,8 @@ function VeiculoCard({
       </div>
     );
   }
+
+  // ... resto do código do modo de visualização normal mantido igual ...
 
   // Modo de visualização normal - MELHORADO
   return (

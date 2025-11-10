@@ -41,5 +41,5 @@ const Concessionaria = sequelize.define("Concessionaria", {
   tableName: "concessionarias",
   timestamps: true,
 });
-
 export default Concessionaria;
+

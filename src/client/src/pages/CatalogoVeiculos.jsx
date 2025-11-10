@@ -122,9 +122,6 @@ function LoginModal({ isOpen, onClose }) {
                 </div>
               </div>
               <div className="modal-footer">
-                <button type="submit" className="btn primary" style={{ width: '100%' }}>
-                  Entrar
-                </button>
               </div>
             </form>
           </motion.div>
@@ -185,9 +182,9 @@ export default function CatalogoVeiculos() {
   }, []);
 
   const navLinks = [
-    { name: 'Início', href: '/' },
+    { name: 'Início', href: '/catalog' },
     { name: 'Veículos', href: '/catalog' },
-    { name: 'Promoções', href: '/catalog/#' },
+    { name: 'Promoções', href: '/catalog' },
   ];
 
   // Função para formatar preço
@@ -224,9 +221,7 @@ export default function CatalogoVeiculos() {
               </Link>
             ))}
             <ProfileDropdown />
-            <button onClick={() => setIsModalOpen(true)} className="btn primary small">
-              Entrar
-            </button>
+
           </div>
 
           {/* Botão Mobile */}

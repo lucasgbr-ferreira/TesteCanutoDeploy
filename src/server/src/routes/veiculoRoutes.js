@@ -1,23 +1,21 @@
 // server/src/routes/veiculoRoutes.js
 import express from 'express';
-import authMiddleware from '../middlewares/authMiddleware.js';
+// Importamos todas as novas funções
 import { 
   createVeiculo,
   getAllVeiculos,
   updateVeiculo,
-  deleteVeiculo,
-  getVeiculosByConcessionaria
+  deleteVeiculo
 } from '../controllers/veiculoController.js';
 
 const router = express.Router();
 
-// Rota pública - qualquer um pode listar veículos
+router.post('/', createVeiculo);
+
 router.get('/', getAllVeiculos);
 
-// Rotas protegidas - apenas concessionárias autenticadas
-router.get('/meus-veiculos', authMiddleware, getVeiculosByConcessionaria);
-router.post('/', authMiddleware, createVeiculo);
-router.put('/:id', authMiddleware, updateVeiculo);
-router.delete('/:id', authMiddleware, deleteVeiculo);
+router.put('/:id', updateVeiculo);
+
+router.delete('/:id', deleteVeiculo);
 
 export default router;

@@ -58,17 +58,21 @@ export default function HomeCliente() {
 
       {/* HERO */}
       <section className="hero-section">
-        <div className="hero-bg" aria-hidden />
-        <div className="hero-overlay" />
-        <div className="hero-content container">
-          <h1 className="hero-title">
-            Bem-vindo, <span className="nome-destaque">{nomeUsuario}</span>!
-          </h1>
-          <p className="hero-lead">Encontre seu próximo veículo com praticidade e confiança.</p>
+        <div className="hero-overlay">
+          <div className="hero-content">
+            <h1>
+              Bem-vindo, <span className="nome-destaque">{nomeUsuario}</span>!
+            </h1>
+            <p>Encontre seu próximo veículo com praticidade e confiança.</p>
 
-          <div className="hero-buttons">
-            <button className="btn" onClick={() => navigate("/cliente/buscar")}>Buscar Veículos</button>
-            <button className="btn-outline" onClick={() => navigate("/catalog")}>Ver todos</button>
+            <div className="hero-buttons">
+              <button className="btn" onClick={() => navigate("/catalog")}>
+                Buscar Veículos
+              </button>
+              <button className="btn-outline" onClick={() => navigate("/catalog")}>
+                Ver todos
+              </button>
+            </div>
           </div>
         </div>
       </section>
@@ -80,27 +84,27 @@ export default function HomeCliente() {
           <p className="muted">Gerencie tudo de forma prática e segura.</p>
 
           <div className="actions-grid">
-            <div className="action-card" onClick={() => navigate("/cliente/agenda")}>
+            <div className="action-card" onClick={() => navigate("/home_cliente")}>
               <FaCalendarAlt className="icon" />
               <h3>Minha Agenda</h3>
             </div>
 
-            <div className="action-card" onClick={() => navigate("/cliente/historico")}>
+            <div className="action-card" onClick={() => navigate("/home_cliente")}>
               <FaHistory className="icon" />
               <h3>Histórico</h3>
             </div>
 
-            <div className="action-card" onClick={() => navigate("/cliente/propostas")}>
+            <div className="action-card" onClick={() => navigate("/home_cliente")}>
               <FaHandshake className="icon" />
               <h3>Propostas</h3>
             </div>
 
-            <div className="action-card" onClick={() => navigate("/cliente/catalogo")}>
+            <div className="action-card" onClick={() => navigate("/catalog")}>
               <FaCar className="icon" />
               <h3>Ver Catálogo</h3>
             </div>
 
-            <div className="action-card" onClick={() => navigate("/cliente/suporte")}>
+            <div className="action-card" onClick={() => navigate("/home_cliente")}>
               <FaHeadset className="icon" />
               <h3>Suporte</h3>
             </div>
