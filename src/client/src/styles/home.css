@@ -1,0 +1,380 @@
+/* ======================
+   VARIÁVEIS E BASE
+======================== */
+
+:root {
+  --bg: #060607;
+  --surface: #0f0f10;
+  --muted: #9aa0a6;
+  --text: #eaeaea;
+  --accent: #7c3aed;
+  --card: rgba(255,255,255,0.04);
+  --border: rgba(255,255,255,0.08);
+}
+
+/* ===== RESET ===== */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  min-height: 100%;
+  overflow-x: hidden;
+  font-family: "Inter", "Montserrat", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  scroll-behavior: smooth;
+}
+
+/* ===== CONTAINERS ===== */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ===== HOME WRAPPER ===== */
+.home-wrapper {
+  background-color: var(--bg);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+  position: relative;
+}
+
+/* ======================
+   HEADER (mantém estilo da landing)
+======================== */
+.home-wrapper .lp-header {
+  position: sticky;
+  top: 0;
+  z-index: 120;
+  backdrop-filter: blur(10px);
+  background: rgba(0, 0, 0, 0.6);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+/* ======================
+   HERO
+======================== */
+.hero-section {
+  position: relative;
+  min-height: 440px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 84px;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background-image: url("https://images.unsplash.com/photo-1549921296-3a86a0b6b2b3");
+  background-size: cover;
+  background-position: center;
+  filter: brightness(0.7) contrast(1.1);
+  z-index: 0;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(3,5,7,0.55), rgba(3,5,7,0.9));
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 2rem;
+}
+
+.hero-title {
+  font-size: 2.6rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 0.4rem;
+}
+
+.nome-destaque {
+  color: var(--accent);
+}
+
+.hero-lead {
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 1.5rem;
+  font-size: 1.1rem;
+}
+
+.hero-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.btn,
+.btn-outline {
+  padding: 10px 28px;
+  font-size: 1rem;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+}
+
+.btn:hover {
+  background: #6433db;
+  transform: translateY(-2px);
+}
+
+.btn-outline {
+  background: transparent;
+  color: #fff;
+  border: 2px solid rgba(255,255,255,0.5);
+}
+
+.btn-outline:hover {
+  background: #fff;
+  color: #000;
+}
+
+/* ======================
+   SEÇÃO AÇÕES
+======================== */
+.actions-section {
+  text-align: center;
+  padding: 80px 20px;
+  background: var(--surface);
+}
+
+.actions-section h2 {
+  font-weight: 700;
+  font-size: 1.8rem;
+  margin-bottom: 8px;
+}
+
+.actions-section p {
+  color: var(--muted);
+  margin-bottom: 40px;
+}
+
+.actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 20px;
+}
+
+.action-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  transition: 0.25s ease;
+  cursor: pointer;
+  text-align: center;
+}
+
+.action-card:hover {
+  background: rgba(255,255,255,0.06);
+  transform: translateY(-4px);
+}
+
+.action-card .icon {
+  font-size: 1.8rem;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+
+.action-card h3 {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+/* ======================
+   BENEFÍCIOS
+======================== */
+.benefit-section {
+  max-width: 1100px;
+  margin: 60px auto;
+  padding: 0 20px;
+}
+
+.benefit-card {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  border-radius: 12px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  transition: transform 0.25s ease;
+}
+
+.benefit-card:hover {
+  transform: translateY(-3px);
+}
+
+.benefit-card.reverse {
+  flex-direction: row-reverse;
+}
+
+.benefit-card img {
+  width: 45%;
+  height: 250px;
+  object-fit: cover;
+}
+
+.benefit-text {
+  padding: 24px;
+}
+
+.benefit-text h2 {
+  font-size: 1.4rem;
+  color: #fff;
+  margin-bottom: 8px;
+}
+
+.benefit-text p {
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* ======================
+   OFERTAS
+======================== */
+.offers-section {
+  text-align: center;
+  background: var(--surface);
+  padding: 80px 20px;
+}
+
+.offers-section h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.offers-section p {
+  color: var(--muted);
+  margin-bottom: 24px;
+}
+
+.offer-card-bg {
+  max-width: 1000px;
+  height: 280px;
+  margin: 0 auto;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  background: url("https://media.istockphoto.com/id/1334802591/pt/vetorial/buying-a-car.jpg?s=612x612&w=0&k=20&c=BETs84cmMSW2QHJ6JORwLXmjfmlbrdYTF1ZqXEMtrAs=")
+    center/cover no-repeat;
+  transition: transform 0.3s ease;
+}
+
+.offer-card-bg:hover {
+  transform: translateY(-6px);
+}
+
+.offer-bg-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.offer-btn-bg {
+  margin-top: 12px;
+  background: #fff;
+  color: #111;
+  padding: 10px 24px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.offer-btn-bg:hover {
+  background: #ddd;
+  transform: translateY(-2px);
+}
+
+/* ======================
+   FOOTER
+======================== */
+.footer {
+  background: #0d0d0d;
+  color: var(--text);
+  text-align: center;
+  padding: 40px 10px;
+  font-size: 0.9rem;
+}
+
+.footer .links {
+  margin-top: 10px;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.footer a {
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer a:hover {
+  color: var(--accent);
+}
+
+/* ======================
+   RESPONSIVO
+======================== */
+@media (max-width: 860px) {
+  .hero-title {
+    font-size: 1.8rem;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .benefit-card {
+    flex-direction: column;
+  }
+
+  .benefit-card img {
+    width: 100%;
+    height: 220px;
+  }
+
+  .actions-section {
+    padding: 60px 16px;
+  }
+
+  .offer-card-bg {
+    height: 220px;
+  }
+}
+

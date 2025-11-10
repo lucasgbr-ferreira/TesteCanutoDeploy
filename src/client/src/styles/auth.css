@@ -1,0 +1,152 @@
+:root {
+  --bg: #060607;
+  --card: #0f0f10;
+  --muted: #9aa0a6;
+  --accent: #45035d;
+  --accent-2: #9b6bff;
+  --text: #eaeaea;
+  --danger: #ff3b5b;
+  --radius: 12px;
+}
+
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Inter", system-ui, sans-serif;
+  padding: 40px 20px;
+}
+
+.auth-card {
+  display: flex;
+  flex-direction: row;
+  background: var(--card);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+  max-width: 960px;
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+/* left visual */
+.auth-visual {
+  flex: 1;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent 40%),
+              url('/src/assets/hero.jpg') center/cover no-repeat;
+  padding: 48px 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: 480px;
+}
+
+/* right form */
+.auth-form {
+  flex: 1;
+  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+  padding: 48px 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.auth-title {
+  font-size: 32px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.auth-sub {
+  color: var(--muted);
+  margin-bottom: 24px;
+  font-size: 15px;
+}
+
+.form-row {
+  margin-bottom: 14px;
+}
+
+.auth-input {
+  width: 100%;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  border-radius: var(--radius);
+  font-size: 14px;
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.auth-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(107, 140, 255, 0.2);
+}
+
+/* select role */
+.auth-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg fill='white' height='18' viewBox='0 0 24 24' width='18' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 40px;
+  cursor: pointer;
+}
+
+/* button */
+.btn-primary {
+  display: block;
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  border: none;
+  border-radius: var(--radius);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 16px;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.auth-footer {
+  margin-top: 16px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+.auth-footer a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.auth-footer a:hover {
+  text-decoration: underline;
+}
+
+.error {
+  color: var(--danger);
+  margin-top: 12px;
+  font-weight: 500;
+}
+
+/* responsive */
+@media (max-width: 860px) {
+  .auth-card {
+    flex-direction: column;
+    max-width: 420px;
+  }
+  .auth-visual {
+    min-height: 200px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+}

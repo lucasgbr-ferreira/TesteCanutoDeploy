@@ -3,8 +3,9 @@ import User from './User.js';
 import UserPhoto from './UserPhoto.js';
 import Client from './Client.js';
 import Concessionaria from './Concessionaria.js';
+import Veiculo from './Veiculo.js';
 
-// associações
+// --- Associações de User ---
 User.hasMany(UserPhoto, { foreignKey: 'user_id', as: 'photos' });
 UserPhoto.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
 
@@ -14,5 +15,12 @@ Client.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
 User.hasOne(Concessionaria, { foreignKey: 'user_id', as: 'gestor' });
 Concessionaria.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
 
-export { sequelize, User, UserPhoto, Client, Concessionaria };
 
+export { 
+  sequelize, 
+  User, 
+  UserPhoto, 
+  Client, 
+  Concessionaria, 
+  Veiculo
+};

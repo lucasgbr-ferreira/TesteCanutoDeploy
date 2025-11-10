@@ -12,7 +12,7 @@ export default function Navbar() {
     >
       <div className="lp-container navbar-inner">
         <div className="lp-logo">
-          🚗 <span>GesCar</span>
+          <span>GesCar</span>
         </div>
 
         <ul className="lp-nav-links">

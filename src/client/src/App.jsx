@@ -1,134 +1,71 @@
-// client/src/App.jsx
-import React from "react";
-import { motion } from "framer-motion";
-import GalleryScroll from "./components/GalleryScroll";
-import "./styles/landing.css";
-import "./styles/gallery.css"; // garante estilos da galeria
+import React, { useEffect, useState } from "react";
+import { Routes, Route } from "react-router-dom";
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: (delay = 0) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: "easeOut", delay }
-  })
-};
+import LandingPage from "./pages/LandingPage";
+import CatalogoVeiculos from "./pages/CatalogoVeiculos";
+import EstoqueVeiculos from "./pages/EstoqueVeiculos";
+import PerfilCliente from "./pages/PerfilCliente";
+import HomeCliente from "./pages/HomeCliente";
+
+
+const FallbackRegister = () => (
+  <div style={{ padding: 40, textAlign: "center" }}>
+    <h2>Registrar (indisponível)</h2>
+    <p>O componente de registro não pôde ser carregado. Verifique se <code>src/pages/RegisterForm.jsx</code> existe.</p>
+  </div>
+);
+const FallbackLogin = () => (
+  <div style={{ padding: 40, textAlign: "center" }}>
+    <h2>Login (indisponível)</h2>
+    <p>O componente de login não pôde ser carregado. Verifique se <code>src/pages/Login.jsx</code> existe.</p>
+  </div>
+);
 
 export default function App() {
+  const [RegisterComp, setRegisterComp] = useState(null);
+  const [LoginComp, setLoginComp] = useState(null);
+
+  useEffect(() => {
+    import("./pages/RegisterForm.jsx")
+      .then((mod) => setRegisterComp(() => mod.default || mod))
+      .catch((err) => {
+        console.warn("RegisterForm import failed:", err.message || err);
+        setRegisterComp(() => null); 
+      });
+    import("./pages/Login.jsx")
+      .then((mod) => setLoginComp(() => mod.default || mod))
+      .catch((err) => {
+        console.warn("Login import failed:", err.message || err);
+        setLoginComp(() => null);
+      });
+  }, []);
+
   return (
-    <main className="lp-root">
-      {/* HERO - simples e central */}
-      <section className="lp-hero">
-        <div className="lp-container lp-hero-grid">
-          <div className="lp-hero-left">
-            <motion.h1
-              className="lp-hero-title"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.3 }}
-              variants={fadeUp}
-              custom={0}
-            >
-              Encontre o carro perfeito — ofertas exclusivas na sua região
-            </motion.h1>
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/landing" element={<LandingPage />} />
+      <Route
+        path="/register"
+        element={RegisterComp ? <RegisterComp /> : <FallbackRegister />}
+      />
+      <Route
+        path="/login"
+        element={LoginComp ? <LoginComp /> : <FallbackLogin />}
+      />
+      <Route path="/catalog" element={<CatalogoVeiculos />} />
+      <Route path="/cliente/catalogo" element={<div style={{textAlign:'center',marginTop:80}}>Página de Catálogo de Veículos</div>} />
+      <Route path="/home_cliente" element={<HomeCliente />} />
+      <Route path="/cliente/buscar" element={<div style={{textAlign:'center',marginTop:80}}>Página de Buscar Veículos</div>} />
+      <Route path="/cliente/veiculos" element={<div style={{textAlign:'center',marginTop:80}}>Página de Veículos</div>} />
+      <Route path="/cliente/agenda" element={<div style={{textAlign:'center',marginTop:80}}>Página de Minha Agenda</div>} />
+      <Route path="/cliente/historico" element={<div style={{textAlign:'center',marginTop:80}}>Página de Histórico</div>} />
+      <Route path="/cliente/propostas" element={<div style={{textAlign:'center',marginTop:80}}>Página de Propostas</div>} />
+      <Route path="/cliente/suporte" element={<div style={{textAlign:'center',marginTop:80}}>Página de Suporte</div>} />
+      <Route path="/dashboard/estoque" element={<EstoqueVeiculos />} />
+      <Route path="/perfil" element={<PerfilCliente />} />
 
-            <motion.p
-              className="lp-hero-sub"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.3 }}
-              variants={fadeUp}
-              custom={0.12}
-            >
-              Catálogo atualizado, financiamento integrado e atendimento direto das concessionárias.
-            </motion.p>
 
-            <motion.div
-              className="lp-hero-cta"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.3 }}
-              variants={fadeUp}
-              custom={0.24}
-            >
-              <a href="/catalog" className="btn primary large">Ver catálogo</a>
-              <a href="/register" className="btn ghost large">Criar conta</a>
-            </motion.div>
-          </div>
-
-          <motion.div
-            className="lp-hero-right"
-            initial={{ opacity: 0, scale: 0.98 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            viewport={{ once: true, amount: 0.3 }}
-          >
-            <div className="lp-hero-card">
-              <div className="lp-car-visual">🚘</div>
-              <div className="lp-car-info">
-                <h3>Novidade: Hatch X200</h3>
-                <p>Entrada facilitada — parcelas a partir de R$799</p>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* FEATURES */}
-      <section className="lp-features">
-        <div className="lp-container">
-          <div className="lp-features-grid">
-            <article className="lp-feature-card">
-              <div className="lp-feature-ico">★</div>
-              <h4>Filtros avançados</h4>
-              <p>Busque por preço, ano, cidade e muito mais.</p>
-            </article>
-            <article className="lp-feature-card">
-              <div className="lp-feature-ico">★</div>
-              <h4>Credenciamento rápido</h4>
-              <p>Cadastro simplificado para clientes e concessionárias.</p>
-            </article>
-            <article className="lp-feature-card">
-              <div className="lp-feature-ico">★</div>
-              <h4>Painel de gestão</h4>
-              <p>Acompanhe propostas, agendamentos e métricas.</p>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      {/* ABOUT */}
-      <section className="lp-about">
-        <div className="lp-container">
-          <h3>Como funciona</h3>
-          <p>
-            Conectamos clientes às concessionárias próximas, facilitamos propostas e agendamentos, e apresentamos opções de pagamento e garantia — tudo numa única plataforma.
-          </p>
-        </div>
-      </section>
-
-      {/* GALLERY SCROLL (horizontal on vertical scroll) */}
-      <GalleryScroll />
-
-      {/* CTA */}
-      <section className="lp-cta" id="cadastro">
-        <div className="lp-container">
-          <div className="lp-cta-inner">
-            <h3>Pronto para encontrar seu próximo carro?</h3>
-            <p>Crie sua conta e comece a pesquisar no catálogo agora mesmo.</p>
-            <div style={{ marginTop: 12 }}>
-              <a href="/register" className="btn primary">Criar Conta</a>
-              <a href="/catalog" className="btn ghost">Ver catálogo</a>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <footer className="lp-footer">
-        <div className="lp-container">
-          <small>© {new Date().getFullYear()} GesCar — Conectando pessoas e concessionárias</small>
-        </div>
-      </footer>
-    </main>
+      <Route path="*" element={<LandingPage />} />
+    </Routes>
   );
 }
