@@ -3,8 +3,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { 
-  CarFront, 
+import {
+  CarFront,
   Calendar,
   Tag,
   MapPin,
@@ -20,7 +20,8 @@ import {
   Palette,
   Settings,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  Building
 } from 'lucide-react';
 
 import "../styles/landing.css";
@@ -94,14 +95,14 @@ function LoginModal({ isOpen, onClose }) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           className="modal-overlay"
-          onClick={onClose} 
+          onClick={onClose}
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
             className="modal-content"
-            onClick={(e) => e.stopPropagation()} 
+            onClick={(e) => e.stopPropagation()}
           >
             <div className="modal-header">
               <h3>Acessar Conta</h3>
@@ -147,7 +148,31 @@ export default function CatalogoVeiculos() {
       try {
         setIsLoading(true);
         const response = await axios.get('http://localhost:3000/api/veiculos');
-        setVeiculos(response.data);
+        
+        // Adicionar informações da concessionária aos veículos
+        const veiculosComConcessionaria = await Promise.all(
+          response.data.map(async (veiculo) => {
+            try {
+              // Buscar informações da concessionária
+              if (veiculo.concessionaria_id) {
+                const concessionariaResponse = await axios.get(`http://localhost:3000/api/concessionarias/${veiculo.concessionaria_id}`);
+                return {
+                  ...veiculo,
+                  concessionaria: concessionariaResponse.data
+                };
+              }
+              return veiculo;
+            } catch (error) {
+              console.error(`Erro ao buscar concessionária para veículo ${veiculo.id}:`, error);
+              return {
+                ...veiculo,
+                concessionaria: { nome: 'Concessionária não disponível' }
+              };
+            }
+          })
+        );
+        
+        setVeiculos(veiculosComConcessionaria);
       } catch (err) {
         console.error("Erro ao buscar veículos:", err);
         setError("Não foi possível carregar os veículos. Tente novamente mais tarde.");
@@ -176,18 +201,18 @@ export default function CatalogoVeiculos() {
 
   // Função para formatar quilometragem
   const formatKm = (km) => {
-    if (!km) return 'N/A';
+    if (km == null) return 'N/A';
     return new Intl.NumberFormat('pt-BR').format(km) + ' km';
   };
 
   return (
     <main className="lp-root">
-      
+
       {/* 1. Navbar (Menu Superior) */}
       <nav className="lp-header">
         <div className="lp-container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Link to="/" className="lp-brand">
-            <CarFront /> 
+            <CarFront />
             CanutoMotors
           </Link>
 
@@ -203,7 +228,7 @@ export default function CatalogoVeiculos() {
               Entrar
             </button>
           </div>
-          
+
           {/* Botão Mobile */}
           <div className="mobile-menu-btn" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
             {isMobileMenuOpen ? <X /> : <Menu />}
@@ -213,7 +238,7 @@ export default function CatalogoVeiculos() {
         {/* Menu Mobile Dropdown */}
         <AnimatePresence>
           {isMobileMenuOpen && (
-            <motion.div 
+            <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
@@ -231,7 +256,7 @@ export default function CatalogoVeiculos() {
       </nav>
 
       {/* 2. Seção Hero */}
-      <motion.header 
+      <motion.header
         className="catalog-hero"
         initial="hidden"
         whileInView="visible"
@@ -243,8 +268,8 @@ export default function CatalogoVeiculos() {
             Catálogo de veículos
           </motion.h1>
           <motion.p variants={fadeUp} custom={0.1}>
-            {veiculos.length > 0 
-              ? `${veiculos.length} veículos disponíveis em nosso estoque` 
+            {veiculos.length > 0
+              ? `${veiculos.length} veículos disponíveis em nosso estoque`
               : 'Descubra os melhores carros disponíveis'
             }
           </motion.p>
@@ -252,7 +277,7 @@ export default function CatalogoVeiculos() {
       </motion.header>
 
       {/* 3. Seção Introdução */}
-      <motion.section 
+      <motion.section
         className="catalog-intro"
         initial="hidden"
         whileInView="visible"
@@ -294,7 +319,7 @@ export default function CatalogoVeiculos() {
             </Link>
           </div>
         ) : (
-          <motion.div 
+          <motion.div
             className="catalog-grid"
             initial="hidden"
             whileInView="visible"
@@ -302,9 +327,9 @@ export default function CatalogoVeiculos() {
             variants={staggerContainer}
           >
             {veiculos.map(vehicle => (
-              <VehicleCard 
-                key={vehicle.id} 
-                vehicle={vehicle} 
+              <VehicleCard
+                key={vehicle.id}
+                vehicle={vehicle}
                 formatPrice={formatPrice}
                 formatKm={formatKm}
               />
@@ -332,36 +357,39 @@ function VehicleCard({ vehicle, formatPrice, formatKm }) {
   // Verificar se o veículo está disponível para contato
   const isAvailable = vehicle.status === 'Disponível';
 
+  // Obter nome da concessionária
+  const concessionariaNome = vehicle.concessionaria?.nome || 'Canuto Motors';
+
   return (
-    <motion.div 
+    <motion.div
       className="vehicle-card"
       variants={fadeUp}
       whileHover={{ y: -5 }}
       transition={{ duration: 0.2 }}
     >
       <div className="vehicle-card-img-container">
-        <img 
-          src={vehicle.imagemUrl || 'https://placehold.co/600x400/334155/FFF?text=Sem+Imagem'} 
-          alt={`${vehicle.marca} ${vehicle.modelo}`} 
-          className="vehicle-card-img" 
+        <img
+          src={vehicle.imagemUrl || 'https://placehold.co/600x400/334155/FFF?text=Sem+Imagem'}
+          alt={`${vehicle.marca} ${vehicle.modelo}`}
+          className="vehicle-card-img"
         />
         <div className="vehicle-card-badge">
           <Tag size={14} />
           {vehicle.placa}
         </div>
-        
-        {/* Badge de Status */}
+
+        {/* Badge de Status - MANTIDO COMO ESTAVA */}
         <div className={`vehicle-status-badge ${!isAvailable ? 'status-unavailable' : ''}`}>
           {vehicle.status}
         </div>
       </div>
-      
+
       <div className="vehicle-card-body">
         <h3 className="vehicle-card-title">
           {vehicle.marca} {vehicle.modelo}
         </h3>
-        
-        {/* Informações principais em grid */}
+
+        {/* Informações principais em grid - MODIFICADO: Status substituído por Concessionária */}
         <div className="vehicle-card-info-grid">
           {vehicle.ano && (
             <div className="info-item">
@@ -369,8 +397,8 @@ function VehicleCard({ vehicle, formatPrice, formatKm }) {
               <span>Ano: <strong>{vehicle.ano}</strong></span>
             </div>
           )}
-          
-          {vehicle.quilometragem && (
+
+          {vehicle.quilometragem !== null && vehicle.quilometragem !== undefined && (
             <div className="info-item">
               <Gauge size={16} />
               <span>KM: <strong>{formatKm(vehicle.quilometragem)}</strong></span>
@@ -398,16 +426,17 @@ function VehicleCard({ vehicle, formatPrice, formatKm }) {
             </div>
           )}
 
+          {/* ITEM MODIFICADO: Status substituído por Concessionária */}
           <div className="info-item">
-            <Car size={16} />
-            <span>Status: <strong>{vehicle.status}</strong></span>
+            <Building size={16} />
+            <span>Concessionária: <strong>{concessionariaNome}</strong></span>
           </div>
         </div>
 
         {/* Informações adicionais (expandíveis) */}
         {(vehicle.especificacoes || vehicle.historico || vehicle.laudoTecnico) && (
           <div className="vehicle-additional-info">
-            <button 
+            <button
               className="btn-details-toggle"
               onClick={() => setShowDetails(!showDetails)}
             >
@@ -458,15 +487,15 @@ function VehicleCard({ vehicle, formatPrice, formatKm }) {
           </div>
         )}
       </div>
-      
+
       <div className="vehicle-card-footer">
         <div className="price-section">
           <span className="price-label">Preço</span>
           <span className="price-value">{formatPrice(vehicle.preco)}</span>
         </div>
-        <button 
+        <button
           className={`btn-contact ${!isAvailable ? 'disabled' : ''}`}
-          disabled={isAvailable}
+          disabled={!isAvailable}
         >
           {isAvailable ? 'Entrar em Contato' : 'Indisponível'}
         </button>

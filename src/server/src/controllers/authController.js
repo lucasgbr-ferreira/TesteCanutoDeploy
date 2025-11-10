@@ -37,17 +37,62 @@ export const login = async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) return res.status(400).json({ message: 'Dados incompletos' });
 
-    const user = await User.findOne({ where: { email } });
+    const user = await User.findOne({ 
+      where: { email },
+      include: [{
+        model: Concessionaria,
+        as: 'gestor',
+        required: false
+      }]
+    });
+    
     if (!user) return res.status(401).json({ message: 'Credenciais inválidas' });
 
     const match = await bcrypt.compare(password, user.password);
     if (!match) return res.status(401).json({ message: 'Credenciais inválidas' });
 
-    const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN || '1d' });
-    return res.json({ token, user: { id: user.id, name: user.name, email: user.email, role: user.role } });
+    // VERIFICAÇÃO CRÍTICA: Só permitir login se for uma concessionária
+    if (user.role !== 'concessionaria') {
+      return res.status(403).json({ 
+        message: 'Acesso restrito apenas para concessionárias cadastradas' 
+      });
+    }
+
+    // Verificar se a concessionária existe no banco
+    const concessionaria = await Concessionaria.findOne({ 
+      where: { user_id: user.id } 
+    });
+
+    if (!concessionaria) {
+      return res.status(403).json({ 
+        message: 'Concessionária não encontrada no sistema' 
+      });
+    }
+
+    const token = jwt.sign({ 
+      id: user.id, 
+      role: user.role,
+      concessionaria_id: concessionaria.id 
+    }, process.env.JWT_SECRET, { 
+      expiresIn: process.env.JWT_EXPIRES_IN || '1d' 
+    });
+
+    return res.json({ 
+      token, 
+      user: { 
+        id: user.id, 
+        name: user.name, 
+        email: user.email, 
+        role: user.role,
+        concessionaria: {
+          id: concessionaria.id,
+          nome: concessionaria.nome,
+          cnpj: concessionaria.cnpj
+        }
+      } 
+    });
   } catch (err) {
     console.error(err);
     return res.status(500).json({ message: 'Erro no login' });
   }
 };
-
