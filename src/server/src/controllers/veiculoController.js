@@ -1,9 +1,16 @@
 // server/src/controllers/veiculoController.js
-import { Veiculo } from '../models/index.js';
+import { Veiculo, Concessionaria } from '../models/index.js';
 
 // --- CREATE ---
 export const createVeiculo = async (req, res) => {
   try {
+    // Verificar se o usuário está autenticado e é uma concessionária
+    if (!req.user || req.user.role !== 'concessionaria') {
+      return res.status(403).json({ 
+        message: 'Acesso negado. Apenas concessionárias podem cadastrar veículos.' 
+      });
+    }
+
     const dadosVeiculo = req.body;
     
     // Validação adicional no servidor
@@ -13,10 +20,24 @@ export const createVeiculo = async (req, res) => {
       });
     }
 
+    // Buscar a concessionária do usuário logado
+    const concessionaria = await Concessionaria.findOne({ 
+      where: { user_id: req.user.id } 
+    });
+
+    if (!concessionaria) {
+      return res.status(404).json({ 
+        message: 'Concessionária não encontrada para este usuário' 
+      });
+    }
+
     // Formatar placa para maiúsculas
     if (dadosVeiculo.placa) {
       dadosVeiculo.placa = dadosVeiculo.placa.toUpperCase().replace(/\s/g, '');
     }
+
+    // Associar veículo à concessionária
+    dadosVeiculo.concessionaria_id = concessionaria.id;
 
     const novoVeiculo = await Veiculo.create(dadosVeiculo); 
     res.status(201).json(novoVeiculo);
@@ -49,6 +70,38 @@ export const getAllVeiculos = async (req, res) => {
   }
 };
 
+// --- READ BY CONCESSIONARIA ---
+export const getVeiculosByConcessionaria = async (req, res) => {
+  try {
+    // Verificar se o usuário está autenticado e é uma concessionária
+    if (!req.user || req.user.role !== 'concessionaria') {
+      return res.status(403).json({ 
+        message: 'Acesso negado. Apenas concessionárias podem visualizar seus veículos.' 
+      });
+    }
+
+    // Buscar a concessionária do usuário logado
+    const concessionaria = await Concessionaria.findOne({ 
+      where: { user_id: req.user.id } 
+    });
+
+    if (!concessionaria) {
+      return res.status(404).json({ 
+        message: 'Concessionária não encontrada' 
+      });
+    }
+
+    const veiculos = await Veiculo.findAll({
+      where: { concessionaria_id: concessionaria.id },
+      order: [['createdAt', 'DESC']]
+    });
+
+    res.status(200).json(veiculos);
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao buscar veículos', error: error.message });
+  }
+};
+
 // --- UPDATE ---
 export const updateVeiculo = async (req, res) => {
   try {
@@ -57,6 +110,17 @@ export const updateVeiculo = async (req, res) => {
 
     if (!veiculo) {
       return res.status(404).json({ message: 'Veículo não encontrado' });
+    }
+
+    // Verificar se o usuário é dono do veículo
+    const concessionaria = await Concessionaria.findOne({ 
+      where: { user_id: req.user.id } 
+    });
+
+    if (!concessionaria || veiculo.concessionaria_id !== concessionaria.id) {
+      return res.status(403).json({ 
+        message: 'Acesso negado. Você só pode editar veículos da sua concessionária.' 
+      });
     }
 
     // Formatar placa para maiúsculas
@@ -92,6 +156,17 @@ export const deleteVeiculo = async (req, res) => {
 
     if (!veiculo) {
       return res.status(404).json({ message: 'Veículo não encontrado' });
+    }
+
+    // Verificar se o usuário é dono do veículo
+    const concessionaria = await Concessionaria.findOne({ 
+      where: { user_id: req.user.id } 
+    });
+
+    if (!concessionaria || veiculo.concessionaria_id !== concessionaria.id) {
+      return res.status(403).json({ 
+        message: 'Acesso negado. Você só pode excluir veículos da sua concessionária.' 
+      });
     }
 
     await veiculo.destroy();

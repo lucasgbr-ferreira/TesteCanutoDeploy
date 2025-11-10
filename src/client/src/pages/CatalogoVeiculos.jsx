@@ -20,7 +20,8 @@ import {
   Palette,
   Settings,
   ChevronDown,
-  ChevronUp
+  ChevronUp,
+  Building
 } from 'lucide-react';
 
 import "../styles/landing.css";
@@ -147,7 +148,31 @@ export default function CatalogoVeiculos() {
       try {
         setIsLoading(true);
         const response = await axios.get('http://localhost:3000/api/veiculos');
-        setVeiculos(response.data);
+        
+        // Adicionar informações da concessionária aos veículos
+        const veiculosComConcessionaria = await Promise.all(
+          response.data.map(async (veiculo) => {
+            try {
+              // Buscar informações da concessionária
+              if (veiculo.concessionaria_id) {
+                const concessionariaResponse = await axios.get(`http://localhost:3000/api/concessionarias/${veiculo.concessionaria_id}`);
+                return {
+                  ...veiculo,
+                  concessionaria: concessionariaResponse.data
+                };
+              }
+              return veiculo;
+            } catch (error) {
+              console.error(`Erro ao buscar concessionária para veículo ${veiculo.id}:`, error);
+              return {
+                ...veiculo,
+                concessionaria: { nome: 'Concessionária não disponível' }
+              };
+            }
+          })
+        );
+        
+        setVeiculos(veiculosComConcessionaria);
       } catch (err) {
         console.error("Erro ao buscar veículos:", err);
         setError("Não foi possível carregar os veículos. Tente novamente mais tarde.");
@@ -332,6 +357,9 @@ function VehicleCard({ vehicle, formatPrice, formatKm }) {
   // Verificar se o veículo está disponível para contato
   const isAvailable = vehicle.status === 'Disponível';
 
+  // Obter nome da concessionária
+  const concessionariaNome = vehicle.concessionaria?.nome || 'Canuto Motors';
+
   return (
     <motion.div
       className="vehicle-card"
@@ -350,7 +378,7 @@ function VehicleCard({ vehicle, formatPrice, formatKm }) {
           {vehicle.placa}
         </div>
 
-        {/* Badge de Status */}
+        {/* Badge de Status - MANTIDO COMO ESTAVA */}
         <div className={`vehicle-status-badge ${!isAvailable ? 'status-unavailable' : ''}`}>
           {vehicle.status}
         </div>
@@ -361,7 +389,7 @@ function VehicleCard({ vehicle, formatPrice, formatKm }) {
           {vehicle.marca} {vehicle.modelo}
         </h3>
 
-        {/* Informações principais em grid */}
+        {/* Informações principais em grid - MODIFICADO: Status substituído por Concessionária */}
         <div className="vehicle-card-info-grid">
           {vehicle.ano && (
             <div className="info-item">
@@ -398,9 +426,10 @@ function VehicleCard({ vehicle, formatPrice, formatKm }) {
             </div>
           )}
 
+          {/* ITEM MODIFICADO: Status substituído por Concessionária */}
           <div className="info-item">
-            <Car size={16} />
-            <span>Status: <strong>{vehicle.status}</strong></span>
+            <Building size={16} />
+            <span>Concessionária: <strong>{concessionariaNome}</strong></span>
           </div>
         </div>
 
@@ -466,7 +495,7 @@ function VehicleCard({ vehicle, formatPrice, formatKm }) {
         </div>
         <button
           className={`btn-contact ${!isAvailable ? 'disabled' : ''}`}
-          disabled={isAvailable}
+          disabled={!isAvailable}
         >
           {isAvailable ? 'Entrar em Contato' : 'Indisponível'}
         </button>
