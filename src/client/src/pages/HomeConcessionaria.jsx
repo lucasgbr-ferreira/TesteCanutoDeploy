@@ -10,31 +10,18 @@ import HeroConcessionaria from '../components/HeroConcessionaria.jsx';
 // CONTEÚDO DA PÁGINA //
 
 export default function HomeConcessionaria() {
-    const [nomeConcessionaria, setNomeConcessionaria] = useState("");
+
+    const [nomeUsuario, setNomeUsuario] = useState("");
 
     useEffect(() => {
-        async function fetchData() {
-            try {
-                const res = await fetch("http://localhost:3000/api/concessionarias/id", {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.getItem("token")}`
-                    }
-                });
-
-                const data = await res.json();
-                setNomeConcessionaria(data.nome); 
-            } catch (error) {
-                console.error("Erro ao buscar a concessionária:", error);
-            }
-        }
-
-        fetchData();
+        const nome = localStorage.getItem("nomeUsuario") || "Usuário";
+        setNomeUsuario(nome);
     }, []);
 
     return (
         <div>
             <HeaderConcessionaria />
-            <HeroConcessionaria nome={nomeConcessionaria} />
+            <HeroConcessionaria nome={nomeUsuario} />
         </div>
     );
 }

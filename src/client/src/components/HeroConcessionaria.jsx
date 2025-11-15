@@ -23,12 +23,11 @@ export default function HeroConcessionaria({ nome }) {
         </h1>
 
         <h1 className="hero-title-strong">
-          {nome ? nome : "Concessionária"}
+          {nome}
         </h1>
 
         <p className="hero-subtitle">
-          Plataforma inteligente para compra e gestão de veículos. Conectamos compradores,
-          concessionárias e administradores em uma única solução.
+          Seu próximo veículo começa aqui: confiança, transparência e qualidade.
         </p>
 
         <div className="hero-buttons">
