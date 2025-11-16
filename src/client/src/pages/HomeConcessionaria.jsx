@@ -13,17 +13,34 @@ import ContactConcessionaria from '../components/ContactConcessionaria.jsx'
 export default function HomeConcessionaria() {
 
     const [nomeUsuario, setNomeUsuario] = useState("");
+    const [concessionaria, setConcessionaria] = useState(null);
 
     useEffect(() => {
+        // Nome do usuário
         const nome = localStorage.getItem("nomeUsuario") || "Usuário";
         setNomeUsuario(nome);
+
+        // Dados da concessionária
+        const stored = localStorage.getItem("concessionaria");
+        if (stored) {
+            setConcessionaria(JSON.parse(stored));
+        }
     }, []);
 
     return (
         <div>
             <HeaderConcessionaria />
+
             <HeroConcessionaria nome={nomeUsuario} />
-            <ContactConcessionaria />
+
+            {/* Só renderiza quando tiver os dados */}
+            {concessionaria && (
+                <ContactConcessionaria
+                    email={concessionaria.email_comercial}
+                    telefone={concessionaria.telefone}
+                    endereco={concessionaria.endereco}
+                />
+            )}
         </div>
     );
 }

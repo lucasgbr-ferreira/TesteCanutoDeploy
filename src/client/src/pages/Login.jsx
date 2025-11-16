@@ -57,6 +57,14 @@ export default function Login() {
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.user || {}));
 
+        if (data.user?.concessionaria) {
+          localStorage.setItem(
+            "concessionaria",
+            JSON.stringify(data.user.concessionaria)
+          );
+          console.log("🔥 Salvando concessionária:", data.user.concessionaria);
+        }
+        
         const role = data.user?.role;
         setIsError(false);
         setMessage("Login bem-sucedido!");
