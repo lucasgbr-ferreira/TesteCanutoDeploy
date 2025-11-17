@@ -2,6 +2,8 @@ import React from "react";
 import "../styles/landing.css";
 import Logo from "../assets/GesCar-Logo-removebg-preview.png"; 
 
+// colocar links de redirecionamento para outras paginas no header
+
 export default function HeaderCliente() {
   return (
     <header className="lp-header">
@@ -13,7 +15,7 @@ export default function HeaderCliente() {
 
       <nav className="lp-nav" style={{ display: "flex", gap: 18, alignItems: "center" }}>
         <a href="/home_cliente">Início</a>
-        <a href="#">Veículos</a>
+        <a href="#">Veículos</a>  
         <a href="#">Promoções</a>
         <a href="/perfil">Perfil</a>
 
@@ -24,3 +26,4 @@ export default function HeaderCliente() {
     </header>
   );
 }
+

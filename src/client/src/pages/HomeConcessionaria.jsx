@@ -8,6 +8,7 @@ import HeroConcessionaria from '../components/HeroConcessionaria.jsx';
 import ContactConcessionaria from '../components/ContactConcessionaria.jsx'
 import FooterConcessionaria from '../components/FooterConcessionaria.jsx'
 import DestaqueConcessionaria from '../components/DestaqueConcessionaria.jsx'
+import FuncoesConcessionaria from "../components/FuncoesConcessionaria.jsx";
 //  IMPORTS  //
 
 // CONTEÚDO DA PÁGINA //
@@ -19,7 +20,8 @@ export default function HomeConcessionaria() {
 
     useEffect(() => {
         // Nome do usuário
-        const nome = localStorage.getItem("nomeUsuario") || "Usuário";
+        const user = JSON.parse(localStorage.getItem("user"));
+        const nome = user?.name || user?.nome || user?.fullName || "Usuário";
         setNomeUsuario(nome);
 
         // Dados da concessionária
@@ -33,6 +35,7 @@ export default function HomeConcessionaria() {
         <div>
             <HeaderConcessionaria />
             <HeroConcessionaria nome={nomeUsuario} />
+            <FuncoesConcessionaria />
             <DestaqueConcessionaria />
             {concessionaria && (
                 <ContactConcessionaria

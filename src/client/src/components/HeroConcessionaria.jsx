@@ -19,16 +19,12 @@ export default function HeroConcessionaria({ nome }) {
 
       <div className="hero-content">
         <h1 className="hero-title">
-          Encontre seu próximo veículo com a
+          Bem vindo, ao seu painel de gestor da
         </h1>
 
         <h1 className="hero-title-strong">
           {nome}
         </h1>
-
-        <p className="hero-subtitle">
-          Seu próximo veículo começa aqui: confiança, transparência e qualidade.
-        </p>
 
         <div className="hero-buttons">
           <button className="btn-primary">Catálogo De Veíuclos</button>

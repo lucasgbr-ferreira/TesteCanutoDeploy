@@ -8,12 +8,12 @@ export default function Contact({ email, telefone, endereco }) {
   return (
     <section className="contact-container">
       <div className="contact-left">
-        <span className="contact-section-title">Contato</span>
+        <span className="contact-section-title">Importante</span>
 
-        <h1 className="contact-title">Fale conosco</h1>
+        <h1 className="contact-title">Informações</h1>
 
         <p className="contact-subtitle">
-          Estamos prontos para ajudar você a encontrar o veículo perfeito ou esclarecer qualquer dúvida.
+          Aqui estão algumas informações importantes sobre a concessionaria!
         </p>
       </div>
 
