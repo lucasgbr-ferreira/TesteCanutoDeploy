@@ -1,8 +1,12 @@
 // src/pages/Contact.jsx
 
+// IMPORTS //
+
 import React from "react";
 import "../styles/ContactConcessionaria.css";
 import { Mail, Phone, MapPin } from "lucide-react";
+
+// IMPORTS //
 
 export default function Contact({ email, telefone, endereco }) {
   return (

@@ -19,12 +19,12 @@ export default function HomeConcessionaria() {
     const [concessionaria, setConcessionaria] = useState(null);
 
     useEffect(() => {
-        // Nome do usuário
+        // salvando nome do usuário logado
         const user = JSON.parse(localStorage.getItem("user"));
         const nome = user?.name || user?.nome || user?.fullName || "Usuário";
         setNomeUsuario(nome);
 
-        // Dados da concessionária
+        // salvando dados da concessionaria 
         const stored = localStorage.getItem("concessionaria");
         if (stored) {
             setConcessionaria(JSON.parse(stored));
@@ -48,3 +48,5 @@ export default function HomeConcessionaria() {
         </div>
     );
 }
+
+// CONTEÚDO DA PÁGINA //

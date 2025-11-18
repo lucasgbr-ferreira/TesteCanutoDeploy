@@ -7,6 +7,7 @@ import EstoqueVeiculos from "./pages/EstoqueVeiculos";
 import PerfilCliente from "./pages/PerfilCliente";
 import HomeCliente from "./pages/HomeCliente";
 import HomeConcessionaria from "./pages/HomeConcessionaria.jsx"
+import HistoricoCliente from "./pages/HistoricoCliente.jsx"
 
 
 const FallbackRegister = () => (
@@ -60,7 +61,7 @@ export default function App() {
       <Route path="/cliente/buscar" element={<div style={{textAlign:'center',marginTop:80}}>Página de Buscar Veículos</div>} />
       <Route path="/cliente/veiculos" element={<div style={{textAlign:'center',marginTop:80}}>Página de Veículos</div>} />
       <Route path="/cliente/agenda" element={<div style={{textAlign:'center',marginTop:80}}>Página de Minha Agenda</div>} />
-      <Route path="/cliente/historico" element={<div style={{textAlign:'center',marginTop:80}}>Página de Histórico</div>} />
+      <Route path="/cliente/historico" element={<HistoricoCliente />} />
       <Route path="/cliente/propostas" element={<div style={{textAlign:'center',marginTop:80}}>Página de Propostas</div>} />
       <Route path="/cliente/suporte" element={<div style={{textAlign:'center',marginTop:80}}>Página de Suporte</div>} />
       <Route path="/dashboard/estoque" element={<EstoqueVeiculos />} />
