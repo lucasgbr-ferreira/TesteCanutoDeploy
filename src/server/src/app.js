@@ -62,9 +62,9 @@ const start = async () => {
     await sequelize.authenticate();
     console.log('✅ DB connection ok');
     
-    // Sincronizar modelos com force: true para recriar tudo
-    await sequelize.sync({ force: true });
-    console.log('✅ Models synced with force');
+    // Sincronizar modelos sem forçar a recriação das tabelas
+    await sequelize.sync();
+    console.log('✅ Models synced safely - existing data preserved');
     
     console.log('✅ Setup inicial concluído');
 
