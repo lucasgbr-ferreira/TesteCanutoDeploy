@@ -3,7 +3,7 @@
 // --- Imports ---
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {
   CarFront,
@@ -30,6 +30,8 @@ import {
 
 import "../styles/landing.css";
 import "../styles/stock.css";
+
+const API_BASE_URL = 'http://localhost:3000';
 
 // --- Variantes de Animação ---
 const fadeUp = {
@@ -273,12 +275,26 @@ export default function EstoqueVeiculos() {
   const [isEditMode, setIsEditMode] = useState(false);
   const [editErrors, setEditErrors] = useState({});
 
+  const navigate = useNavigate();
+  const token = localStorage.getItem('token');
+  const userRaw = localStorage.getItem('user');
+  const user = userRaw ? JSON.parse(userRaw) : null;
+
+  // Check de autenticação
+  useEffect(() => {
+    if (!token || user?.role !== 'concessionaria') {
+      navigate('/login');
+    }
+  }, [navigate, token, user]);
+
   // --- Função para buscar veículos ---
   const fetchVeiculos = async () => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await axios.get('http://localhost:3000/api/veiculos');
+      const response = await axios.get(`${API_BASE_URL}/api/veiculos`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       setVeiculos(response.data);
     } catch (err) {
       console.error("Erro ao buscar veículos:", err);
@@ -309,7 +325,9 @@ export default function EstoqueVeiculos() {
     }
 
     try {
-      await axios.delete(`http://localhost:3000/api/veiculos/${veiculoId}`);
+      await axios.delete(`${API_BASE_URL}/api/veiculos/${veiculoId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
 
       setVeiculos(prevVeiculos =>
         prevVeiculos.filter(veiculo => veiculo.id !== veiculoId)
@@ -376,8 +394,9 @@ export default function EstoqueVeiculos() {
 
     try {
       const response = await axios.put(
-        `http://localhost:3000/api/veiculos/${veiculoEditando.id}`,
-        veiculoEditando
+        `${API_BASE_URL}/api/veiculos/${veiculoEditando.id}`,
+        veiculoEditando,
+        { headers: { Authorization: `Bearer ${token}` } }
       );
 
       setVeiculos(prevVeiculos =>
@@ -454,7 +473,7 @@ export default function EstoqueVeiculos() {
     setIsSubmitting(true);
     setSubmitSuccess(false);
 
-    const endpoint = 'http://localhost:3000/api/veiculos';
+    const endpoint = `${API_BASE_URL}/api/veiculos`;
 
     try {
       // Formatar dados antes do envio
@@ -466,7 +485,9 @@ export default function EstoqueVeiculos() {
         quilometragem: formData.quilometragem ? parseInt(formData.quilometragem) : null
       };
 
-      const response = await axios.post(endpoint, dadosEnvio);
+      const response = await axios.post(endpoint, dadosEnvio, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
 
       console.log('Veículo cadastrado:', response.data);
       setSubmitSuccess(true);
@@ -489,6 +510,11 @@ export default function EstoqueVeiculos() {
         status: 'Disponível'
       });
       setFormErrors({});
+
+      // Atualiza a lista de veículos se o modal estiver aberto
+      if (isVeiculoModalOpen) {
+        fetchVeiculos();
+      }
 
       setTimeout(() => setSubmitSuccess(false), 5000);
 
@@ -1055,8 +1081,6 @@ function VeiculoListModal({
     </AnimatePresence>
   );
 }
-
-// ... código anterior mantido ...
 
 // --- Componente: Card do Veículo (MELHORADO COM FORMULÁRIO DE EDIÇÃO REORGANIZADO) ---
 function VeiculoCard({

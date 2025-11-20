@@ -1,3 +1,4 @@
+// Veiculo.js
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
 
@@ -83,6 +84,11 @@ const Veiculo = sequelize.define('Veiculo', {
   status: {
     type: DataTypes.ENUM('Disponível', 'Vendido', 'Em Manutenção', 'Reservado'),
     defaultValue: 'Disponível'
+  },
+  concessionaria_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: { model: 'concessionarias', key: 'id' }  // Alterado para o nome real da tabela
   }
 });
 

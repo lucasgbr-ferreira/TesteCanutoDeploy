@@ -15,6 +15,9 @@ Client.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
 User.hasOne(Concessionaria, { foreignKey: 'user_id', as: 'gestor' });
 Concessionaria.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
 
+// --- Associações de Concessionaria e Veiculo ---
+Concessionaria.hasMany(Veiculo, { foreignKey: 'concessionaria_id', as: 'veiculos' });
+Veiculo.belongsTo(Concessionaria, { foreignKey: 'concessionaria_id', as: 'concessionaria' });
 
 export { 
   sequelize, 

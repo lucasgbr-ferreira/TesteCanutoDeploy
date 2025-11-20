@@ -3,6 +3,7 @@ import { Veiculo } from '../models/index.js';
 
 // --- CREATE ---
 export const createVeiculo = async (req, res) => {
+  if (req.user.role !== 'concessionaria') return res.status(403).json({ message: 'Acesso negado: Apenas concessionárias' });
   try {
     const dadosVeiculo = req.body;
     
@@ -23,7 +24,8 @@ export const createVeiculo = async (req, res) => {
       ...dadosVeiculo,
       ano: dadosVeiculo.ano ? parseInt(dadosVeiculo.ano) : null,
       preco: dadosVeiculo.preco ? parseFloat(dadosVeiculo.preco) : null,
-      quilometragem: dadosVeiculo.quilometragem ? parseInt(dadosVeiculo.quilometragem) : null
+      quilometragem: dadosVeiculo.quilometragem ? parseInt(dadosVeiculo.quilometragem) : null,
+      concessionaria_id: req.user.concessionaria_id
     };
 
     const novoVeiculo = await Veiculo.create(dadosProcessados); 
@@ -59,8 +61,10 @@ export const createVeiculo = async (req, res) => {
 
 // --- READ ---
 export const getAllVeiculos = async (req, res) => {
+  if (req.user.role !== 'concessionaria') return res.status(403).json({ message: 'Acesso negado: Apenas concessionárias' });
   try {
     const veiculos = await Veiculo.findAll({
+      where: { concessionaria_id: req.user.concessionaria_id },
       order: [['createdAt', 'DESC']]
     });
     res.status(200).json(veiculos);
@@ -75,12 +79,13 @@ export const getAllVeiculos = async (req, res) => {
 
 // --- UPDATE ---
 export const updateVeiculo = async (req, res) => {
+  if (req.user.role !== 'concessionaria') return res.status(403).json({ message: 'Acesso negado: Apenas concessionárias' });
   try {
     const { id } = req.params;
     const veiculo = await Veiculo.findByPk(id);
 
-    if (!veiculo) {
-      return res.status(404).json({ message: 'Veículo não encontrado' });
+    if (!veiculo || veiculo.concessionaria_id !== req.user.concessionaria_id) {
+      return res.status(403).json({ message: 'Acesso negado: Veículo não pertence à sua concessionária' });
     }
 
     // Formatar placa para maiúsculas
@@ -122,12 +127,13 @@ export const updateVeiculo = async (req, res) => {
 
 // --- DELETE ---
 export const deleteVeiculo = async (req, res) => {
+  if (req.user.role !== 'concessionaria') return res.status(403).json({ message: 'Acesso negado: Apenas concessionárias' });
   try {
     const { id } = req.params;
     const veiculo = await Veiculo.findByPk(id);
 
-    if (!veiculo) {
-      return res.status(404).json({ message: 'Veículo não encontrado' });
+    if (!veiculo || veiculo.concessionaria_id !== req.user.concessionaria_id) {
+      return res.status(403).json({ message: 'Acesso negado: Veículo não pertence à sua concessionária' });
     }
 
     await veiculo.destroy();

@@ -1,3 +1,4 @@
+// app.js
 import 'dotenv/config'; 
 import express from 'express';  
 import cors from 'cors';
@@ -61,9 +62,9 @@ const start = async () => {
     await sequelize.authenticate();
     console.log('✅ DB connection ok');
     
-    // Sincronizar modelos
-    await sequelize.sync({ alter: true });
-    console.log('✅ Models synced');
+    // Sincronizar modelos com force: true para recriar tudo
+    await sequelize.sync({ force: true });
+    console.log('✅ Models synced with force');
     
     console.log('✅ Setup inicial concluído');
 
