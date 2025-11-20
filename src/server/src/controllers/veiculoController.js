@@ -1,24 +1,25 @@
 // server/src/controllers/veiculoController.js
 import { Veiculo } from '../models/index.js';
 
-// --- CREATE ---
+// =============================
+// CREATE
+// =============================
 export const createVeiculo = async (req, res) => {
   try {
     const dadosVeiculo = req.body;
-    
-    // Validação adicional no servidor
+
+    // Campos obrigatórios
     if (!dadosVeiculo.placa || !dadosVeiculo.modelo || !dadosVeiculo.marca) {
-      return res.status(400).json({ 
-        message: 'Placa, modelo e marca são obrigatórios' 
+      return res.status(400).json({
+        message: 'Placa, modelo e marca são obrigatórios'
       });
     }
 
-    // Formatar placa para maiúsculas
+    // Formatar placa
     if (dadosVeiculo.placa) {
       dadosVeiculo.placa = dadosVeiculo.placa.toUpperCase().replace(/\s/g, '');
     }
 
-    // VALIDAÇÃO ADICIONAL: Garantir que campos numéricos sejam convertidos
     const dadosProcessados = {
       ...dadosVeiculo,
       ano: dadosVeiculo.ano ? parseInt(dadosVeiculo.ano) : null,
@@ -26,69 +27,92 @@ export const createVeiculo = async (req, res) => {
       quilometragem: dadosVeiculo.quilometragem ? parseInt(dadosVeiculo.quilometragem) : null
     };
 
-    const novoVeiculo = await Veiculo.create(dadosProcessados); 
+    const novoVeiculo = await Veiculo.create(dadosProcessados);
     res.status(201).json(novoVeiculo);
+
   } catch (error) {
-    console.error('Erro detalhado ao criar veículo:', error);
-    
+
+    console.error('Erro ao criar veículo:', error);
+
     if (error.name === 'SequelizeValidationError') {
-      const errors = error.errors.map(err => err.message);
-      return res.status(400).json({ 
-        message: 'Erro de validação', 
-        errors 
+      return res.status(400).json({
+        message: "Erro de validação",
+        errors: error.errors.map(err => err.message),
       });
     }
-    if (error.name === 'SequelizeUniqueConstraintError') {
-      return res.status(400).json({ 
-        message: 'Placa já cadastrada no sistema' 
+
+    if (error.name === "SequelizeUniqueConstraintError") {
+      return res.status(400).json({
+        message: "Placa já cadastrada",
       });
     }
-    // Adicionar mais tipos de erro do Sequelize
-    if (error.name === 'SequelizeDatabaseError') {
-      return res.status(400).json({ 
-        message: 'Erro no banco de dados: ' + error.message 
-      });
-    }
-    
-    res.status(500).json({ 
-      message: 'Erro interno ao cadastrar veículo',
-      error: process.env.NODE_ENV === 'development' ? error.message : 'Erro interno do servidor'
+
+    res.status(500).json({
+      message: "Erro interno ao cadastrar veículo"
     });
   }
 };
 
-// --- READ ---
+// =============================
+// READ ALL
+// =============================
 export const getAllVeiculos = async (req, res) => {
   try {
     const veiculos = await Veiculo.findAll({
       order: [['createdAt', 'DESC']]
     });
     res.status(200).json(veiculos);
+
   } catch (error) {
     console.error('Erro ao buscar veículos:', error);
-    res.status(500).json({ 
-      message: 'Erro ao buscar veículos', 
-      error: process.env.NODE_ENV === 'development' ? error.message : 'Erro interno do servidor'
+    res.status(500).json({
+      message: "Erro ao buscar veículos"
     });
   }
 };
 
-// --- UPDATE ---
+// =============================
+// READ BY ID (NOVO)
+// =============================
+export const getVeiculo = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const veiculo = await Veiculo.findByPk(id);
+
+    if (!veiculo) {
+      return res.status(404).json({
+        message: "Veículo não encontrado"
+      });
+    }
+
+    res.status(200).json(veiculo);
+
+  } catch (error) {
+    console.error('Erro ao buscar veículo:', error);
+    res.status(500).json({
+      message: 'Erro ao buscar veículo'
+    });
+  }
+};
+
+// =============================
+// UPDATE
+// =============================
 export const updateVeiculo = async (req, res) => {
   try {
     const { id } = req.params;
     const veiculo = await Veiculo.findByPk(id);
 
     if (!veiculo) {
-      return res.status(404).json({ message: 'Veículo não encontrado' });
+      return res.status(404).json({
+        message: "Veículo não encontrado"
+      });
     }
 
-    // Formatar placa para maiúsculas
     if (req.body.placa) {
       req.body.placa = req.body.placa.toUpperCase().replace(/\s/g, '');
     }
 
-    // Processar campos numéricos
     const dadosAtualizados = {
       ...req.body,
       ano: req.body.ano ? parseInt(req.body.ano) : null,
@@ -97,47 +121,51 @@ export const updateVeiculo = async (req, res) => {
     };
 
     await veiculo.update(dadosAtualizados);
-    
-    res.status(200).json(veiculo); 
+    res.status(200).json(veiculo);
+
   } catch (error) {
     console.error('Erro ao atualizar veículo:', error);
+
     if (error.name === 'SequelizeValidationError') {
-      const errors = error.errors.map(err => err.message);
-      return res.status(400).json({ 
-        message: 'Erro de validação', 
-        errors 
+      return res.status(400).json({
+        message: "Erro de validação",
+        errors: error.errors.map(err => err.message),
       });
     }
+
     if (error.name === 'SequelizeUniqueConstraintError') {
-      return res.status(400).json({ 
-        message: 'Placa já cadastrada no sistema' 
+      return res.status(400).json({
+        message: "Placa já cadastrada"
       });
     }
-    res.status(500).json({ 
-      message: 'Erro ao atualizar veículo', 
-      error: process.env.NODE_ENV === 'development' ? error.message : 'Erro interno do servidor'
+
+    res.status(500).json({
+      message: "Erro ao atualizar veículo"
     });
   }
 };
 
-// --- DELETE ---
+// =============================
+// DELETE
+// =============================
 export const deleteVeiculo = async (req, res) => {
   try {
     const { id } = req.params;
     const veiculo = await Veiculo.findByPk(id);
 
     if (!veiculo) {
-      return res.status(404).json({ message: 'Veículo não encontrado' });
+      return res.status(404).json({
+        message: "Veículo não encontrado"
+      });
     }
 
     await veiculo.destroy();
-    
-    res.status(204).json({ message: 'Veículo deletado com sucesso' });
+    res.status(204).json({ message: "Veículo deletado" });
+
   } catch (error) {
     console.error('Erro ao deletar veículo:', error);
-    res.status(500).json({ 
-      message: 'Erro ao deletar veículo', 
-      error: process.env.NODE_ENV === 'development' ? error.message : 'Erro interno do servidor'
+    res.status(500).json({
+      message: "Erro ao deletar veículo"
     });
   }
 };

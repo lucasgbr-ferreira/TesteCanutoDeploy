@@ -6,6 +6,8 @@ import CatalogoVeiculos from "./pages/CatalogoVeiculos";
 import EstoqueVeiculos from "./pages/EstoqueVeiculos";
 import PerfilCliente from "./pages/PerfilCliente";
 import HomeCliente from "./pages/HomeCliente";
+import SobreConcessionaria from "./pages/SobreConcessionaria";
+import DetalhesVeiculo from "./pages/DetalhesVeiculo";
 
 
 const FallbackRegister = () => (
@@ -30,7 +32,7 @@ export default function App() {
       .then((mod) => setRegisterComp(() => mod.default || mod))
       .catch((err) => {
         console.warn("RegisterForm import failed:", err.message || err);
-        setRegisterComp(() => null); 
+        setRegisterComp(() => null);
       });
     import("./pages/Login.jsx")
       .then((mod) => setLoginComp(() => mod.default || mod))
@@ -53,17 +55,19 @@ export default function App() {
         element={LoginComp ? <LoginComp /> : <FallbackLogin />}
       />
       <Route path="/catalog" element={<CatalogoVeiculos />} />
-      <Route path="/cliente/catalogo" element={<div style={{textAlign:'center',marginTop:80}}>Página de Catálogo de Veículos</div>} />
+      <Route path="/cliente/catalogo" element={<div style={{ textAlign: 'center', marginTop: 80 }}>Página de Catálogo de Veículos</div>} />
       <Route path="/home_cliente" element={<HomeCliente />} />
-      <Route path="/cliente/buscar" element={<div style={{textAlign:'center',marginTop:80}}>Página de Buscar Veículos</div>} />
-      <Route path="/cliente/veiculos" element={<div style={{textAlign:'center',marginTop:80}}>Página de Veículos</div>} />
-      <Route path="/cliente/agenda" element={<div style={{textAlign:'center',marginTop:80}}>Página de Minha Agenda</div>} />
-      <Route path="/cliente/historico" element={<div style={{textAlign:'center',marginTop:80}}>Página de Histórico</div>} />
-      <Route path="/cliente/propostas" element={<div style={{textAlign:'center',marginTop:80}}>Página de Propostas</div>} />
-      <Route path="/cliente/suporte" element={<div style={{textAlign:'center',marginTop:80}}>Página de Suporte</div>} />
+      <Route path="/cliente/buscar" element={<div style={{ textAlign: 'center', marginTop: 80 }}>Página de Buscar Veículos</div>} />
+      <Route path="/cliente/veiculos" element={<div style={{ textAlign: 'center', marginTop: 80 }}>Página de Veículos</div>} />
+      <Route path="/cliente/agenda" element={<div style={{ textAlign: 'center', marginTop: 80 }}>Página de Minha Agenda</div>} />
+      <Route path="/cliente/historico" element={<div style={{ textAlign: 'center', marginTop: 80 }}>Página de Histórico</div>} />
+      <Route path="/cliente/propostas" element={<div style={{ textAlign: 'center', marginTop: 80 }}>Página de Propostas</div>} />
+      <Route path="/cliente/suporte" element={<div style={{ textAlign: 'center', marginTop: 80 }}>Página de Suporte</div>} />
       <Route path="/dashboard/estoque" element={<EstoqueVeiculos />} />
       <Route path="/perfil" element={<PerfilCliente />} />
-
+      <Route path="/sobre" element={<SobreConcessionaria />} />
+      <Route path="/sobre/:id" element={<SobreConcessionaria />} />
+      <Route path="/detalhes/:id" element={<DetalhesVeiculo />} />
 
       <Route path="*" element={<LandingPage />} />
     </Routes>
