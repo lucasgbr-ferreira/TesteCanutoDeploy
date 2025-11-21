@@ -35,25 +35,34 @@ export default function PerfilCliente() {
   const [msg, setMsg] = useState(null);
   const [err, setErr] = useState(false);
 
-  // token / user
-  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
-  const localUserRaw = typeof window !== "undefined" ? localStorage.getItem("user") : null;
-  const localUser = localUserRaw ? JSON.parse(localUserRaw) : null;
+  // local user state (mantém sincronizado com localStorage)
+  const [localUser, setLocalUser] = useState(() => {
+    if (typeof window === "undefined") return null;
+    const raw = localStorage.getItem("user");
+    return raw ? JSON.parse(raw) : null;
+  });
+
   const userId = localUser?.id || null; // usado para buscar foto
 
   // Carrega dados do usuário ao montar
   useEffect(() => {
     async function carregar() {
-      // primeiro tenta popular com localStorage.user (se existir)
-      if (localUser) {
+      // re-ler localUser diretamente (em caso de mudanças)
+      const rawUser = typeof window !== "undefined" ? localStorage.getItem("user") : null;
+      const storedUser = rawUser ? JSON.parse(rawUser) : null;
+      if (storedUser) {
+        setLocalUser(storedUser);
         setFormData((prev) => ({
           ...prev,
-          name: localUser.name || prev.name,
-          email: localUser.email || prev.email
+          name: storedUser.name || prev.name,
+          email: storedUser.email || prev.email
         }));
+        setBackupData((prev) => ({ ...prev, name: storedUser.name || prev.name, email: storedUser.email || prev.email }));
       }
 
-      // se houver token, pede os dados atualizados ao backend
+      // ler token no momento do carregamento
+      const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
       if (token) {
         setLoading(true);
         try {
@@ -62,6 +71,7 @@ export default function PerfilCliente() {
           });
           if (res.ok) {
             const data = await res.json();
+
             // o endpoint pode devolver user e client fields; adaptamos
             // exemplo esperado: { user: { name, email }, client: { cpf, telefone, endereco } }
             const out = {
@@ -71,14 +81,21 @@ export default function PerfilCliente() {
               cpf: data?.cpf ?? data?.client?.cpf ?? "",
               endereco: data?.endereco ?? data?.client?.endereco ?? ""
             };
+
             setFormData((prev) => ({ ...prev, ...out }));
-            setBackupData({ ...prev, ...out });
+            // backup com os dados atuais
+            setBackupData({ ...out });
+
+            // se o backend retornou user atualizado, sincroniza localStorage e estado
+            if (data?.user) {
+              localStorage.setItem("user", JSON.stringify(data.user));
+              setLocalUser(data.user);
+            }
           } else {
-            // não autorizado ou outro problema: mantém localStorage
-            // se for 401, podemos forçar logout
+            // se não autorizado, opcionalmente forçar logout
             if (res.status === 401) {
-              // opcional: redirecionar para login
-              // navigate("/login");
+              // não forçar logout automático aqui - só mostrar mensagem se necessário
+              console.warn("Não autorizado ao buscar perfil (401)");
             }
           }
         } catch (e) {
@@ -122,7 +139,8 @@ export default function PerfilCliente() {
   }
 
   async function handleSave() {
-    // salva no backend -- precisa de token
+    // ler token no momento do envio (garante token atual)
+    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
     if (!token) {
       setErr(true);
       setMsg("Você precisa estar logado para salvar. Faça login primeiro.");
@@ -141,9 +159,9 @@ export default function PerfilCliente() {
         cpf: formData.cpf,
         endereco: formData.endereco
       };
-      // se houver nova senha, envie como campo password
+      // se houver nova senha, envie como campo newPassword (o controller espera newPassword)
       if (formData.newPassword && formData.newPassword.trim() !== "") {
-        payload.password = formData.newPassword.trim();
+        payload.newPassword = formData.newPassword.trim();
       }
 
       const res = await fetch(`${API_BASE_URL}/api/clients/me`, {
@@ -167,9 +185,10 @@ export default function PerfilCliente() {
         setIsEditing(false);
         setMsg("Dados salvos com sucesso!");
         setErr(false);
-        // atualiza localStorage user (se necessário)
+        // atualiza localStorage user (se necessário) e estado local
         if (data?.user) {
           localStorage.setItem("user", JSON.stringify(data.user));
+          setLocalUser(data.user);
         }
       }
     } catch (e) {
@@ -178,6 +197,8 @@ export default function PerfilCliente() {
       setMsg("Erro ao salvar. Verifique sua conexão.");
     } finally {
       setLoading(false);
+      // limpa a senha do formulário por segurança
+      setFormData((prev) => ({ ...prev, newPassword: "" }));
     }
   }
 
@@ -196,6 +217,8 @@ export default function PerfilCliente() {
 
   const salvarFoto = async () => {
     if (!fotoFile) return setMsg("Escolha uma foto antes de enviar.");
+    // ler token no momento do envio
+    const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
     if (!token) {
       setErr(true);
       setMsg("Faça login para enviar foto.");
@@ -208,7 +231,7 @@ export default function PerfilCliente() {
 
     try {
       const body = new FormData();
-      // seu backend esperava campo "foto" (visto no código anterior)
+      // seu backend espera campo "foto"
       body.append("foto", fotoFile);
 
       const res = await fetch(`${API_BASE_URL}/api/profile/photo/upload`, {
@@ -275,7 +298,7 @@ export default function PerfilCliente() {
 
               <div style={{ display: "flex", gap: 8 }}>
                 <button type="button" className="btn" onClick={escolherFoto}>Alterar Foto</button>
-                {fotoFile && <button type="button" className="btn-outline" onClick={salvarFoto}>Salvar Foto</button>}
+                {fotoFile && <button type="button" className="btn-outline" onClick={salvarFoto} disabled={loading}>{loading ? "Enviando..." : "Salvar Foto"}</button>}
               </div>
             </div>
 
@@ -308,7 +331,7 @@ export default function PerfilCliente() {
                 value={formData.telefone}
                 readOnly={!isEditing}
                 onChange={handleChange}
-                style={{ width: "100%", padding: 10, margin: "8px 0 12px", borderRadius: 8, background: "transparent", border: "1px solid var(--border)", color: "var(--text)" }}
+                style={{ width: "100%", padding:10, margin:"8px 0 12px", borderRadius:8, background:"transparent", border:"1px solid var(--border)", color:"var(--text)" }}
               />
 
               <label style={{ color: "var(--muted)", fontSize: 13 }}>CPF</label>
@@ -318,7 +341,7 @@ export default function PerfilCliente() {
                 value={formData.cpf}
                 readOnly={!isEditing}
                 onChange={handleChange}
-                style={{ width: "100%", padding: 10, margin: "8px 0 12px", borderRadius: 8, background: "transparent", border: "1px solid var(--border)", color: "var(--text)" }}
+                style={{ width: "100%", padding:10, margin:"8px 0 12px", borderRadius:8, background:"transparent", border:"1px solid var(--border)", color:"var(--text)" }}
               />
 
               <label style={{ color: "var(--muted)", fontSize: 13 }}>Endereço</label>
@@ -328,7 +351,7 @@ export default function PerfilCliente() {
                 value={formData.endereco}
                 readOnly={!isEditing}
                 onChange={handleChange}
-                style={{ width: "100%", padding: 10, margin: "8px 0 12px", borderRadius: 8, background: "transparent", border: "1px solid var(--border)", color: "var(--text)" }}
+                style={{ width: "100%", padding:10, margin:"8px 0 12px", borderRadius:8, background:"transparent", border:"1px solid var(--border)", color:"var(--text)" }}
               />
 
               <label style={{ color: "var(--muted)", fontSize: 13 }}>Nova Senha</label>
@@ -338,7 +361,7 @@ export default function PerfilCliente() {
                 value={formData.newPassword}
                 readOnly={!isEditing}
                 onChange={handleChange}
-                style={{ width: "100%", padding: 10, margin: "8px 0 16px", borderRadius: 8, background: "transparent", border: "1px solid var(--border)", color: "var(--text)" }}
+                style={{ width: "100%", padding:10, margin:"8px 0 16px", borderRadius:8, background:"transparent", border:"1px solid var(--border)", color:"var(--text)" }}
               />
 
               <div style={{ display: "flex", gap: 12, alignItems: "center", marginTop: 6 }}>
