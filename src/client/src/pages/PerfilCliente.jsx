@@ -12,7 +12,6 @@ const API_BASE_URL =
 export default function PerfilCliente() {
   const navigate = useNavigate();
 
-  // estado do formulário
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -25,29 +24,24 @@ export default function PerfilCliente() {
   const [backupData, setBackupData] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
 
-  // foto
   const [fotoPreview, setFotoPreview] = useState(null);
   const [fotoFile, setFotoFile] = useState(null);
   const [fotoUrlServidor, setFotoUrlServidor] = useState(null);
 
-  // UI
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState(null);
   const [err, setErr] = useState(false);
 
-  // local user state (mantém sincronizado com localStorage)
   const [localUser, setLocalUser] = useState(() => {
     if (typeof window === "undefined") return null;
     const raw = localStorage.getItem("user");
     return raw ? JSON.parse(raw) : null;
   });
 
-  const userId = localUser?.id || null; // usado para buscar foto
+  const userId = localUser?.id || null; 
 
-  // Carrega dados do usuário ao montar
   useEffect(() => {
     async function carregar() {
-      // re-ler localUser diretamente (em caso de mudanças)
       const rawUser = typeof window !== "undefined" ? localStorage.getItem("user") : null;
       const storedUser = rawUser ? JSON.parse(rawUser) : null;
       if (storedUser) {
@@ -60,7 +54,6 @@ export default function PerfilCliente() {
         setBackupData((prev) => ({ ...prev, name: storedUser.name || prev.name, email: storedUser.email || prev.email }));
       }
 
-      // ler token no momento do carregamento
       const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
       if (token) {
@@ -72,8 +65,6 @@ export default function PerfilCliente() {
           if (res.ok) {
             const data = await res.json();
 
-            // o endpoint pode devolver user e client fields; adaptamos
-            // exemplo esperado: { user: { name, email }, client: { cpf, telefone, endereco } }
             const out = {
               name: data?.user?.name ?? data?.name ?? formData.name,
               email: data?.user?.email ?? data?.email ?? formData.email,
@@ -83,18 +74,14 @@ export default function PerfilCliente() {
             };
 
             setFormData((prev) => ({ ...prev, ...out }));
-            // backup com os dados atuais
             setBackupData({ ...out });
 
-            // se o backend retornou user atualizado, sincroniza localStorage e estado
             if (data?.user) {
               localStorage.setItem("user", JSON.stringify(data.user));
               setLocalUser(data.user);
             }
           } else {
-            // se não autorizado, opcionalmente forçar logout
             if (res.status === 401) {
-              // não forçar logout automático aqui - só mostrar mensagem se necessário
               console.warn("Não autorizado ao buscar perfil (401)");
             }
           }
@@ -106,17 +93,13 @@ export default function PerfilCliente() {
       }
     }
     carregar();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // carregar foto do servidor (se existir userId)
   useEffect(() => {
     if (!userId) return;
-    // busca a foto pública (rota de get de foto)
     setFotoUrlServidor(`${API_BASE_URL}/api/profile/photo/${userId}`);
   }, [userId]);
 
-  // handlers
   function handleChange(e) {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -139,7 +122,6 @@ export default function PerfilCliente() {
   }
 
   async function handleSave() {
-    // ler token no momento do envio (garante token atual)
     const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
     if (!token) {
       setErr(true);
@@ -159,7 +141,6 @@ export default function PerfilCliente() {
         cpf: formData.cpf,
         endereco: formData.endereco
       };
-      // se houver nova senha, envie como campo newPassword (o controller espera newPassword)
       if (formData.newPassword && formData.newPassword.trim() !== "") {
         payload.newPassword = formData.newPassword.trim();
       }
@@ -185,7 +166,6 @@ export default function PerfilCliente() {
         setIsEditing(false);
         setMsg("Dados salvos com sucesso!");
         setErr(false);
-        // atualiza localStorage user (se necessário) e estado local
         if (data?.user) {
           localStorage.setItem("user", JSON.stringify(data.user));
           setLocalUser(data.user);
@@ -197,12 +177,10 @@ export default function PerfilCliente() {
       setMsg("Erro ao salvar. Verifique sua conexão.");
     } finally {
       setLoading(false);
-      // limpa a senha do formulário por segurança
       setFormData((prev) => ({ ...prev, newPassword: "" }));
     }
   }
 
-  // foto handlers
   const escolherFoto = () => {
     const el = document.getElementById("inputFoto");
     if (el) el.click();
@@ -217,7 +195,6 @@ export default function PerfilCliente() {
 
   const salvarFoto = async () => {
     if (!fotoFile) return setMsg("Escolha uma foto antes de enviar.");
-    // ler token no momento do envio
     const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
     if (!token) {
       setErr(true);
@@ -238,7 +215,6 @@ export default function PerfilCliente() {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`
-          // NÃO colocar Content-Type — browser define para multipart/form-data
         },
         body
       });
@@ -248,7 +224,6 @@ export default function PerfilCliente() {
         throw new Error(`Erro upload: ${res.status} ${text}`);
       }
 
-      // sucesso: atualizar preview com timestamp para bust cache
       setMsg("Foto enviada com sucesso!");
       setErr(false);
       setFotoFile(null);
