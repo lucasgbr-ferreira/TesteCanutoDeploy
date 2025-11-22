@@ -16,11 +16,11 @@ router.use(authMiddleware);
 
 // Rotas do painel da concessionária
 router.post('/', createVeiculo);
-router.get('/estoque', getAllVeiculos);     // ← Estoque privado
+router.get('/estoque', getAllVeiculos);
 router.put('/:id', updateVeiculo);
 router.delete('/:id', deleteVeiculo);
 
 // Rota do catálogo (clientes logados também podem acessar)
-router.get('/catalogo', getCatalogoVeiculos);   // ← ESSA É A ROTA QUE VOCÊ DEVE USAR
+router.get('/catalogo', getCatalogoVeiculos);
 
 export default router;

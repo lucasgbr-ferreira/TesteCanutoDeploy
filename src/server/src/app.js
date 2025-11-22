@@ -7,11 +7,12 @@ import './models/index.js';
 
 import authRoutes from './routes/authRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
-import imageGetRoutes from './routes/imageGetRoutes.js';
-import concessionariaRoutes from './routes/concessionariaRoutes.js';
+import imageGetRoutes from './routes/imageGetRoutes.js'; 
+import concessionariaRoutes from './routes/concessionariaRoutes.js'; 
 import clientRoutes from './routes/clientRoutes.js';
-import veiculoRoutes from './routes/veiculoRoutes.js';
-import profilePhotoRoutes from "./routes/profilePhotoRoutes.js";
+import veiculoRoutes from './routes/veiculoRoutes.js'; 
+import profilePhotoRoutes from './routes/profilePhotoRoutes.js';
+import veiculoPhotoRoutes from './routes/veiculoPhotoRoutes.js'; 
 
 const app = express();
 // CORS configurado para aceitar o front dev (Vite) e outras origens úteis em dev
@@ -52,6 +53,7 @@ app.use("/api/profile/photo", profilePhotoRoutes);
 app.use('/api/uploads', uploadRoutes); 
 app.use('/api/clients', clientRoutes); 
 app.use('/api/veiculos', veiculoRoutes);
+app.use('/api/veiculo-photos', veiculoPhotoRoutes);
 
 app.get('/', (req, res) => res.send('GesCar API running'));
 

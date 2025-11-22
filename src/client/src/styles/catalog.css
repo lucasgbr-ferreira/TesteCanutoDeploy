@@ -1,5 +1,81 @@
+
+.lp-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 32px;
+  background: #0b0b0d;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+/* Brand */
+.lp-header .lp-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 800;
+  text-decoration: none;
+}
+.lp-header .lp-brand svg {
+  color: #8b5cf6;
+}
+
+/* Navigation */
+.lp-nav {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+.lp-nav .nav-link {
+  text-decoration: none;
+  color: var(--muted);
+  font-weight: 600;
+  transition: all .2s ease;
+}
+.lp-nav .nav-link:hover {
+  color: #fff;
+}
+
+/* Profile Dropdown */
+.lp-nav .profile-dropdown {
+  position: relative;
+}
+.lp-nav .profile-dropdown .nav-link {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+.lp-nav .profile-dropdown .nav-link:hover {
+  background: var(--glass);
+  color: #fff;
+}
+.lp-nav .profile-dropdown .dropdown-arrow {
+  margin-left: 4px;
+  transition: transform 0.2s ease;
+}
+.lp-nav .profile-dropdown .dropdown-arrow.open {
+  transform: rotate(180deg);
+}
+
+
+/* --- ORIGINAL CSS BELOW --- */
+
 /* client/src/styles/catalog.css */
-/* 1. Header & Logo Enhancements */
+/* 1. Header & Logo Enhancements - MANTIDO COMO ORIGINAL APENAS COM COR ALTERADA */
 .lp-header .lp-brand {
   display: inline-flex;
   align-items: center;
@@ -10,7 +86,7 @@
   font-size: 18px;
 }
 .lp-header .lp-brand svg {
-  color: var(--accent);
+  color: #8b5cf6;
 }
 
 .lp-nav .profile-dropdown .nav-link {
@@ -39,14 +115,13 @@
 }
 
 /* 2. Seção Hero (Catálogo) */
-/* 2. Seção Hero (Catálogo) */
 .catalog-hero {
   padding: 96px 0;
   position: relative;
   text-align: center;
-  background-color: var(--card); 
+  background-color: var(--card);
   background-image: linear-gradient(rgba(7, 20, 40, 0.8), rgba(7, 20, 40, 0.8)),
-    url('https://images.unsplash.com/photo-1669882571697-454409913872?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1169 ');
+    url('https://images.unsplash.com/photo-1669882571697-454409913872?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1169');
   background-size: cover;
   background-position: center;
   border-bottom: 1px solid var(--glass);
@@ -76,7 +151,7 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.02);
 }
 .catalog-intro h6 {
-  color: var(--accent);
+  color: #8b5cf6;
   font-size: 14px;
   font-weight: 700;
   text-transform: uppercase;
@@ -102,10 +177,14 @@
 /* 4. Grid de Veículos - MELHORADO */
 .catalog-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 24px;
+  grid-template-columns: repeat(3, minmax(320px, 1fr));
+  gap: 32px;
   width: 100%;
   justify-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  box-sizing: border-box;
 }
 
 /* Quando há apenas um card, limitamos a largura máxima */
@@ -127,15 +206,16 @@
   transition: all 0.3s ease;
   border: 1px solid rgba(255, 255, 255, 0.08);
   width: 100%;
-  max-width: 400px;
+  max-width: 380px;
   height: fit-content;
   position: relative;
+  margin: 0 auto;
 }
 
 .vehicle-card:hover {
   transform: translateY(-8px);
   box-shadow: 0 20px 40px rgba(2, 6, 23, 0.6);
-  border-color: rgba(255, 90, 95, 0.3);
+  border-color: rgba(139, 92, 246, 0.3);
 }
 
 /* Container da imagem melhorado */
@@ -180,6 +260,7 @@
   gap: 4px;
   letter-spacing: 0.5px;
   font-family: 'Monaco', 'Consolas', monospace;
+  z-index: 3;
 }
 
 /* Badge de status */
@@ -195,7 +276,7 @@
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  z-index: 2;
+  z-index: 3;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
@@ -205,7 +286,7 @@
 
 /* Corpo do card melhorado */
 .vehicle-card-body {
-  padding: 20px;
+  padding: 24px;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
@@ -222,6 +303,7 @@
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  min-height: 52px;
 }
 
 /* Grid de informações do veículo - NOVO */
@@ -242,10 +324,12 @@
   background: rgba(255, 255, 255, 0.05);
   border-radius: 6px;
   border: 1px solid rgba(255, 255, 255, 0.08);
+  min-height: 36px;
+  box-sizing: border-box;
 }
 
 .info-item svg {
-  color: var(--accent);
+  color: #8b5cf6;
   flex-shrink: 0;
 }
 
@@ -254,16 +338,52 @@
   font-weight: 600;
 }
 
-/* Informações adicionais expandíveis */
+/* Informações de contato */
+.contact-info {
+  margin-top: 8px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.contact-section h4 {
+  font-size: 13px;
+  color: #8b5cf6;
+  margin: 0 0 12px 0;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.contact-item:last-child {
+  margin-bottom: 0;
+}
+
+.contact-item svg {
+  color: #8b5cf6;
+  flex-shrink: 0;
+}
+
+/* Informações adicionais (expandíveis) */
 .vehicle-additional-info {
   margin-top: 8px;
 }
 
 .btn-details-toggle {
   background: transparent;
-  border: 1px solid var(--glass);
-  color: var(--accent);
-  padding: 8px 12px;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  color: #8b5cf6;
+  padding: 10px 12px;
   border-radius: 6px;
   font-size: 12px;
   font-weight: 600;
@@ -278,8 +398,8 @@
 }
 
 .btn-details-toggle:hover {
-  background: rgba(255, 90, 95, 0.1);
-  border-color: var(--accent);
+  background: rgba(139, 92, 246, 0.1);
+  border-color: #8b5cf6;
 }
 
 .details-content {
@@ -296,7 +416,7 @@
 
 .detail-section h4 {
   font-size: 13px;
-  color: var(--accent);
+  color: #8b5cf6;
   margin: 0 0 8px 0;
   font-weight: 700;
   text-transform: uppercase;
@@ -312,19 +432,22 @@
 
 /* Footer do card melhorado */
 .vehicle-card-footer {
-  padding: 20px;
+  padding: 20px 24px;
   background: var(--glass);
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
+  min-height: 80px;
+  box-sizing: border-box;
 }
 
 .price-section {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  flex: 1;
 }
 
 .price-label {
@@ -338,15 +461,15 @@
 .price-value {
   font-size: 20px;
   font-weight: 800;
-  color: var(--accent);
+  color: #8b5cf6;
   letter-spacing: -0.5px;
 }
 
 .btn-contact {
-  background: linear-gradient(90deg, var(--accent), #ff7b7f);
+  background: linear-gradient(90deg, #8b5cf6, #a78bfa);
   color: white;
   border: none;
-  padding: 10px 16px;
+  padding: 12px 20px;
   border-radius: 8px;
   font-size: 14px;
   font-weight: 600;
@@ -354,11 +477,16 @@
   transition: all 0.2s ease;
   white-space: nowrap;
   flex-shrink: 0;
+  min-width: 140px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-contact:hover:not(.disabled):not(:disabled) {
   transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(255, 90, 95, 0.4);
+  box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
 }
 
 .btn-contact.disabled,
@@ -369,7 +497,7 @@
   opacity: 0.5;
   box-shadow: none;
   transform: none;
-  pointer-events: none; /* impede qualquer evento */
+  pointer-events: none;
 }
 
 /* 6. Estados de loading e empty states */
@@ -387,7 +515,7 @@
   width: 40px;
   height: 40px;
   border: 3px solid var(--glass);
-  border-top: 3px solid var(--accent);
+  border-top: 3px solid #8b5cf6;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -553,11 +681,11 @@
 }
 .form-group input:focus {
   outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(255, 90, 95, 0.2);
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
 }
 
-/* 8. Menu Mobile */
+/* 8. Menu Mobile - MANTIDO COMO ORIGINAL */
 .mobile-menu-btn {
   display: none;
   cursor: pointer;
@@ -594,6 +722,13 @@
 }
 
 /* 9. Responsividade */
+@media (max-width: 1200px) {
+  .catalog-grid {
+    grid-template-columns: repeat(2, minmax(320px, 1fr));
+    gap: 24px;
+  }
+}
+
 @media (max-width: 980px){
   .lp-nav { 
     display: none; 
@@ -614,7 +749,7 @@
   }
   
   .catalog-grid {
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 20px;
   }
   
@@ -622,15 +757,25 @@
     flex-direction: column;
     align-items: stretch;
     gap: 12px;
+    min-height: auto;
   }
   
   .btn-contact {
     width: 100%;
+    min-width: auto;
   }
   
   .vehicle-card-info-grid {
     grid-template-columns: 1fr;
     gap: 8px;
+  }
+}
+
+@media (max-width: 768px) {
+  .catalog-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    max-width: 400px;
   }
 }
 
@@ -670,6 +815,11 @@
     font-size: 9px;
     padding: 4px 8px;
   }
+  
+  .vehicle-card-title {
+    font-size: 18px;
+    min-height: 48px;
+  }
 }
 
 /* 10. Estados de foco para acessibilidade */
@@ -677,11 +827,75 @@
 .modal-close-btn:focus,
 .mobile-menu-btn:focus,
 .btn-details-toggle:focus {
-  outline: 2px solid var(--accent);
+  outline: 2px solid #8b5cf6;
   outline-offset: 2px;
 }
 
 .vehicle-card:focus-within {
-  outline: 2px solid var(--accent);
+  outline: 2px solid #8b5cf6;
   outline-offset: 4px;
+}
+
+/* 11. Ajustes de centralização e layout */
+.lp-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.catalog-grid-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* Garantir que os cards fiquem sempre centralizados e com espaçamento adequado */
+.vehicle-card {
+  margin: 0 auto;
+}
+
+/* --- HEADER OVERRIDES ADDED TO FIX ALIGNMENT --- */
+
+
+/* Header-specific container override
+   Ensures logo (CanutoMotors) stays left and navigation stays right,
+   even if .lp-container globally centers children.
+*/
+.lp-header .lp-container {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* If header has an inner wrapper with class .container or similar, target common variants */
+.lp-header .container,
+.lp-header .header-inner {
+  display: flex !important;
+  flex-direction: row !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: 100%;
+  max-width: 1200px;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Ensure brand is left-aligned and nav stays on the right */
+.lp-header .lp-brand { order: 0; margin-right: auto; }
+.lp-header .lp-nav { order: 1; margin-left: 0; }
+
+/* Small-screen adjustment: stack but keep brand left */
+@media (max-width: 980px) {
+  .lp-header .lp-container,
+  .lp-header .container,
+  .lp-header .header-inner {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
 }
