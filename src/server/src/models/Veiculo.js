@@ -1,3 +1,4 @@
+// Veiculo.js
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/database.js';
 
@@ -15,7 +16,7 @@ const Veiculo = sequelize.define('Veiculo', {
     type: DataTypes.STRING,
     allowNull: false,
     validate: {
-      notEmpty: { msg: 'Modelo não pode estar vazio' },
+      notEmpty: { msg: 'Modelo não pode estar vazia' },
       len: { args: [2, 100], msg: 'Modelo deve ter entre 2 e 100 caracteres' }
     }
   },
@@ -40,14 +41,7 @@ const Veiculo = sequelize.define('Veiculo', {
       min: { args: [0], msg: 'Preço não pode ser negativo' }
     }
   },
-  imagemUrl: {
-    type: DataTypes.STRING,
-    allowNull: true,
-    validate: {
-      isUrl: { msg: 'URL da imagem deve ser válida' }
-    }
-  },
-  // NOVOS CAMPOS ADICIONADOS
+  // REMOVIDO: imagemUrl
   especificacoes: {
     type: DataTypes.TEXT,
     allowNull: true
@@ -83,6 +77,11 @@ const Veiculo = sequelize.define('Veiculo', {
   status: {
     type: DataTypes.ENUM('Disponível', 'Vendido', 'Em Manutenção', 'Reservado'),
     defaultValue: 'Disponível'
+  },
+  concessionaria_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    references: { model: 'concessionarias', key: 'id' }
   }
 });
 

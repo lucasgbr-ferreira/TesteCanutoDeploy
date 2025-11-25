@@ -13,7 +13,7 @@ export default async function authMiddleware(req, res, next) {
     const user = await User.findByPk(payload.id);
     if (!user) return res.status(401).json({ message: 'Usuário não encontrado' });
 
-    req.user = { id: user.id, role: user.role };
+    req.user = { id: user.id, role: user.role, concessionaria_id: payload.concessionaria_id };
     next();
   } catch (err) {
     return res.status(401).json({ message: 'Token inválido ou expirado' });

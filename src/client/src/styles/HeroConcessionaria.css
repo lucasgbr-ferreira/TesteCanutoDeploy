@@ -1,0 +1,85 @@
+.hero-concessionaria {
+  width: 100%;
+  height: 90vh;
+  background-image: url("/img/carro-bg.jpg");
+  background-size: cover;
+  background-position: center;
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: white;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+.hero-content {
+  position: relative;
+  max-width: 800px;
+  text-align: center;
+  padding: 0 20px;
+}
+
+.hero-title {
+  font-size: 52px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.hero-title-strong {
+  margin-top: 10px;
+  font-size: 68px;
+  font-weight: 800;
+  color: rgb(128, 4, 159);
+}
+
+.hero-subtitle {
+  margin-top: 20px;
+  font-size: 20px;
+}
+
+.hero-buttons {
+  margin-top: 35px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.btn-primary {
+  padding: 12px 32px;
+  background: white;
+  color: black;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-primary:hover {
+  background: #e2e2e2;
+}
+
+.btn-secondary {
+  padding: 12px 32px;
+  background: transparent;
+  border: 2px solid white;
+  color: white;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-secondary:hover {
+  background: white;
+  color: black;
+}
+
+
