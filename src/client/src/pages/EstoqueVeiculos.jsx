@@ -3,7 +3,7 @@
 // --- Imports ---
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {
   CarFront,
@@ -25,11 +25,20 @@ import {
   Calendar,
   Palette,
   Fuel,
-  Settings
+  Settings,
+  BarChart3,
+  CalendarCheck,
+  MessageCircle,
+  ClipboardList,
+  ShoppingCart,
+  CreditCard,
+  ShieldCheck
 } from 'lucide-react';
 
 import "../styles/landing.css";
 import "../styles/stock.css";
+
+const API_BASE_URL = 'http://localhost:3000';
 
 // --- Variantes de Animação ---
 const fadeUp = {
@@ -246,8 +255,7 @@ export default function EstoqueVeiculos() {
     marca: '',
     ano: '',
     preco: '',
-    imagemUrl: '',
-    // NOVOS CAMPOS
+    // REMOVIDO: imagemUrl: '',
     especificacoes: '',
     historico: '',
     laudoTecnico: '',
@@ -262,6 +270,11 @@ export default function EstoqueVeiculos() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState(false);
 
+  // --- NOVOS ESTADOS PARA UPLOAD DE IMAGEM ---
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
+
   // --- LÓGICA DO MODAL DE VEÍCULOS ---
   const [isVeiculoModalOpen, setIsVeiculoModalOpen] = useState(false);
   const [veiculos, setVeiculos] = useState([]);
@@ -273,12 +286,30 @@ export default function EstoqueVeiculos() {
   const [isEditMode, setIsEditMode] = useState(false);
   const [editErrors, setEditErrors] = useState({});
 
-  // --- Função para buscar veículos ---
+  // Estados para edição de imagem
+  const [editSelectedFile, setEditSelectedFile] = useState(null);
+  const [editPreviewUrl, setEditPreviewUrl] = useState('');
+
+  const navigate = useNavigate();
+  const token = localStorage.getItem('token');
+  const userRaw = localStorage.getItem('user');
+  const user = userRaw ? JSON.parse(userRaw) : null;
+
+  // Check de autenticação
+  useEffect(() => {
+    if (!token || user?.role !== 'concessionaria') {
+      navigate('/login');
+    }
+  }, [navigate, token, user]);
+
+  // Função para buscar veículos'
   const fetchVeiculos = async () => {
     setIsLoading(true);
     setError(null);
     try {
-      const response = await axios.get('http://localhost:3000/api/veiculos');
+      const response = await axios.get(`${API_BASE_URL}/api/veiculos/estoque`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       setVeiculos(response.data);
     } catch (err) {
       console.error("Erro ao buscar veículos:", err);
@@ -300,6 +331,8 @@ export default function EstoqueVeiculos() {
     setIsEditMode(false);
     setVeiculoEditando(null);
     setEditErrors({});
+    setEditSelectedFile(null);
+    setEditPreviewUrl('');
   };
 
   // --- Função para excluir veículo ---
@@ -309,7 +342,9 @@ export default function EstoqueVeiculos() {
     }
 
     try {
-      await axios.delete(`http://localhost:3000/api/veiculos/${veiculoId}`);
+      await axios.delete(`${API_BASE_URL}/api/veiculos/${veiculoId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
 
       setVeiculos(prevVeiculos =>
         prevVeiculos.filter(veiculo => veiculo.id !== veiculoId)
@@ -327,6 +362,8 @@ export default function EstoqueVeiculos() {
     setVeiculoEditando({ ...veiculo });
     setIsEditMode(true);
     setEditErrors({});
+    setEditSelectedFile(null);
+    setEditPreviewUrl('');
   };
 
   // --- Função para validar edição ---
@@ -342,6 +379,86 @@ export default function EstoqueVeiculos() {
         return newErrors;
       });
       return true;
+    }
+  };
+
+  // --- Função para upload de imagem do veículo ---
+  const uploadVeiculoImage = async (veiculoId) => {
+    if (!selectedFile && !editSelectedFile) return null;
+
+    const fileToUpload = selectedFile || editSelectedFile;
+    setIsUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('photo', fileToUpload);
+
+      const response = await axios.post(
+        `${API_BASE_URL}/api/veiculo-photos/${veiculoId}/photo`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      );
+
+      return response.data.photo;
+    } catch (error) {
+      console.error('Erro no upload da imagem:', error);
+      alert('Erro ao fazer upload da imagem. Tente novamente.');
+      return null;
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  // --- Handler para seleção de arquivo no formulário principal ---
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Validar tipo de arquivo
+      if (!file.type.startsWith('image/')) {
+        alert('Por favor, selecione apenas arquivos de imagem.');
+        return;
+      }
+
+      // Validar tamanho do arquivo (2MB)
+      if (file.size > 2 * 1024 * 1024) {
+        alert('A imagem deve ter no máximo 2MB.');
+        return;
+      }
+
+      setSelectedFile(file);
+
+      // Criar preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setPreviewUrl(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // --- Handler para seleção de arquivo na edição ---
+  const handleEditFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      if (!file.type.startsWith('image/')) {
+        alert('Por favor, selecione apenas arquivos de imagem.');
+        return;
+      }
+      if (file.size > 2 * 1024 * 1024) {
+        alert('A imagem deve ter no máximo 2MB.');
+        return;
+      }
+
+      setEditSelectedFile(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setEditPreviewUrl(e.target.result);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -376,9 +493,15 @@ export default function EstoqueVeiculos() {
 
     try {
       const response = await axios.put(
-        `http://localhost:3000/api/veiculos/${veiculoEditando.id}`,
-        veiculoEditando
+        `${API_BASE_URL}/api/veiculos/${veiculoEditando.id}`,
+        veiculoEditando,
+        { headers: { Authorization: `Bearer ${token}` } }
       );
+
+      // Upload de imagem se houver arquivo selecionado
+      if (editSelectedFile) {
+        await uploadVeiculoImage(veiculoEditando.id);
+      }
 
       setVeiculos(prevVeiculos =>
         prevVeiculos.map(veiculo =>
@@ -389,6 +512,8 @@ export default function EstoqueVeiculos() {
       setIsEditMode(false);
       setVeiculoEditando(null);
       setEditErrors({});
+      setEditSelectedFile(null);
+      setEditPreviewUrl('');
       alert('Veículo atualizado com sucesso!');
     } catch (error) {
       console.error('Erro ao atualizar veículo:', error);
@@ -405,6 +530,8 @@ export default function EstoqueVeiculos() {
     setIsEditMode(false);
     setVeiculoEditando(null);
     setEditErrors({});
+    setEditSelectedFile(null);
+    setEditPreviewUrl('');
   };
 
   // --- Função para atualizar campo em edição ---
@@ -454,7 +581,7 @@ export default function EstoqueVeiculos() {
     setIsSubmitting(true);
     setSubmitSuccess(false);
 
-    const endpoint = 'http://localhost:3000/api/veiculos';
+    const endpoint = `${API_BASE_URL}/api/veiculos`;
 
     try {
       // Formatar dados antes do envio
@@ -466,9 +593,17 @@ export default function EstoqueVeiculos() {
         quilometragem: formData.quilometragem ? parseInt(formData.quilometragem) : null
       };
 
-      const response = await axios.post(endpoint, dadosEnvio);
+      const response = await axios.post(endpoint, dadosEnvio, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
 
       console.log('Veículo cadastrado:', response.data);
+
+      // UPLOAD DA IMAGEM SE HOUVER ARQUIVO SELECIONADO
+      if (selectedFile) {
+        await uploadVeiculoImage(response.data.id);
+      }
+
       setSubmitSuccess(true);
 
       // Limpa o formulário
@@ -478,7 +613,6 @@ export default function EstoqueVeiculos() {
         marca: '',
         ano: '',
         preco: '',
-        imagemUrl: '',
         especificacoes: '',
         historico: '',
         laudoTecnico: '',
@@ -489,6 +623,13 @@ export default function EstoqueVeiculos() {
         status: 'Disponível'
       });
       setFormErrors({});
+      setSelectedFile(null);
+      setPreviewUrl('');
+
+      // Atualiza a lista de veículos se o modal estiver aberto
+      if (isVeiculoModalOpen) {
+        fetchVeiculos();
+      }
 
       setTimeout(() => setSubmitSuccess(false), 5000);
 
@@ -587,19 +728,37 @@ export default function EstoqueVeiculos() {
         viewport={{ once: true, amount: 0.3 }}
         variants={staggerContainer}
       >
-        <div className="lp-container" style={{ marginTop: "40px" }}>
-          <motion.h2 variants={fadeUp} custom={0.1}>
-            Catálogo completo
+        <div className="lp-container" style={{ marginTop: "48px", textAlign: "center" }}>
+          <motion.h2
+            variants={fadeUp}
+            custom={0.1}
+            style={{
+              color: '#ffffff',
+              fontSize: 'clamp(26px, 4vw, 36px)',
+              fontWeight: 700,
+              marginBottom: '12px'
+            }}
+          >
+            Catálogo Completo
           </motion.h2>
-          <motion.p variants={fadeUp} custom={0.2}>
+          <motion.p
+            variants={fadeUp}
+            custom={0.2}
+            style={{
+              color: 'rgba(255, 255, 255, 0.9)',
+              fontSize: '17px',
+              maxWidth: '500px',
+              margin: '0 auto',
+              lineHeight: '1.5'
+            }}
+          >
             Visualize todos os veículos cadastrados em um único lugar.
           </motion.p>
         </div>
-
       </motion.section>
 
-      {/* 4. Seção Grid de Ações */}
-      <main className="lp-container" style={{ paddingBottom: '72px', paddingTop: '36px' }}>
+      {/* 4. Seção Grid de Ações - ATUALIZADA COM CARDS DA LANDING PAGE */}
+      <main className="lp-container" style={{ paddingBottom: '80px', paddingTop: '40px' }}>
         <motion.div
           className="dash-grid"
           initial="hidden"
@@ -607,28 +766,34 @@ export default function EstoqueVeiculos() {
           viewport={{ once: true, amount: 0.1 }}
           variants={staggerContainer}
         >
-          <DashboardCard
-            icon={Car}
+          <FeatureCard
+            icon={<Car size={20} />}
             title="Veículos disponíveis para venda"
-            desc="Confira os detalhes de cada veículo do estoque."
-            linkText="Detalhes"
+            line1="Confira os detalhes de cada veículo do estoque."
+            linkText="Visualizar Veículos"
             onClick={handleOpenVeiculoModal}
+            accentFrom="#565656ff"
+            accentTo="#bd07d8ff"
           />
-          <DashboardCard
-            icon={CheckSquare}
+          <FeatureCard
+            icon={<CheckSquare size={20} />}
             title="Veículos vendidos"
-            desc="Histórico de vendas concluídas."
-            linkText="Relatório"
+            line1="Histórico de vendas concluídas."
+            linkText="Ver Relatório"
+            accentFrom="#565656ff"
+            accentTo="#bd07d8ff"
           />
-          <DashboardCard
-            icon={Wrench}
+          <FeatureCard
+            icon={<Wrench size={20} />}
             title="Veículos em manutenção"
-            desc="Acompanhe veículos temporariamente indisponíveis."
-            linkText="Manutenção"
+            line1="Acompanhe veículos temporariamente indisponíveis."
+            linkText="Gerenciar"
+            accentFrom="#565656ff"
+            accentTo="#bd07d8ff"
           />
         </motion.div>
 
-        {/* 5. Seção Adicionar Veículo (MODIFICADA COM VALIDAÇÕES) */}
+        {/* 5. Seção Adicionar Veículo */}
         <motion.section
           id="add-veiculo"
           className="dash-add-form"
@@ -824,25 +989,40 @@ export default function EstoqueVeiculos() {
               </div>
             </div>
 
-            {/* Linha 4: URL da Imagem */}
+            {/* Linha 4: Upload de Imagem */}
             <div className="form-row">
               <div className="form-group large" style={{ flexGrow: 10 }}>
-                <label htmlFor="imagemUrl">URL da Imagem</label>
+                <label htmlFor="imagemUpload">Foto do Veículo</label>
                 <input
-                  type="text"
-                  id="imagemUrl"
-                  name="imagemUrl"
-                  value={formData.imagemUrl}
-                  onChange={handleChange}
-                  className={formErrors.imagemUrl ? 'error' : ''}
-                  placeholder="https://exemplo.com/foto-do-carro.png"
+                  type="file"
+                  id="imagemUpload"
+                  name="imagemUpload"
+                  accept="image/jpeg,image/png,image/jpg,image/webp"
+                  onChange={handleFileChange}
+                  className="file-input"
                 />
-                {formErrors.imagemUrl && (
-                  <div className="field-error">
-                    <AlertCircle size={14} />
-                    {formErrors.imagemUrl[0]}
+                {previewUrl && (
+                  <div className="image-preview-container">
+                    <img
+                      src={previewUrl}
+                      alt="Preview"
+                      className="image-preview"
+                    />
+                    <button
+                      type="button"
+                      className="remove-image-btn"
+                      onClick={() => {
+                        setSelectedFile(null);
+                        setPreviewUrl('');
+                      }}
+                    >
+                      × Remover
+                    </button>
                   </div>
                 )}
+                <div className="file-input-hint">
+                  Formatos: JPEG, PNG, WebP (máx. 2MB)
+                </div>
               </div>
             </div>
 
@@ -892,9 +1072,16 @@ export default function EstoqueVeiculos() {
             <button
               type="submit"
               className="btn primary"
-              disabled={isSubmitting}
+              disabled={isSubmitting || isUploading}
             >
-              {isSubmitting ? 'Cadastrando...' : 'Cadastrar Veículo no Estoque'}
+              {isSubmitting || isUploading ? (
+                <>
+                  <div className="loading-spinner-small"></div>
+                  {isUploading ? 'Fazendo upload...' : 'Cadastrando...'}
+                </>
+              ) : (
+                'Cadastrar Veículo no Estoque'
+              )}
             </button>
 
             {/* MENSAGEM DE SUCESSO MOVIDA PARA AQUI - ABAIXO DO BOTÃO */}
@@ -938,30 +1125,45 @@ export default function EstoqueVeiculos() {
         onCancelEdit={handleCancelEdit}
         onEditFieldChange={handleEditFieldChange}
         editErrors={editErrors}
+        // NOVAS PROPS PARA EDIÇÃO DE IMAGEM
+        onEditFileChange={handleEditFileChange}
+        editSelectedFile={editSelectedFile}
+        setEditSelectedFile={setEditSelectedFile}
+        editPreviewUrl={editPreviewUrl}
+        setEditPreviewUrl={setEditPreviewUrl}
       />
 
     </main>
   );
 }
 
-// --- Componente do Card ---
-function DashboardCard({ icon: Icon, title, desc, linkText, onClick }) {
+// --- Componente FeatureCard (reaproveitado da Landing Page) ---
+function FeatureCard({ icon, title, line1, linkText, onClick, accentFrom, accentTo }) {
   return (
     <motion.div
-      className="dash-card"
-      variants={fadeUp}
+      className="feature-card"
       onClick={onClick}
       style={{ cursor: onClick ? 'pointer' : 'default' }}
+      variants={fadeUp}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.98 }}
     >
-      <div className="dash-card-icon">
-        <Icon size={24} />
+      <div
+        className="feature-ico"
+        style={{
+          background: `linear-gradient(135deg, ${accentFrom}, ${accentTo})`
+        }}
+      >
+        {icon}
       </div>
       <h3>{title}</h3>
-      <p>{desc}</p>
-      <span className="dash-card-link">
-        {linkText}
-        <ArrowRight size={16} />
-      </span>
+      <p>{line1}</p>
+      {linkText && (
+        <span className="feature-card-link">
+          {linkText}
+          <ArrowRight size={16} />
+        </span>
+      )}
     </motion.div>
   );
 }
@@ -980,7 +1182,13 @@ function VeiculoListModal({
   onSaveEdit,
   onCancelEdit,
   onEditFieldChange,
-  editErrors
+  editErrors,
+  // NOVAS PROPS PARA EDIÇÃO DE IMAGEM
+  onEditFileChange,
+  editSelectedFile,
+  setEditSelectedFile,
+  editPreviewUrl,
+  setEditPreviewUrl
 }) {
   return (
     <AnimatePresence>
@@ -1042,6 +1250,12 @@ function VeiculoListModal({
                         onCancelEdit={onCancelEdit}
                         onEditFieldChange={onEditFieldChange}
                         editErrors={editErrors}
+                        // PASSANDO AS NOVAS PROPS
+                        onEditFileChange={onEditFileChange}
+                        editSelectedFile={editSelectedFile}
+                        setEditSelectedFile={setEditSelectedFile}
+                        editPreviewUrl={editPreviewUrl}
+                        setEditPreviewUrl={setEditPreviewUrl}
                       />
                     ))
                   )}
@@ -1056,9 +1270,7 @@ function VeiculoListModal({
   );
 }
 
-// ... código anterior mantido ...
-
-// --- Componente: Card do Veículo (MELHORADO COM FORMULÁRIO DE EDIÇÃO REORGANIZADO) ---
+// --- Componente: Card do Veículo ---
 function VeiculoCard({
   veiculo,
   onDelete,
@@ -1068,7 +1280,13 @@ function VeiculoCard({
   onSaveEdit,
   onCancelEdit,
   onEditFieldChange,
-  editErrors
+  editErrors,
+  // NOVAS PROPS PARA EDIÇÃO DE IMAGEM
+  onEditFileChange,
+  editSelectedFile,
+  setEditSelectedFile,
+  editPreviewUrl,
+  setEditPreviewUrl
 }) {
   const isEditing = isEditMode && veiculoEditando && veiculoEditando.id === veiculo.id;
 
@@ -1083,17 +1301,19 @@ function VeiculoCard({
 
   // Função para formatar quilometragem
   const formatKm = (km) => {
-    if (km === null || km === undefined || km === '') return 'N/A';
+    if (km === null || km === undefined || km === '') return '0 Km';
     return new Intl.NumberFormat('pt-BR').format(km) + ' km';
   };
 
   if (isEditing) {
-    // Modo de edição - MELHORADO
+    // Modo de edição
     return (
       <div className="veiculo-card editing">
         <div className="veiculo-card-img-container">
           <img
-            src={veiculoEditando.imagemUrl || 'https://placehold.co/300x200/334155/FFF?text=Sem+Foto'}
+            src={editPreviewUrl || (veiculoEditando.photos && veiculoEditando.photos[0] ?
+              `${API_BASE_URL}/api/media/veiculos/${veiculoEditando.id}/photo` :
+              'https://placehold.co/300x200/334155/FFF?text=Sem+Foto')}
             alt={`${veiculoEditando.marca} ${veiculoEditando.modelo}`}
             className="veiculo-card-img"
           />
@@ -1277,24 +1497,42 @@ function VeiculoCard({
               </div>
             </div>
 
-            {/* URL da Imagem */}
+            {/* Upload da imagem */}
             <div className="edit-section">
               <h4 className="edit-section-title">Imagem</h4>
               <div className="edit-field full-width">
-                <label>URL da Imagem</label>
+                <label>Foto do Veículo</label>
                 <input
-                  type="text"
-                  value={veiculoEditando.imagemUrl || ''}
-                  onChange={(e) => onEditFieldChange('imagemUrl', e.target.value)}
-                  className={editErrors.imagemUrl ? 'edit-input error' : 'edit-input'}
-                  placeholder="https://exemplo.com/foto.jpg"
+                  type="file"
+                  accept="image/jpeg,image/png,image/jpg,image/webp"
+                  onChange={onEditFileChange}
+                  className="edit-input"
                 />
-                {editErrors.imagemUrl && (
-                  <div className="field-error">
-                    <AlertCircle size={12} />
-                    {editErrors.imagemUrl[0]}
+                {editPreviewUrl ? (
+                  <div className="image-preview-container">
+                    <img src={editPreviewUrl} alt="Preview" className="image-preview" />
+                    <button
+                      type="button"
+                      className="remove-image-btn"
+                      onClick={() => {
+                        setEditSelectedFile(null);
+                        setEditPreviewUrl('');
+                      }}
+                    >
+                      × Remover
+                    </button>
                   </div>
-                )}
+                ) : veiculoEditando.photos && veiculoEditando.photos[0] ? (
+                  <div className="image-preview-container">
+                    <img
+                      src={`${API_BASE_URL}/api/media/veiculos/${veiculoEditando.id}/photo`}
+                      alt="Atual"
+                      className="image-preview"
+                    />
+                    <div className="file-input-hint">Imagem atual do veículo</div>
+                  </div>
+                ) : null}
+                <div className="file-input-hint">Formatos: JPEG, PNG, WebP (máx. 2MB)</div>
               </div>
             </div>
 
@@ -1357,14 +1595,14 @@ function VeiculoCard({
     );
   }
 
-  // ... resto do código do modo de visualização normal mantido igual ...
-
-  // Modo de visualização normal - MELHORADO
+  // Modo de visualização normal
   return (
     <div className="veiculo-card">
       <div className="veiculo-card-img-container">
         <img
-          src={veiculo.imagemUrl || 'https://placehold.co/300x200/334155/FFF?text=Sem+Foto'}
+          src={veiculo.photos && veiculo.photos[0] ?
+            `${API_BASE_URL}/api/media/veiculos/${veiculo.id}/photo` :
+            'https://placehold.co/300x200/334155/FFF?text=Sem+Foto'}
           alt={`${veiculo.marca} ${veiculo.modelo}`}
           className="veiculo-card-img"
         />
@@ -1378,7 +1616,7 @@ function VeiculoCard({
           <span className="veiculo-card-placa">{veiculo.placa}</span>
         </div>
 
-        {/* MELHORADO: Informações principais em grid */}
+        {/* Informações principais em grid */}
         <div className="veiculo-card-grid">
           {veiculo.ano && (
             <div className="veiculo-card-info-item">
@@ -1387,12 +1625,10 @@ function VeiculoCard({
             </div>
           )}
 
-          {veiculo.quilometragem !== null && veiculo.quilometragem !== undefined && (
-            <div className="veiculo-card-info-item">
-              <Gauge size={14} className="info-icon" />
-              <span className="info-value">{formatKm(veiculo.quilometragem)}</span>
-            </div>
-          )}
+          <div className="veiculo-card-info-item">
+            <Gauge size={14} className="info-icon" />
+            <span className="info-value">{formatKm(veiculo.quilometragem)}</span>
+          </div>
 
           {veiculo.cor && (
             <div className="veiculo-card-info-item">

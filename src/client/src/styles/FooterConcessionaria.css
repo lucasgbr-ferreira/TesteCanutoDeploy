@@ -1,0 +1,65 @@
+/* CONTAINER GERAL */
+.footer-container {
+  background: #0d0d0d;
+  color: #ffffff;
+  padding: 8px 30px;  
+}
+
+/* PARTE DE CIMA */
+.footer-top {
+    padding: 0px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 5px; 
+  gap: 20px;
+}
+
+.footer-logo img {
+  width: 55px; 
+}
+
+/* NAV */
+.footer-nav {
+  display: flex;
+  gap: 18px; 
+}
+
+.footer-nav a {
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 0.9rem; 
+}
+
+/* ÍCONES */
+.footer-social a {
+  margin-left: 10px;
+  color: #ffffff;
+}
+
+/* LINHA */
+.footer-divider {
+  opacity: 0.2;
+  margin: 5px 0; /* Reduzido */
+}
+
+/* PARTE DE BAIXO */
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem; /* Levemente menor */
+  padding-top: 10px; /* Reduzido */
+}
+
+/* LINKS DE BAIXO */
+.footer-links {
+  display: flex;
+  gap: 15px;
+}
+
+.footer-links a {
+  color: #bbbbbb;
+  font-size: 0.85rem;
+  text-decoration: none;
+}
