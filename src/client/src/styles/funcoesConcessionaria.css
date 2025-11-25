@@ -1,0 +1,141 @@
+/* Área geral */
+.fc-section {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 60px 0;
+}
+
+.fc-container {
+  width: 90%;
+  max-width: 1300px;
+  text-align: center;
+}
+
+/* Títulos da seção */
+.lp-destaque-tag {
+  font-size: 15px;
+  color: #9f9f9f;
+}
+
+.lp-destaque-title {
+  font-size: 32px;
+  margin-top: 5px;
+  color: rgb(128, 4, 159);
+  font-weight: 600;
+}
+
+.lp-destaque-desc {
+  font-size: 17px;
+  color: #8b8b8b;
+  margin-top: 5px;
+  margin-bottom: 40px;
+}
+
+/* Grid de cards */
+.fc-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+}
+
+/* CARD */
+.novo-card {
+  background: #949494;
+  border-radius: 18px;
+  padding: 28px 26px;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  min-height: 430px;
+  text-decoration: none;
+  color: #222;
+  transition: 0.25s ease;
+  border: 1px solid #e5e5e5;
+  box-shadow: 0px 4px 14px rgba(0,0,0,0.08);
+  border: 3px solid rgb(128, 4, 159);
+}
+
+/* Hover visual mais limpo */
+.novo-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0px 8px 18px rgba(0,0,0,0.15);
+  border-color: rgb(128, 4, 159);
+}
+
+/* Ícone topo */
+.card-icon {
+  margin-bottom: 18px;
+  color: rgb(128, 4, 159);
+}
+
+/* Título */
+.card-title {
+  font-size: 22px;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Descrição */
+.card-desc {
+  font-size: 15px;
+  color: #555;
+  margin-bottom: 18px;
+}
+
+/* Imagem */
+.card-img {
+  width: 100%;
+  height: 160px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #ddd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* borda roxa */
+  border: 2px solid rgb(128, 4, 159);
+}
+
+.card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Rodapé */
+.card-footer {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 15px;
+  padding-top: 12px;
+  border-top: 1px solid #e3e3e3;
+  color: rgb(128, 4, 159);
+  font-weight: 600;
+}
+
+.arrow {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* Responsivo */
+@media (max-width: 1024px) {
+  .fc-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 650px) {
+  .fc-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .novo-card {
+    min-height: 380px;
+  }
+}

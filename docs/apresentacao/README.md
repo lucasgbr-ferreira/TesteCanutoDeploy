@@ -1,24 +1,18 @@
-
-# Apresentação
-
-<span style="color:red">Pré-requisitos: Todos os demais artefatos</span>
-
-
-> Conjunto de slides em um arquivo PowerPoint ou PDF
-> com a apresentação do projeto contemplando todos os
-> itens trabalhados nos demais artefatos. 
-> **Links Úteis**:
-> - [10 dicas de design para slides](https://rockcontent.com/blog/design-para-slides/)
-> - [7 dicas de design para criar apresentações de PowerPoint incríveis e eficientes](https://www.shutterstock.com/pt/blog/7-dicas-de-design-para-criar-apresentacoes-de-powerpoint-incriveis-e-eficientes)
-> - [Especialista do TED dá 10 dicas para criar slides eficazes e bonitos](https://soap.com.br/blog/especialista-do-ted-da-10-dicas-para-criar-slides-eficazes-e-bonitos)
-> - [A regra 10-20-30 para apresentações de sucesso](https://revistapegn.globo.com/Noticias/noticia/2014/07/regra-10-20-30-para-apresentacoes-de-sucesso.html)
-> - [Top Tips for Effective Presentations](https://www.skillsyouneed.com/present/presentation-tips.html)
-> - [How to make a great presentation](https://www.ted.com/playlists/574/how_to_make_a_great_presentation)
+# 📊 Apresentação do Projeto
 
 ## Slides
 
-Coloque aqui os slides da apresentação
+| Sprint | Descrição / Link |
+|--------|---------------------|
+| **Sprint 1** | [Apresentação no Canva](https://www.canva.com/design/DAGyPZD4nrQ/Xfg82yzMPupn7V4bvU_tdw/edit?utm_content=DAGyPZD4nrQ&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton) |
+| **Sprint 2** | [Apresentação no Canva](https://www.canva.com/design/DAG0XHAEHEw/wc-avYQsHNFZjsw_Upuh8w/edit?utm_content=DAG0XHAEHEw&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton) |
+| **Sprint 3** | [Apresentação no Canva](https://www.canva.com/design/DAG2P_VD7zc/KadGDKC4XIGjorM-VcdFSg/edit?utm_content=DAG2P_VD7zc&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton) |
+| **Sprint 4** | [Apresentação no Canva](https://www.canva.com/design/DAG4P_JGzW8/-BJwhIfQfDCVl5hRqf2INw/view?utm_content=DAG4P_JGzW8&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h59c51f80c2) |
 
-## Vídeo
+---
 
-No caso de apresentação gravada, insira aqui o link do vídeo de apresentação.
+## 🎥 Vídeo da Apresentação
+
+Caso seja uma apresentação gravada, insira o link do vídeo abaixo:
+
+> 🔗 **Link do Vídeo:**

@@ -25,6 +25,15 @@
 - Apresentação e Slides: Guilherme Henrique, Pedro Canutoo
 - Documentação: João Victor Soares, Lucas Gabriel Ferreira
 
+### Sprint 4
+- _Scrum master_: João Victor Soares
+- _Front-End (Padrão, Landing, Login)_: João Victor Soares, Lucas Gabriel Ferreira
+- _Front-End (Telas Concessionária)_: Pedro Henrique Canuto, Guilherme Henrique Souza, Lucas Gabriel Ferreira
+- _Front-End (Telas Cliente)_: Gabriela Chaves, Guilherme Henrique Souza, João Victor Soares
+- _Back-End & Funcionalidades (Concessionária)_: Lucas Gabriel Ferreira, Guilherme Henrique Souza, Pedro Henrique Canuto
+- _Back-End & Funcionalidades (Cliente)_: João Victor Soares, Gabriela Chaves, Guilherme Henrique Souza
+- _Documentação & Apresentação_: Guilherme Henrique Souza, João Victor Soares, Lucas Gabriel Ferreira
+
 ## 5.2. Quadro de tarefas
 
 > Apresente a divisão de tarefas entre os membros do grupo e o acompanhamento da execução, conforme exemplo abaixo.
@@ -61,6 +70,19 @@ Atualizado em: 19/10/2025
 | João, Gabriela C. | Confecção dos Wireframes (#9) | |20/10/2025 | ✔️ | |
 | Guilherme, Pedro C. | Apresentação + Criação dos slides (#10) | |20/10/2025 | ✔️ | |
 | João, Lucas | Documentação (#11) |19/10/2025 |20/10/2025 | ✔️ |19/10/2025 |
+
+## Sprint 4 - Prazos/Funções {10/11}
+
+Atualizado em: 09/11/2025
+
+| Responsável | Tarefa/Requisito | Iniciado em | Prazo | Status | Terminado em |
+| :--- | :--- | :---: | :---: | :---: | :---: |
+| João, Lucas | Confecção Landing Page + Front-End Login + Definição padrão Front-End | 21/10/2025 | 01/11/2025 | ✔️ | 01/11/2025 |
+| Pedro, Gui, Lucas | Wireframes Concessionária (Tela Sobre, HomePage, Estoque) | 21/10/2025 | 05/11/2025 | ✔️ | 05/11/2025 |
+| Lucas, Gui, Pedro | Funcionalidades Concessionária (Dinamismo, Funções, BD) | 01/11/2025 | 09/11/2025 | ✔️ | 09/11/2025 |
+| Gabi, Gui, João | Wireframes Cliente (Tela Perfil, HomePage, Catálogo, DescVeículo) | 21/10/2025 | 05/11/2025 | ✔️ | 05/11/2025 |
+| João, Gabi, Gui | Funcionalidades Cliente (Dinamismo, Funções, BD) | 01/11/2025 | 09/11/2025 | ✔️ | 09/11/2025 |
+| Gui, João, Lucas | Apresentação + Documentação | 05/11/2025 | 10/11/2025 | ✔️ | 09/11/2025 |
 
 Legenda:
 - ✔️: terminado
