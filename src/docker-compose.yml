@@ -1,0 +1,58 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:15
+    container_name: gescar_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123   # troque para senha forte
+      POSTGRES_DB: gescar_db
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  server:
+    build:
+      context: ./src/server
+      dockerfile: Dockerfile
+    container_name: gescar_server
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: **7729
+      DB_NAME: gescar_db
+      PORT: 3000
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./src/server:/usr/src/app
+      - /usr/src/app/node_modules
+    command: ["sh", "-c", "npm install --silent && npm run start"] 
+
+  client:
+    build:
+      context: ./src/client
+      dockerfile: Dockerfile
+    container_name: gescar_client
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./src/client:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      VITE_API_URL: "http://host.docker.internal:3000" 
+    command: ["sh", "-c", "npm install --silent && npm run dev"]
+
+volumes:
+  pgdata:

@@ -13,16 +13,13 @@ import veiculoRoutes from './routes/veiculoRoutes.js';
 import profilePhotoRoutes from "./routes/profilePhotoRoutes.js";
 
 const app = express();
-// CORS configurado para aceitar o front dev (Vite) e outras origens úteis em dev
 const allowedOrigins = [
-  process.env.FRONTEND_ORIGIN || 'http://localhost:5173', // Vite
-  'http://localhost:3000' // caso front também rode aqui em algum teste
+  process.env.FRONTEND_ORIGIN || 'http://localhost:5173', 
+  'http://localhost:3000' 
 ];
 
-// função de verificação
 app.use(cors({
   origin: function(origin, callback) {
-    // permitir requests sem origin (curl, Postman)
     if (!origin) return callback(null, true);
     if (allowedOrigins.indexOf(origin) === -1) {
       const msg = `CORS policy: origin ${origin} not allowed`;
@@ -33,7 +30,6 @@ app.use(cors({
   credentials: true
 }));
 
-// opcional: tratar erro de CORS para mostrar mensagem no console do browser
 app.use(function (err, req, res, next) {
   if (err && err.message && err.message.indexOf('CORS') !== -1) {
     console.warn('CORS blocked request:', err.message);
