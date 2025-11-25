@@ -1,12 +1,12 @@
 /* client/src/styles/stock.css */
 
-/* 1. Seção Hero (Cabeçalho do Dashboard) */
+/* 1. Seção Hero (Cabeçalho do Dashboard) - MELHORADA */
 .dash-hero {
-  padding: 96px 0;
+  padding: 80px 0;
   position: relative;
   text-align: center;
   background-color: var(--card); 
-  background-image: linear-gradient(rgba(7, 20, 40, 0.8), rgba(7, 20, 40, 0.8)),
+  background-image: linear-gradient(rgba(7, 20, 40, 0.85), rgba(7, 20, 40, 0.9)),
     url('https://sun9-42.userapi.com/impf/h1O3UbcAYQZZYiQxxCEvFXFH4n8HF5sC7tudrg/Pff6adsxeGk.jpg?size=1920x768&quality=95&crop=0,44,2400,958&sign=7e4b89a006168b798b2cf46fe6154a89&type=cover_group');
   background-size: cover;
   background-position: center;
@@ -15,138 +15,171 @@
 
 .dash-hero h1 {
   font-size: clamp(28px, 4vw, 44px);
-  margin: 0 0 12px 0;
-  line-height: 1.03;
+  margin: 0 0 16px 0;
+  line-height: 1.1;
   font-weight: 800;
   letter-spacing: -0.01em;
-  color: #fff;
-  max-width: 600px; 
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  max-width: 700px;
   margin-left: auto;
   margin-right: auto;
 }
 
 .dash-hero p {
-  color: var(--muted);
-  margin: 0 auto 24px auto;
-  font-size: 16px;
-  max-width: 500px; 
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 auto 32px auto;
+  font-size: 18px;
+  line-height: 1.5;
+  font-weight: 400;
+  max-width: 600px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
 .dash-hero-cta {
   display: flex;
-  flex-wrap: wrap; 
+  flex-wrap: wrap;
   justify-content: center;
-  gap: 12px;
+  gap: 16px;
 }
 
-/* 2. Seção Grid de Ações */
+/* 2. Seção Grid de Ações - ATUALIZADA COM ESTILOS DA LANDING PAGE */
 .dash-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 24px;
+  justify-content: center;
+  margin: 0 auto;
+  max-width: 1200px;
 }
 
-/* 3. Card de Ação (Veículos disponíveis, etc.) */
-.dash-card {
-  display: block; 
-  background: var(--card);
+/* 3. Feature Card (REAPROVEITADO DA LANDING PAGE) */
+.feature-card {
+  background: rgba(255, 255, 255, 0.08); /* MAIS CLARO */
+  padding: 28px 24px;
+  border-radius: 12px;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   border: 1px solid var(--glass);
-  border-radius: var(--radius);
-  padding: 24px;
-  text-decoration: none;
-  color: inherit;
-  transition: transform 0.3s ease, box-shadow 0.3s ease,
-    background-color 0.3s ease;
-  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
 }
 
-.dash-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 30px rgba(2, 6, 23, 0.7);
-  background-color: var(--glass);
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #8a4fff, #6a35e0); /* LILÁS ESCURO */
 }
 
-.dash-card-icon {
-  width: 48px;
-  height: 48px;
-  background: var(--glass);
-  border-radius: 10px;
+.feature-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 40px rgba(2, 6, 23, 0.8);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.08)); /* MAIS CLARO */
+  border-color: rgba(138, 79, 255, 0.3); /* LILÁS ESCURO */
+}
+
+.feature-ico {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--accent); 
-  margin-bottom: 20px;
+  color: white;
+  margin: 0 auto 16px auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, #8a4fff, #6a35e0); /* LILÁS ESCURO */
 }
 
-.dash-card h3 {
-  font-size: 20px;
+.feature-card h3 {
+  font-size: 18px;
   font-weight: 700;
-  color: #fff;
+  color: #ffffff;
   margin: 0 0 8px 0;
+  line-height: 1.3;
 }
 
-.dash-card p {
+.feature-card p {
   font-size: 14px;
-  color: var(--muted);
-  margin: 0 0 20px 0;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0 0 16px 0;
   line-height: 1.5;
-  min-height: 42px; 
+  flex-grow: 1;
 }
 
-.dash-card-link {
+.feature-card-link {
   font-size: 14px;
   font-weight: 600;
-  color: var(--accent);
+  color: #8a4fff; /* LILÁS ESCURO */
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
+  transition: all 0.2s ease;
+  margin-top: auto;
 }
 
-/* 4. Seção do Formulário de Cadastro */
+.feature-card:hover .feature-card-link {
+  transform: translateX(4px);
+  color: #9d6bff; /* LILÁS MAIS CLARO NO HOVER */
+}
+
+/* 4. Seção do Formulário de Cadastro - MELHORADA */
 .dash-add-form {
-  padding: 48px 24px;
-  margin-top: 72px;
+  padding: 56px 32px;
+  margin: 80px auto 0 auto;
   border: 1px solid var(--glass);
   border-radius: var(--radius);
   text-align: center;
-  background: var(--card);
+  background: rgba(255, 255, 255, 0.08); /* MAIS CLARO */
+  max-width: 1000px;
+  box-shadow: 0 8px 32px rgba(2, 6, 23, 0.4);
 }
 
 .dash-add-form h2 {
-  font-size: clamp(26px, 3.5vw, 36px);
+  font-size: clamp(28px, 3.5vw, 40px);
   font-weight: 800;
-  color: #fff;
-  margin-bottom: 12px;
+  color: #ffffff;
+  margin-bottom: 16px;
   line-height: 1.1;
   letter-spacing: -0.01em;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .dash-add-form p {
-  color: var(--muted);
-  font-size: 16px;
-  max-width: 500px;
-  margin: 0 auto 24px auto;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 17px;
+  max-width: 600px;
+  margin: 0 auto 32px auto;
+  line-height: 1.5;
 }
 
-/* 5. Estilos do Formulário Real */
+/* 5. Estilos do Formulário Real - MELHORADOS */
 .dash-real-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 20px;
   max-width: 800px;
-  margin: 32px auto 0 auto;
+  margin: 40px auto 0 auto;
 }
 
 .form-row {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap; 
-  gap: 16px;
+  flex-wrap: wrap;
+  gap: 20px;
 }
 
 .form-group {
-  flex: 1; 
-  min-width: 150px; 
+  flex: 1;
+  min-width: 150px;
   text-align: left;
 }
 
@@ -163,23 +196,24 @@
 
 .form-group label {
   display: block;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 600;
-  color: var(--muted);
-  margin-bottom: 6px;
+  color: rgba(255, 255, 255, 0.95);
+  margin-bottom: 8px;
   text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
   width: 100%;
-  padding: 12px 14px;
-  background: rgba(0, 0, 0, 0.2);
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.08);
   border: 1px solid var(--glass);
-  border-radius: 8px;
-  color: #fff;
-  font-size: 14px;
+  border-radius: 10px;
+  color: #ffffff;
+  font-size: 15px;
   transition: all 0.2s ease;
   font-family: inherit;
 }
@@ -188,47 +222,51 @@
 .form-group select:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.2);
+  border-color: #8a4fff; /* LILÁS ESCURO */
+  box-shadow: 0 0 0 3px rgba(138, 79, 255, 0.25); /* LILÁS ESCURO */
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.form-group input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .form-group textarea {
   resize: vertical;
-  min-height: 80px;
+  min-height: 100px;
   line-height: 1.5;
 }
 
 .form-group select {
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2394a3b8'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23ffffff'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 12px center;
+  background-position: right 16px center;
   background-size: 16px;
-  padding-right: 40px;
+  padding-right: 48px;
   cursor: pointer;
 }
 
-.form-group select:focus {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23ff5a5f'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-}
-
 .dash-real-form .btn {
-  margin-top: 16px;
-  align-self: flex-start;
+  margin-top: 20px;
+  align-self: center;
+  min-width: 240px;
 }
 
-/* Mensagem de sucesso abaixo do botão */
+/* Mensagem de sucesso */
 .form-success-message {
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  gap: 10px;
   background: linear-gradient(90deg, #10b981, #059669);
   color: white;
-  padding: 12px 16px;
-  border-radius: 8px;
-  margin-top: 16px;
+  padding: 16px 20px;
+  border-radius: 10px;
+  margin-top: 20px;
   font-weight: 600;
-  animation: slideInUp 0.3s ease-out;
+  font-size: 15px;
+  animation: slideInUp 0.4s ease-out;
 }
 
 @keyframes slideInUp {
@@ -256,33 +294,34 @@
   gap: 6px;
   color: #ef4444;
   font-size: 12px;
-  margin-top: 4px;
+  margin-top: 6px;
   font-weight: 500;
 }
 
 .form-required-notice {
-  margin-top: 16px;
-  text-align: left;
-  color: var(--muted);
-  font-size: 12px;
+  margin-top: 20px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
 }
 
-/* 6. Estilos do Modal (Fundo e Conteúdo) */
+/* 6. Estilos do Modal (Fundo e Conteúdo) - MELHORADOS */
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(2, 6, 23, 0.6) !important;
-  backdrop-filter: blur(8px) !important;
-  -webkit-backdrop-filter: blur(8px) !important;
+  background-color: rgba(2, 6, 23, 0.8) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999; 
+  z-index: 999;
+  padding: 20px;
 }
 
 .modal-content {
-  background: var(--card);
-  padding: 20px;
+  background: rgba(255, 255, 255, 0.08); /* MAIS CLARO */
+  padding: 24px;
   border-radius: var(--radius);
   border: 1px solid var(--glass);
   z-index: 1000;
@@ -290,42 +329,45 @@
   overflow-y: auto;
   width: 90%;
   max-width: 600px;
+  box-shadow: 0 20px 60px rgba(2, 6, 23, 0.8);
 }
 
 .modal-content.large {
   max-width: 900px;
 }
 
-/* 7. Lista de Veículos - MELHORADO */
+/* 7. Lista de Veículos - MELHORADA E SIMÉTRICA */
 .veiculo-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* CARDS MAIS SIMÉTRICOS */
+  gap: 24px;
   width: 100%;
-  max-height: 70vh; 
-  overflow-y: auto; 
+  max-height: 70vh;
+  overflow-y: auto;
   padding: 4px;
   justify-items: center;
+  align-items: start; /* GARANTIR ALINHAMENTO SUPERIOR */
 }
 
 /* Quando há apenas um card, limitamos a largura máxima */
 .veiculo-list:has(.veiculo-card:only-child) {
-  grid-template-columns: minmax(280px, 400px);
+  grid-template-columns: minmax(300px, 400px);
   justify-content: center;
 }
 
-/* 8. Estilos do Card de Veículo (Dentro do Modal) - MELHORADO */
+/* 8. Estilos do Card de Veículo (Dentro do Modal) - MELHORADO E SIMÉTRICO */
 .veiculo-card {
-  background: var(--card);
+  background: rgba(255, 255, 255, 0.1); /* MAIS CLARO PARA CONTRASTAR */
   border: 1px solid var(--glass);
   border-radius: var(--radius);
-  overflow: hidden; 
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   width: 100%;
   max-width: 400px;
-  height: fit-content;
+  height: 100%; /* GARANTIR ALTURA COMPLETA */
+  min-height: 520px; /* ALTURA MÍNIMA PARA SIMETRIA */
 }
 
 .veiculo-card:hover {
@@ -359,7 +401,7 @@
 
 .veiculo-card-body {
   padding: 20px;
-  flex-grow: 1; 
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -376,16 +418,17 @@
 .veiculo-card-title {
   font-size: 18px;
   font-weight: 700;
-  color: #fff;
+  color: #ffffff;
   margin: 0;
   line-height: 1.3;
   flex: 1;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .veiculo-card-placa {
   font-family: 'Monaco', 'Consolas', monospace;
   font-size: 14px;
-  color: var(--muted);
+  color: rgba(255, 255, 255, 0.9);
   background: var(--glass);
   padding: 4px 8px;
   border-radius: 4px;
@@ -406,19 +449,19 @@
   align-items: center;
   gap: 6px;
   padding: 8px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.08); /* MAIS CLARO */
   border-radius: 6px;
   border: 1px solid var(--glass);
 }
 
 .info-icon {
-  color: var(--accent);
+  color: #8a4fff; /* LILÁS ESCURO */
   flex-shrink: 0;
 }
 
 .info-label {
   font-size: 11px;
-  color: var(--muted);
+  color: rgba(255, 255, 255, 0.8);
   text-transform: uppercase;
   font-weight: 600;
   margin-right: 4px;
@@ -426,7 +469,7 @@
 
 .info-value {
   font-size: 13px;
-  color: #fff;
+  color: #ffffff;
   font-weight: 500;
   flex: 1;
 }
@@ -436,15 +479,15 @@
   text-align: center;
   margin: 20px 0;
   padding: 16px;
-  background: linear-gradient(135deg, rgba(255, 90, 95, 0.1), rgba(255, 90, 95, 0.05));
+  background: linear-gradient(135deg, rgba(138, 79, 255, 0.1), rgba(138, 79, 255, 0.05)); /* LILÁS ESCURO */
   border-radius: 8px;
-  border: 1px solid rgba(255, 90, 95, 0.2);
+  border: 1px solid rgba(138, 79, 255, 0.2); /* LILÁS ESCURO */
 }
 
 .veiculo-card-preco {
   font-size: 22px;
   font-weight: 800;
-  color: var(--accent);
+  color: #8a4fff; /* LILÁS ESCURO */
   margin: 0;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
@@ -466,7 +509,7 @@
 
 .info-section-title {
   font-size: 12px;
-  color: var(--muted);
+  color: rgba(255, 255, 255, 0.8);
   text-transform: uppercase;
   font-weight: 700;
   margin: 0 0 4px 0;
@@ -475,7 +518,7 @@
 
 .info-section-content {
   font-size: 13px;
-  color: #fff;
+  color: #ffffff;
   line-height: 1.4;
   margin: 0;
   opacity: 0.9;
@@ -536,21 +579,22 @@
   border-bottom: 1px solid var(--glass);
   position: sticky;
   top: 0;
-  background: var(--card);
+  background: rgba(255, 255, 255, 0.08); /* MAIS CLARO */
   z-index: 10;
 }
 
 .modal-header h3 {
   margin: 0;
-  color: #fff;
+  color: #ffffff;
   font-size: 24px;
   font-weight: 700;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .modal-close-btn {
   background: var(--glass);
   border: none;
-  color: var(--muted);
+  color: rgba(255, 255, 255, 0.8);
   cursor: pointer;
   padding: 8px;
   border-radius: 8px;
@@ -562,7 +606,7 @@
 
 .modal-close-btn:hover {
   background: rgba(239, 68, 68, 0.2);
-  color: #fff;
+  color: #ffffff;
 }
 
 .modal-body {
@@ -585,7 +629,7 @@
   justify-content: center;
   align-items: center;
   padding: 60px 40px;
-  color: var(--muted);
+  color: rgba(255, 255, 255, 0.8);
   gap: 16px;
 }
 
@@ -593,7 +637,7 @@
   width: 40px;
   height: 40px;
   border: 3px solid var(--glass);
-  border-top: 3px solid var(--accent);
+  border-top: 3px solid #8a4fff; /* LILÁS ESCURO */
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -616,7 +660,7 @@
 .empty-state {
   text-align: center;
   padding: 60px 20px;
-  color: var(--muted);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .empty-state-icon {
@@ -626,23 +670,22 @@
 }
 
 /* 12. ESTILOS PARA MODO DE EDIÇÃO MELHORADOS */
-
 .veiculo-card.editing {
-  border: 2px solid var(--accent);
-  box-shadow: 0 8px 32px rgba(255, 90, 95, 0.15);
-  background: linear-gradient(135deg, var(--card), rgba(255, 90, 95, 0.05));
+  border: 2px solid #8a4fff; /* LILÁS ESCURO */
+  box-shadow: 0 8px 32px rgba(138, 79, 255, 0.15); /* LILÁS ESCURO */
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(138, 79, 255, 0.05)); /* MAIS CLARO COM LILÁS */
   animation: pulseEdit 0.6s ease-in-out;
 }
 
 @keyframes pulseEdit {
   0% {
-    box-shadow: 0 0 0 0 rgba(255, 90, 95, 0.4);
+    box-shadow: 0 0 0 0 rgba(138, 79, 255, 0.4); /* LILÁS ESCURO */
   }
   50% {
-    box-shadow: 0 0 0 8px rgba(255, 90, 95, 0.1);
+    box-shadow: 0 0 0 8px rgba(138, 79, 255, 0.1); /* LILÁS ESCURO */
   }
   100% {
-    box-shadow: 0 8px 32px rgba(255, 90, 95, 0.15);
+    box-shadow: 0 8px 32px rgba(138, 79, 255, 0.15); /* LILÁS ESCURO */
   }
 }
 
@@ -660,7 +703,7 @@
 .edit-section {
   margin-bottom: 24px;
   padding: 20px;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.08); /* MAIS CLARO */
   border-radius: 12px;
   border: 1px solid var(--glass);
 }
@@ -672,10 +715,10 @@
 .edit-section-title {
   font-size: 16px;
   font-weight: 700;
-  color: var(--accent);
+  color: #8a4fff; /* LILÁS ESCURO */
   margin: 0 0 16px 0;
   padding-bottom: 8px;
-  border-bottom: 2px solid rgba(255, 90, 95, 0.3);
+  border-bottom: 2px solid rgba(138, 79, 255, 0.664); /* LILÁS ESCURO */
   display: flex;
   align-items: center;
   gap: 8px;
@@ -686,7 +729,7 @@
   display: block;
   width: 4px;
   height: 16px;
-  background: var(--accent);
+  background: #8a4fff; /* LILÁS ESCURO */
   border-radius: 2px;
 }
 
@@ -720,7 +763,7 @@
 .edit-field label {
   font-size: 12px;
   font-weight: 600;
-  color: var(--muted);
+  color: rgba(255, 255, 255, 0.95);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   display: flex;
@@ -732,7 +775,7 @@
   content: "";
   flex: 1;
   height: 1px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.24);
   margin-left: 8px;
 }
 
@@ -741,16 +784,16 @@
 .edit-field label[for*="marca"]::before,
 .edit-field label[for*="modelo"]::before {
   content: "*";
-  color: var(--accent);
+  color: #8a4fff; /* LILÁS ESCURO */
   margin-right: 2px;
 }
 
 .edit-input {
   padding: 12px 14px;
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.08);
   border: 1px solid var(--glass);
   border-radius: 8px;
-  color: #fff;
+  color: #ffffff;
   font-size: 14px;
   transition: all 0.2s ease;
   font-family: inherit;
@@ -758,9 +801,9 @@
 
 .edit-input:focus {
   outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(255, 90, 95, 0.2);
-  background: rgba(0, 0, 0, 0.4);
+  border-color: #8a4fff; /* LILÁS ESCURO */
+  box-shadow: 0 0 0 3px rgba(138, 79, 255, 0.2); /* LILÁS ESCURO */
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .edit-input.error {
@@ -780,7 +823,7 @@
 }
 
 .edit-field select.edit-input:focus {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23ff5a5f'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%238a4fff'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E"); /* LILÁS ESCURO */
 }
 
 /* Textareas no formulário de edição */
@@ -820,7 +863,7 @@
 .veiculo-card-actions {
   display: flex;
   gap: 12px;
-  margin-top: 24px;
+  margin-top: auto; /* EMPURRAR PARA BAIXO */
   padding-top: 20px;
   border-top: 1px solid var(--glass);
 }
@@ -878,13 +921,13 @@
 
 .btn-cancel {
   background: var(--glass);
-  color: var(--muted);
+  color: rgba(255, 255, 255, 0.8);
   border: 1px solid var(--glass);
 }
 
 .btn-cancel:hover {
   background: rgba(255, 255, 255, 0.05);
-  color: #fff;
+  color: #ffffff;
   transform: translateY(-2px);
 }
 
@@ -902,7 +945,7 @@
 .form-group select:focus,
 .form-group textarea:focus,
 .modal-close-btn:focus {
-  outline: 2px solid var(--accent);
+  outline: 2px solid #8a4fff; /* LILÁS ESCURO */
   outline-offset: 2px;
 }
 
@@ -972,12 +1015,12 @@
 }
 
 .veiculo-list::-webkit-scrollbar-thumb {
-  background: var(--accent);
+  background: #8a4fff; /* LILÁS ESCURO */
   border-radius: 3px;
 }
 
 .veiculo-list::-webkit-scrollbar-thumb:hover {
-  background: #ff7b7f;
+  background: #9d6bff; /* LILÁS MAIS CLARO */
 }
 
 /* 18. Placeholder para imagens que não carregam */
@@ -991,25 +1034,70 @@
   font-size: 24px;
 }
 
-/* 19. RESPONSIVIDADE */
+/* 19. RESPONSIVIDADE - ATUALIZADA */
+@media (max-width: 1200px) {
+  .dash-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 300px));
+    gap: 20px;
+    padding: 0 20px;
+  }
+}
 
 @media (max-width: 768px) {
   .dash-hero {
-    padding: 72px 0;
+    padding: 60px 0;
+  }
+  
+  .dash-hero h1 {
+    font-size: clamp(24px, 6vw, 36px);
+    margin-bottom: 12px;
+  }
+  
+  .dash-hero p {
+    font-size: 16px;
+    margin-bottom: 24px;
+  }
+  
+  .dash-hero-cta {
+    gap: 12px;
   }
   
   .dash-grid {
     grid-template-columns: 1fr;
     gap: 16px;
+    padding: 0 16px;
+  }
+  
+  .feature-card {
+    max-width: 100%;
+    padding: 24px 20px;
+    margin: 0;
+  }
+  
+  .feature-ico {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+  }
+  
+  .feature-card h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  .feature-card p {
+    font-size: 14px;
+    margin-bottom: 20px;
   }
   
   .dash-add-form {
-    padding: 32px 16px;
-    margin-top: 48px;
+    padding: 40px 20px;
+    margin: 60px 16px 0 16px;
   }
   
   .form-row {
     flex-direction: column;
+    gap: 16px;
   }
   
   .form-group {
@@ -1029,6 +1117,7 @@
   
   .veiculo-card {
     max-width: 100%;
+    min-height: 480px; /* ALTURA REDUZIDA PARA MOBILE */
   }
   
   .veiculo-card-img-container {
@@ -1041,7 +1130,6 @@
   
   .veiculo-card-title {
     font-size: 16px;
-    min-height: auto;
   }
   
   .modal-header {
@@ -1116,6 +1204,51 @@
 }
 
 @media (max-width: 480px) {
+  .dash-hero {
+    padding: 48px 0;
+  }
+  
+  .dash-hero h1 {
+    font-size: 28px;
+  }
+  
+  .dash-hero p {
+    font-size: 15px;
+  }
+  
+  .dash-hero-cta {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .dash-hero-cta .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .feature-card {
+    padding: 20px 16px;
+  }
+  
+  .feature-ico {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+  }
+  
+  .dash-add-form {
+    padding: 32px 16px;
+    margin: 48px 12px 0 12px;
+  }
+  
+  .dash-add-form h2 {
+    font-size: 24px;
+  }
+  
+  .dash-add-form p {
+    font-size: 15px;
+  }
+
   .veiculo-card-img-container {
     height: 160px;
   }
@@ -1221,4 +1354,179 @@
 
 .dropdown-arrow.open {
   transform: rotate(180deg);
+}
+
+/* Estilos para a seção de introdução do catálogo */
+.catalog-intro {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(255,255,255,0.02) 100%); /* MAIS CLARO */
+  padding: 48px 0;
+  border-bottom: 1px solid var(--glass);
+}
+
+/* ===== ESTILOS PARA UPLOAD DE IMAGEM ===== */
+
+/* Input de arquivo personalizado */
+.file-input {
+  width: 100%;
+  padding: 14px 16px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--glass);
+  border-radius: 10px;
+  color: #ffffff;
+  font-size: 15px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.file-input:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: #8a4fff; /* LILÁS ESCURO */
+}
+
+.file-input:focus {
+  outline: none;
+  border-color: #8a4fff; /* LILÁS ESCURO */
+  box-shadow: 0 0 0 3px rgba(138, 79, 255, 0.25); /* LILÁS ESCURO */
+}
+
+.file-input-hint {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.6);
+  margin-top: 6px;
+  font-style: italic;
+}
+
+/* Container de preview de imagem */
+.image-preview-container {
+  margin-top: 16px;
+  text-align: center;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.08); /* MAIS CLARO */
+  border-radius: 8px;
+  border: 1px solid var(--glass);
+}
+
+.image-preview {
+  max-width: 100%;
+  max-height: 200px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  margin-bottom: 12px;
+}
+
+/* Botão para remover imagem */
+.remove-image-btn {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.remove-image-btn:hover {
+  background: rgba(239, 68, 68, 0.3);
+  color: #ffffff;
+}
+
+/* Spinner de loading pequeno */
+.loading-spinner-small {
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+  margin-right: 8px;
+}
+
+/* Estados de upload */
+.btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.btn:disabled:hover {
+  transform: none;
+}
+
+/* Estilos para o campo de upload na edição */
+.edit-field input[type="file"] {
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--glass);
+  border-radius: 8px;
+  color: #ffffff;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  width: 100%;
+}
+
+.edit-field input[type="file"]:focus {
+  outline: none;
+  border-color: #8a4fff; /* LILÁS ESCURO */
+  box-shadow: 0 0 0 3px rgba(138, 79, 255, 0.2); /* LILÁS ESCURO */
+}
+
+/* Preview na edição */
+.edit-field .image-preview-container {
+  margin-top: 12px;
+  padding: 12px;
+}
+
+.edit-field .image-preview {
+  max-height: 150px;
+}
+
+/* Responsividade para upload */
+@media (max-width: 768px) {
+  .file-input {
+    padding: 12px 14px;
+    font-size: 14px;
+  }
+  
+  .image-preview {
+    max-height: 150px;
+  }
+  
+  .edit-field input[type="file"] {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}
+
+/* ===== MELHORIAS ADICIONAIS PARA SIMETRIA DOS CARDS ===== */
+
+/* Garantir que todos os cards tenham a mesma altura */
+.veiculo-list {
+  align-items: stretch; /* FORÇAR CARDS COM MESMA ALTURA */
+}
+
+.veiculo-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* DISTRIBUIR CONTEÚDO VERTICALMENTE */
+}
+
+/* Espaçamento consistente para conteúdo dos cards */
+.veiculo-card-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Garantir que as ações fiquem sempre no final */
+.veiculo-card-actions {
+  margin-top: auto;
+}
+
+/* Melhorar a visualização de quilometragem vazia */
+.veiculo-card-info-item .info-value:empty::before {
+  content: "0 km"; /* EXIBIR 0KM QUANDO VAZIO */
+  color: rgba(255, 255, 255, 0.7);
 }

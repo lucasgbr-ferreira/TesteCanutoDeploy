@@ -1,21 +1,19 @@
 import React from "react";
 import "../styles/landing.css";
-import Logo from "../assets/GesCar-Logo-removebg-preview.png"; 
 
-// colocar links de redirecionamento para outras paginas no header
-
+//
 export default function HeaderCliente() {
   return (
     <header className="lp-header">
       <div className="lp-brand">
-        <a href="/home_cliente">
-          <img src={Logo} alt="GesCar" className="lp-logo" />
+        <a href="/home_concessionaria">
+          <img src="{}" alt="logoconces" className="lp-logo" />
         </a>
       </div>
 
       <nav className="lp-nav" style={{ display: "flex", gap: 18, alignItems: "center" }}>
-        <a href="/home_cliente">Início</a>
-        <a href="#">Veículos</a>  
+        <a href="/home_concessionaria">Início</a>
+        <a href="#">Veículos</a>
         <a href="#">Promoções</a>
         <a href="/perfil">Perfil</a>
 
@@ -26,4 +24,3 @@ export default function HeaderCliente() {
     </header>
   );
 }
-

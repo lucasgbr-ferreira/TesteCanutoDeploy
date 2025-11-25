@@ -1,0 +1,55 @@
+/* Área geral */
+.fc-section {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 60px 0;
+}
+
+.fc-container {
+  width: 90%;
+  max-width: 1300px;
+  text-align: center;
+}
+
+/* Títulos da seção */
+.lp-destaque-tag {
+  font-size: 15px;
+  color: #9f9f9f;
+}
+
+.lp-destaque-title {
+  font-size: 32px;
+  margin-top: 5px;
+  color: rgb(128, 4, 159);
+  font-weight: 600;
+}
+
+.lp-destaque-desc {
+  font-size: 17px;
+  color: #8b8b8b;
+  margin-top: 5px;
+  margin-bottom: 40px;
+}
+
+.arrow {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* Responsivo */
+@media (max-width: 1024px) {
+  .fc-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 650px) {
+  .fc-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .novo-card {
+    min-height: 380px;
+  }
+}
