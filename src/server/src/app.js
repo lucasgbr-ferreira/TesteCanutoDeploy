@@ -16,32 +16,27 @@ import veiculoPhotoRoutes from './routes/veiculoPhotoRoutes.js';
 
 const app = express();
 
-const allowedOrigins = [
-  process.env.FRONTEND_ORIGIN || 'http://localhost:5173',
-  'http://localhost:3000'
-];
 
+const allowedOrigins = [
+  'http://localhost:5173', 
+  'http://localhost:5174' 
+];
 // --- CORS atualizado para permitir Authorization ---
 app.use(cors({
-  origin: function(origin, callback) {
+  origin: (origin, callback) => {
     if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) === -1) {
-      const msg = `CORS policy: origin ${origin} not allowed`;
-      return callback(new Error(msg), false);
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
     }
-    return callback(null, true);
+    return callback(new Error(`CORS not allowed for ${origin}`), false);
   },
-  credentials: true,
-  allowedHeaders: ['Content-Type', 'Authorization', 'Accept', 'Origin'], // <- ADICIONADO
+  credentials: true
 }));
 
-// Tratamento de erros de CORS
-app.use(function (err, req, res, next) {
-  if (err && err.message && err.message.includes('CORS')) {
-    console.warn('CORS blocked request:', err.message);
-    return res.status(403).json({ message: 'CORS blocked: origin not allowed' });
-  }
-  next(err);
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  next();
 });
 
 app.use(express.json({ limit: '6mb' }));
