@@ -20,24 +20,17 @@ const allowedOrigin = process.env.FRONTEND_URL;
 // CORS CORRETO
 app.use(
   cors({
-    origin: (origin, callback) => {
-      // Permite chamadas sem origin (pré-flight, mobile, Postman, SSR etc.)
-      if (!origin) return callback(null, true);
-
-      // Permite o domínio do frontend
-      if (origin === allowedOrigin) return callback(null, true);
-
-      console.error("❌ CORS blocked:", origin);
-      return callback(new Error(`CORS not allowed for ${origin}`), false);
-    },
-    credentials: true,
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true
   })
 );
 
-// Headers extra (importante p/ cookies e auth)
 app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Credentials', 'true');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS");
   next();
 });
 
