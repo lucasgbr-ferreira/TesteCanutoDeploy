@@ -18,10 +18,10 @@
     "react-router-dom": "^7.9.5",
     "sequelize": "^6.32.1",
     "sharp": "^0.34.4",
+    "dotenv": "^17.2.3",
     "uuid": "^13.0.0"
   },
   "devDependencies": {
-    "dotenv": "^17.2.3",
     "nodemon": "^3.0.1",
     "sequelize-cli": "^6.6.3"
   }
